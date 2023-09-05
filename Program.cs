@@ -61,7 +61,13 @@ void addCheep(string message) {
     DateTimeOffset dto = DateTimeOffset.Now;
     Cheep cheep = new Cheep(Environment.UserName, message, dto);
     string cheepString = cheep.ToCsvString();
-
+    try {
+        using (StreamWriter writer = new StreamWriter("chirp_cli_db.csv")){
+            writer.AppendLine(cheepString);
+        }
+     } catch (System.Exception) {
+        throw;
+     } 
 
 }
 
