@@ -12,10 +12,10 @@ public class Cheep{
     }
 
     //Used when reading Cheep from CSV file
-    public Cheep(string author, string message, long unixTime){
+    public Cheep(string author, string message, string unixTime){
         this.author = author;
         this.message = message;
-        this.messageTime = DateTimeOffset.FromUnixTimeSeconds(unixTime);
+        this.messageTime = DateTimeOffset.FromUnixTimeSeconds(long.Parse(unixTime));
     }
 
 
