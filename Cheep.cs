@@ -20,10 +20,10 @@ public class Cheep{
 
 
     public string ToCsvString(){
-        return $"{author},{message},{messageTime.ToUnixTimeSeconds()}";
+        return $"{author},\"{message}\",{messageTime.ToUnixTimeSeconds()}";
     }
 
     public override string ToString(){
-        return $"{author} @ {messageTime:dd/mm/yy HH:mm:ss}: \"{message}\"";
+        return $"{author} @ {messageTime:dd/mm/yy HH:mm:ss}: {message}";
     }
 }
