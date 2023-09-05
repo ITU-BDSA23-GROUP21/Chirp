@@ -63,8 +63,8 @@ void addCheep(string message) {
     Cheep cheep = new Cheep(Environment.UserName, message, dto);
     string cheepString = cheep.ToCsvString();
     try {
-        using (StreamWriter writer = new StreamWriter("chirp_cli_db.csv")){
-            writer.AppendLine(cheepString);
+        using (StreamWriter writer = new StreamWriter("chirp_cli_db.csv", true)){
+            writer.WriteLine(cheepString);
         }
      } catch (System.Exception) {
         throw;
