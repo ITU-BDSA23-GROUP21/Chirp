@@ -13,7 +13,7 @@ switch (args[0])
         printCheeps(cheeps);
         break;
     case "cheep":
-        if (args.Length < 1) {
+        if (args.Length < 2) {
             Console.WriteLine("Missing cheep message");
             return;
         }
@@ -58,8 +58,11 @@ void printCheeps(List<Cheep> cheeps) {
 }
 
 void addCheep(string message) {
-    DateTimeOffset dto = DateTimeOffset.Now
-    new Cheep(Enviroment.Username, message, dto)
+    DateTimeOffset dto = DateTimeOffset.Now;
+    Cheep cheep = new Cheep(Environment.UserName, message, dto);
+    string cheepString = cheep.ToCsvString();
+
+
 }
 
 //test 3
