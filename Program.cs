@@ -27,7 +27,7 @@ switch (args[0])
 
 List<Cheep> readFile()
 {
-    List<Cheep> cheeps = new List<Cheep>();
+    List<Cheep> cheeps = new();
     try
     {
         using var sr = new StreamReader("chirp_cli_db.csv");
@@ -39,8 +39,9 @@ List<Cheep> readFile()
             var CSVParser = new Regex(",(?=(?:[^\"]*\"[^\"]*\")*(?![^\"]*\"))");
 
             // Separating columns to array
-            // TODO: ""s should not be included in message
             string[] splitLine = CSVParser.Split(line);
+            splitLine[1] = splitLine[1].Trim('"');
+            
             // Create cheep from splitLine, and add to cheep list 
             cheeps.Add(new Cheep(splitLine[0], splitLine[1], splitLine[2]));
         }
@@ -70,5 +71,3 @@ void addCheep(string message) {
      } 
 
 }
-
-//test 3
