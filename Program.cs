@@ -58,7 +58,8 @@ void printCheeps(List<Cheep> cheeps) {
 }
 
 void addCheep(string message) {
-    // not implemented yet
+    DateTimeOffset dto = DateTimeOffset.Now
+    new Cheep(Enviroment.Username, message, dto)
 }
 
 //test 3
