@@ -15,6 +15,10 @@ switch (args[0])
         //Print out all Cheeps
         break;
     case "cheep":
+        if (args.Length < 1) {
+            Console.WriteLine("Missing cheep message");
+            return;
+        }
         addCheep(args[1]);
         //Write input as a new Cheep to file
         break;
