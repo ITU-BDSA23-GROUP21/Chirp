@@ -24,6 +24,6 @@ public class Cheep{
     }
 
     public override string ToString(){
-        return $"{author} @ {messageTime:dd/mm/yy HH:mm:ss}: {message}";
+        return $"{author} @ {messageTime.ToLocalTime():dd/mm/yy HH:mm:ss}: {message}";
     }
 }
