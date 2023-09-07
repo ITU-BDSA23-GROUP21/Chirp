@@ -47,7 +47,7 @@ internal class Program
         if (read == true)
         {
             var cheeps = ReadFile();
-            PrintCheeps(cheeps);
+            UserInterface.printCheeps(cheeps); // Using static funtion from static class UserInterface
         }
 
         if (!string.IsNullOrEmpty(cheep))
@@ -81,12 +81,6 @@ internal class Program
         {
             throw;
         }
-    }
-
-    static private void PrintCheeps(List<Cheep> cheeps)
-    {
-        foreach (Cheep cheep in cheeps)
-            Console.WriteLine(cheep.ToString());
     }
 
     static private void AddCheep(string message)
