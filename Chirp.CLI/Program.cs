@@ -1,4 +1,8 @@
 ﻿using System.Text.RegularExpressions;
+// using SimpleDB;
+
+
+// IDatabaseRepository<Cheep> database = new CSVDatabase<Cheep>();
 
 if (args.Length == 0)
 {
