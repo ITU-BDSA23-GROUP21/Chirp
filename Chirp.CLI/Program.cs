@@ -41,7 +41,7 @@ internal sealed class Program {
         // You can currently read and cheep at the same time. Is this intended?
         if (read == true) {
             var cheeps = ReadFile();
-            PrintCheeps(cheeps);
+            UserInterface.printCheeps(cheeps); // Using static funtion from static class UserInterface
         }
 
         if (!string.IsNullOrEmpty(cheep)) {
@@ -71,11 +71,6 @@ internal sealed class Program {
         catch (Exception) {
             throw;
         }
-    }
-
-    static private void PrintCheeps(List<Cheep> cheeps) {
-        foreach (Cheep cheep in cheeps)
-            Console.WriteLine(cheep.ToString());
     }
 
     static private void AddCheep(string message) {
