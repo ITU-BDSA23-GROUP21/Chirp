@@ -66,22 +66,7 @@ internal class Program
     {
         DateTimeOffset dto = DateTimeOffset.Now.ToLocalTime();
         Cheep cheep = new(Environment.UserName, message, dto.ToUnixTimeSeconds());
-        
         CSVdb.Store(cheep);
-
-        // string cheepString = cheep.ToCsvString();
-        // try
-        // {
-        //     using (StreamWriter writer = new StreamWriter("chirp_cli_db.csv", true))
-        //     {
-        //         writer.WriteLine(cheepString);
-        //     }
-        // }
-        // catch (Exception)
-        // {
-        //     throw;
-        // }
-
     }
 }
 //test
