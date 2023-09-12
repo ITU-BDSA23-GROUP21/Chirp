@@ -1,10 +1,10 @@
-using SimpleDB;
 
-namespace CSVDatabase;
+public sealed class CSVDatabase<T> : IDatabaseRepository<T>{
+    public IEnumerable<T> Read(int limit){
+        
+    }
 
-
-public class CSVDatabase<T> : IDatabaseRepository<T> {
-
-
-
+    public void Store(T record){
+        
+    }
 }
