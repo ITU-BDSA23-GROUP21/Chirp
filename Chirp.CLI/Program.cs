@@ -1,18 +1,15 @@
-﻿using System.Text.RegularExpressions;
-using System.CommandLine;
+﻿using System.CommandLine;
+using System.Text.RegularExpressions;
 // using SimpleDB;
 
 
 // IDatabaseRepository<Cheep> database = new CSVDatabase<Cheep>();
 
-internal class Program
-{
-    private static async Task<int> Main(string[] args)
-    {
+internal sealed class Program {
+    private static async Task<int> Main(string[] args) {
         // Workaround for CLI not printing help message if no arguments are passed
         // Inspired by https://stackoverflow.com/a/75734131
-        if (args.Length == 0)
-        {
+        if (args.Length == 0) {
             args = new[] { "--help" };
         }
 
@@ -20,8 +17,7 @@ internal class Program
         var readOption = new Option<bool?>(
             name: "read",
             description: "Read chirps from the database"
-            )
-        {
+            ) {
             // Disallow typing a value for "read", as cli library crashes if parsing to boolean fails
             Arity = ArgumentArity.Zero
         };
@@ -41,29 +37,24 @@ internal class Program
         return await rootCommand.InvokeAsync(args);
     }
 
-    private static void HandleCommands(bool? read, string cheep)
-    {
+    private static void HandleCommands(bool? read, string cheep) {
         // You can currently read and cheep at the same time. Is this intended?
-        if (read == true)
-        {
+        if (read == true) {
             var cheeps = ReadFile();
             PrintCheeps(cheeps);
         }
 
-        if (!string.IsNullOrEmpty(cheep))
-        {
+        if (!string.IsNullOrEmpty(cheep)) {
             AddCheep(cheep);
         }
     }
-    static private List<Cheep> ReadFile()
-    {
+
+    static private List<Cheep> ReadFile() {
         List<Cheep> cheeps = new();
-        try
-        {
+        try {
             using var sr = new StreamReader("chirp_cli_db.csv");
             sr.ReadLine(); // Skip first line. CSV file format is hardcoded in fileReader
-            while (!sr.EndOfStream)
-            {
+            while (!sr.EndOfStream) {
                 // Regex adapted from https://stackoverflow.com/questions/3507498/reading-csv-files-using-c-sharp/
                 var line = sr.ReadLine();
                 var CSVParser = new Regex(",(?=(?:[^\"]*\"[^\"]*\")*(?![^\"]*\"))");
@@ -77,32 +68,26 @@ internal class Program
             }
             return cheeps;
         }
-        catch (Exception)
-        {
+        catch (Exception) {
             throw;
         }
     }
 
-    static private void PrintCheeps(List<Cheep> cheeps)
-    {
+    static private void PrintCheeps(List<Cheep> cheeps) {
         foreach (Cheep cheep in cheeps)
             Console.WriteLine(cheep.ToString());
     }
 
-    static private void AddCheep(string message)
-    {
+    static private void AddCheep(string message) {
         DateTimeOffset dto = DateTimeOffset.Now;
         Cheep cheep = new Cheep(Environment.UserName, message, dto);
         string cheepString = cheep.ToCsvString();
-        try
-        {
-            using (StreamWriter writer = new StreamWriter("chirp_cli_db.csv", true))
-            {
+        try {
+            using (StreamWriter writer = new StreamWriter("chirp_cli_db.csv", true)) {
                 writer.WriteLine(cheepString);
             }
         }
-        catch (Exception)
-        {
+        catch (Exception) {
             throw;
         }
 
