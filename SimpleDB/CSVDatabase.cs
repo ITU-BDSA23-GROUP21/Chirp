@@ -1,10 +1,6 @@
-using SimpleDB;
-
-namespace CSVDatabase;
-
+namespace SimpleDB;
 
 public class CSVDatabase<T> : IDatabaseRepository<T> {
 
-
-
+    
 }
