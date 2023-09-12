@@ -1,10 +1,10 @@
 
-public sealed class CSVDatabase<T> : IDatabaseRepository<T>{
-    public IEnumerable<T> Read(int limit){
-        
+public sealed class CSVDatabase<T> : IDatabaseRepository<T> {
+    public IEnumerable<T> Read(int limit) {
+
     }
 
-    public void Store(T record){
-        
+    public void Store(T record) {
+
     }
 }
