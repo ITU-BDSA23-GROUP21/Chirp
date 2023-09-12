@@ -22,7 +22,7 @@ namespace SimpleDB
             {
                 PrepareHeaderForMatch = args => args.Header.ToLower()
             };
-            using (var reader = new StreamReader("./chirp_cli_db.csv"))
+            using (var reader = new StreamReader(pathToCSV))
             using (var csv = new CsvReader(reader, config))
             {
                 var records = csv.GetRecords<T>();
@@ -44,6 +44,7 @@ namespace SimpleDB
             CsvConfiguration config = new CsvConfiguration(CultureInfo.InvariantCulture)
             {
                 HasHeaderRecord = false,
+                PrepareHeaderForMatch = args => args.Header.ToLower()
             };
             using (var stream = File.Open(pathToCSV, FileMode.Append))
             using (var writer = new StreamWriter(stream))

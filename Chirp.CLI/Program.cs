@@ -1,6 +1,7 @@
-﻿﻿using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using System.CommandLine;
 using SimpleDB;
+using System.Net;
 
 
 // IDatabaseRepository<Cheep> database = new CSVDatabase<Cheep>();
@@ -11,7 +12,7 @@ internal class Program
 
     private static async Task<int> Main(string[] args)
     {
-        CSVdb = new CSVDatabase<Cheep>();
+        CSVdb = new CSVDatabase<Cheep>("./chirp_cli_db.csv");
         // Workaround for CLI not printing help message if no arguments are passed
         // Inspired by https://stackoverflow.com/a/75734131
         if (args.Length == 0) {
@@ -63,18 +64,23 @@ internal class Program
 
     static private void AddCheep(string message)
     {
-        DateTimeOffset dto = DateTimeOffset.Now;
-        //Cheep cheep = new Cheep(Environment.UserName, message, dto);
-        Cheep cheep = new Cheep(Environment.UserName, message, 1);
-        string cheepString = cheep.ToCsvString();
-        try {
-            using (StreamWriter writer = new StreamWriter("chirp_cli_db.csv", true)) {
-                writer.WriteLine(cheepString);
-            }
-        }
-        catch (Exception) {
-            throw;
-        }
+        DateTimeOffset dto = DateTimeOffset.Now.ToLocalTime();
+        Cheep cheep = new(Environment.UserName, message, dto.ToUnixTimeSeconds());
+        
+        CSVdb.Store(cheep);
+
+        // string cheepString = cheep.ToCsvString();
+        // try
+        // {
+        //     using (StreamWriter writer = new StreamWriter("chirp_cli_db.csv", true))
+        //     {
+        //         writer.WriteLine(cheepString);
+        //     }
+        // }
+        // catch (Exception)
+        // {
+        //     throw;
+        // }
 
     }
 }
