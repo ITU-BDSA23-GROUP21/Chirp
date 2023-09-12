@@ -1,29 +1,57 @@
-using System.Globalization;
-using CsvHelper;
-using CsvHelper.Configuration;
+namespace SimpleDB
+{
+    using System.Globalization;
+    using CsvHelper;
+    using CsvHelper.Configuration;
+    using System.ComponentModel.Design;
+    using System.Runtime.CompilerServices;
 
-public sealed class CSVDatabase<T> : IDatabaseRepository<T>{
-    private string pathToCSV;
-
-    public CSVDatabase(string pathToCSV)
+    public sealed class CSVDatabase<T> : IDatabaseRepository<T>
     {
-        this.pathToCSV = pathToCSV;
-    }
+        private string pathToCSV;
 
-    public IEnumerable<T> Read(int limit){
+        public CSVDatabase(string pathToCSV)
+        {
+            this.pathToCSV = pathToCSV;
+        }
         
-    }
+        
+        public IEnumerable<T> Read(int? limit = null)
+        {
+            CsvConfiguration config = new CsvConfiguration(CultureInfo.InvariantCulture)
+            {
+                PrepareHeaderForMatch = args => args.Header.ToLower()
+            };
+            using (var reader = new StreamReader("./chirp_cli_db.csv"))
+            using (var csv = new CsvReader(reader, config))
+            {
+                var records = csv.GetRecords<T>();
+                var recordsToReturn = records.ToList();
 
-    public void Store(T record){
-        CsvConfiguration config = new CsvConfiguration(CultureInfo.InvariantCulture)
+                if (limit == null)
+                {
+                    return recordsToReturn;
+                }
+                else
+                {
+                    return recordsToReturn.Skip(0).Take((int)limit);
+                }
+            }
+        }
+
+        public void Store(T record)
         {
-            HasHeaderRecord = false,
-        };
-        using(var stream = File.Open(pathToCSV, FileMode.Append))
-        using (var writer = new StreamWriter(stream))
-        using (var csv = new CsvWriter(writer, config))
-        {
-            csv.WriteRecord(record);
+            CsvConfiguration config = new CsvConfiguration(CultureInfo.InvariantCulture)
+            {
+                HasHeaderRecord = false,
+            };
+            using (var stream = File.Open(pathToCSV, FileMode.Append))
+            using (var writer = new StreamWriter(stream))
+            using (var csv = new CsvWriter(writer, config))
+            {
+                csv.WriteRecord(record);
+            }
         }
     }
+
 }
