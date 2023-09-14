@@ -1,7 +1,5 @@
-﻿using System.Text.RegularExpressions;
-using System.CommandLine;
+﻿using System.CommandLine;
 using SimpleDB;
-using System.Net;
 
 
 // IDatabaseRepository<Cheep> database = new CSVDatabase<Cheep>();
@@ -48,18 +46,12 @@ internal class Program
         if (read == true)
         {
             var cheeps = CSVdb.Read();
-            PrintCheeps(cheeps);
+            UserInterface.PrintCheeps(cheeps);
         }
 
         if (!string.IsNullOrEmpty(cheep)) {
             AddCheep(cheep);
         }
-    }
-
-    static private void PrintCheeps(IEnumerable<Cheep> cheeps)
-    {
-        foreach (Cheep cheep in cheeps)
-            Console.WriteLine(cheep.ToString());
     }
 
     static private void AddCheep(string message)
