@@ -40,6 +40,7 @@ namespace SimpleDB {
             using (var writer = new StreamWriter(stream))
             using (var csv = new CsvWriter(writer, config)) {
                 csv.WriteRecord(record);
+                csv.NextRecord();
             }
         }
     }
