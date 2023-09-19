@@ -1,0 +1,372 @@
+[33mcommit ee02f24ffdfc10e711d611194ea508374e922f66[m[33m ([m[1;36mHEAD -> [m[1;32mtest[m[33m, [m[1;31morigin/test[m[33m)[m
+Author: lucas <@itu.dk>
+Date:   Sun Sep 17 11:45:13 2023 +0200
+
+    created test projects and added references
+
+[33mcommit 6c37ab28ec92059f42e8f859d706081e5d0a30bb[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m
+Author: rafj58 <rafj@itu.dk>
+Date:   Fri Sep 15 15:59:04 2023 +0200
+
+    Reverted unintended changes in previous commit
+
+[33mcommit 4abd83dafd18c98b38b73e23b1a8833bea096a66[m
+Author: rafj58 <rafj@itu.dk>
+Date:   Fri Sep 15 15:55:45 2023 +0200
+
+    Fixed bug described in issue 15
+
+[33mcommit e63079ec1ac13fe7e3685500039bbd57fdefcf0f[m
+Author: rafj58 <rafj@itu.dk>
+Date:   Fri Sep 15 15:19:23 2023 +0200
+
+    Fixed bug specified in issue 14
+
+[33mcommit cfa172cfe4e5e669ddd5ec67c6692b7de2aad502[m
+Author: Tobias Engbo <toen@itu.dk>
+Date:   Thu Sep 14 15:12:48 2023 +0200
+
+    test
+
+[33mcommit 0bb0a9acf233f1a4e2a7f68e9716bb4daae3b041[m
+Author: Tobias Engbo <toen@itu.dk>
+Date:   Thu Sep 14 15:03:46 2023 +0200
+
+    Fixed path file to DB
+
+[33mcommit c9dc88480a2aa4486f719b4e1bb8471a77424cd4[m
+Author: Tobias Engbo <toen@itu.dk>
+Date:   Thu Sep 14 15:00:10 2023 +0200
+
+    Refactoring to src, data and test folders
+
+[33mcommit aaa2ed70332125a661d0c27d31033a73c729dc41[m
+Author: Tobias Engbo <toen@itu.dk>
+Date:   Thu Sep 14 14:30:45 2023 +0200
+
+    Formatting test
+
+[33mcommit da83274e6d463a92737947028421edbb9cf6949b[m
+Author: Thøger Bro <bros@itu.dk>
+Date:   Thu Sep 14 13:38:55 2023 +0200
+
+    fix branch name in build workflow
+
+[33mcommit 68d5d6110aec855b537655b6337af61c920865cf[m
+Author: Thøger Bro <bros@itu.dk>
+Date:   Thu Sep 14 13:37:12 2023 +0200
+
+    test build workflow
+
+[33mcommit 792f6ae73feff2631f31f2d8e5de08fe83f5bfa6[m
+Author: Thøger Bro <bros@itu.dk>
+Date:   Thu Sep 14 13:35:11 2023 +0200
+
+    add build and test action
+
+[33mcommit 3f0cc27181837755e1d154b48e86e4e4be652610[m
+Author: Thøger Bro <bros@itu.dk>
+Date:   Thu Sep 14 13:17:48 2023 +0200
+
+    chore: run formatter
+
+[33mcommit b3279d52e62f3a0b460ae0c3da322a64604a932a[m
+Author: Thøger Bro <bros@itu.dk>
+Date:   Thu Sep 14 11:19:39 2023 +0200
+
+    fix rebase error
+
+[33mcommit e32e28436758a3c67e9f64444708d636d76463cd[m
+Author: Thøger Bro <bros@example.com>
+Date:   Wed Sep 13 00:06:51 2023 +0200
+
+    fix build errors
+
+[33mcommit 48f4ab7cbd65364a5d6aac146e3e7d1723b56b73[m
+Author: Tobias Engbo <toen@itu.dk>
+Date:   Tue Sep 12 20:00:02 2023 +0200
+
+    CSV Library WIP integration
+
+[33mcommit c84234723d88dd35aa8ccba54877d1a10246fb31[m
+Author: Tobias Engbo <toen@itu.dk>
+Date:   Tue Sep 12 13:24:41 2023 +0200
+
+    Added database csv reading functionality
+    Co-authored-by: Emil eson@itu.dk
+
+[33mcommit 102568f28a9d3fdf5252745a9384637091718062[m
+Author: Rafael <rafj@itu.dk>
+Date:   Tue Sep 12 13:03:42 2023 +0200
+
+    Extended CSVDatabase.cs with constructor and store method
+
+[33mcommit 85417e2f1ad0f21ec3ecd5cd063048da4f21935a[m
+Author: Tobias Engbo <toen@itu.dk>
+Date:   Tue Sep 12 11:54:28 2023 +0200
+
+    Changed Cheep from class to record
+
+[33mcommit daca3100aa6ef7de507caaec88d5e872dbfeff0e[m
+Author: Tobias Engbo <toen@itu.dk>
+Date:   Tue Sep 12 11:16:02 2023 +0200
+
+    Added library to csproj
+
+[33mcommit 835299452bea68e30574f59927e6f259e8179708[m
+Author: Thøger Bro <bros@itu.dk>
+Date:   Thu Sep 14 10:56:00 2023 +0200
+
+    add dependabot for automatic nuget updated
+
+[33mcommit 0228ddb27b9c6667dfb65ba48d15a86049321046[m
+Author: lucas <@itu.dk>
+Date:   Tue Sep 12 19:43:26 2023 +0200
+
+    testing auto formatting commit
+
+[33mcommit 16136a7408ce3fb187673883bfd98c7e17a1783b[m
+Merge: f3f00ac e54f4f5
+Author: lucas <@itu.dk>
+Date:   Tue Sep 12 19:39:51 2023 +0200
+
+    no changes
+
+[33mcommit e54f4f545942b83b6730649d76e87b40f10c922a[m
+Author: lucas <lgul@itu.dk>
+Date:   Thu Sep 7 16:09:37 2023 +0200
+
+    new userinterface class with printcheep function *working*
+
+[33mcommit bfd14fbaaaeb00c9cd14d58a19922a28dbe99e30[m
+Author: Thøger Bro <bros@itu.dk>
+Date:   Tue Sep 12 11:47:06 2023 +0200
+
+    add editorconfig for code formatting
+
+[33mcommit f3f00ac1d78ae53a958c9a96e98fa9606f282a65[m
+Merge: 9540428 608c4d0
+Author: lucas <lgul@itu.dk>
+Date:   Tue Sep 12 11:21:20 2023 +0200
+
+    test
+
+[33mcommit 608c4d030e4ecee1db43dd8debc7727e97daf785[m
+Author: Emil Sondum <eson@itu.dk>
+Date:   Tue Sep 12 11:05:54 2023 +0200
+
+    solutions file added
+
+[33mcommit df7810842f229e85de5993f7ed6e73bbde70b581[m
+Author: Emil Sondum <eson@itu.dk>
+Date:   Tue Sep 12 10:48:38 2023 +0200
+
+    Test
+
+[33mcommit 66b56748832be7d388248375bc2b65572f11751c[m
+Author: Emil Sondum <eson@itu.dk>
+Date:   Tue Sep 12 10:24:14 2023 +0200
+
+    start working on database
+
+[33mcommit 39f0a217a4fa6511232540bd82c180bae16d5339[m
+Author: Tobias Dirchsen Engbo <toen@itu.dk>
+Date:   Thu Sep 7 15:40:40 2023 +0200
+
+    Changed launch.json to remove unnecessary messaged
+    being displayed while debugging
+
+[33mcommit 95404285c2121690b687a517e1925cd3b1554bfd[m
+Author: Thøger Bro <bros@itu.dk>
+Date:   Thu Sep 7 15:38:16 2023 +0200
+
+    update folder name in json files
+    
+    use package for parsing cli args
+    
+    resolves issue #1
+
+[33mcommit de28c250d1e2af01173a5db22b4c8d6e93a14407[m
+Merge: 8f1b987 0d80fa5
+Author: tbr2 <56914972+tbr2@users.noreply.github.com>
+Date:   Tue Sep 12 09:55:50 2023 +0200
+
+    Merge pull request #8 from ITU-BDSA23-GROUP21/cli-package
+
+[33mcommit 0d80fa57c8f39fed395124b9d271a63c5845058d[m[33m ([m[1;31morigin/cli-package[m[33m)[m
+Author: Thøger Bro <bros@example.com>
+Date:   Mon Sep 11 02:00:50 2023 +0200
+
+    use package for parsing cli args
+    
+    resolves issue #1
+
+[33mcommit 8f1b9877d326359f63c2c8c8c8c2dc9a3728f5f4[m
+Author: Thøger Bro <bros@itu.dk>
+Date:   Thu Sep 7 15:38:16 2023 +0200
+
+    update folder name in json files
+
+[33mcommit af4669cef76134cd27cbb6d36ce9ec02424371a0[m
+Author: Emil Sondum <eson@itu.dk>
+Date:   Thu Sep 7 14:30:34 2023 +0200
+
+    restructure project
+    
+    add structure for simpleDB database package
+    
+    Co-authored-by: Thøger <bros@itu.dk>
+
+[33mcommit 3cc12b11c5316879b84b687515a4d9371eb11c44[m
+Author: Thøger Bro <bros@itu.dk>
+Date:   Wed Sep 6 10:28:22 2023 +0200
+
+    display messageTime in local time
+
+[33mcommit d76ca4235165101ecec61d07020a69e411f7eba7[m
+Merge: 02befc1 e6f8709
+Author: rafj58 <rafj@itu.dk>
+Date:   Tue Sep 5 14:19:44 2023 +0200
+
+    Merge branch 'main' of https://github.com/ITU-BDSA23-GROUP21/Chirp
+
+[33mcommit 02befc102a27620257d9ff0a95b11483b00cfbe4[m
+Author: rafj58 <rafj@itu.dk>
+Date:   Tue Sep 5 14:18:57 2023 +0200
+
+    Fixed addCheep function
+
+[33mcommit e6f8709f8a4e53d929c91855f18d089992991f07[m
+Author: Thøger Bro <bros@itu.dk>
+Date:   Tue Sep 5 14:14:01 2023 +0200
+
+    bugfix in cheep formatting
+
+[33mcommit 856161230f48fc2ca2d2caf3279b975822285b3d[m
+Merge: d44330f 262cf9e
+Author: chrolle69 <guldbrandsen102030@gmail.com>
+Date:   Tue Sep 5 14:12:52 2023 +0200
+
+    Merge branch 'main' of https://github.com/ITU-BDSA23-GROUP21/Chirp
+
+[33mcommit d44330f84d23affd06a137efae98d46878c85c55[m
+Author: chrolle69 <guldbrandsen102030@gmail.com>
+Date:   Tue Sep 5 14:11:58 2023 +0200
+
+    addCheep function complete writing in csv file
+
+[33mcommit 262cf9edd1231cc9e2e26fd34dcaf0051ce5c4f7[m
+Author: Thøger Bro <bros@itu.dk>
+Date:   Tue Sep 5 14:08:16 2023 +0200
+
+    fix formatting of message
+
+[33mcommit 1230d262c359c7209790cc3ae6ccdee66f7edad2[m
+Author: chrolle69 <guldbrandsen102030@gmail.com>
+Date:   Tue Sep 5 14:03:29 2023 +0200
+
+    addCheep function extension
+
+[33mcommit 61dcde901c4d2ce887229117cbd06867131fb7c3[m
+Author: chrolle69 <guldbrandsen102030@gmail.com>
+Date:   Tue Sep 5 13:55:29 2023 +0200
+
+    addCheep function
+
+[33mcommit cc05ac43fd80486269ed0d7fb1eff085472a22ac[m
+Merge: b0564c4 85e09bb
+Author: rafj58 <rafj@itu.dk>
+Date:   Tue Sep 5 13:48:24 2023 +0200
+
+    Merge branch 'main' of https://github.com/ITU-BDSA23-GROUP21/Chirp
+
+[33mcommit 85e09bb9c7f45254e9030ca7a40216dea52622cb[m
+Author: chrolle69 <guldbrandsen102030@gmail.com>
+Date:   Tue Sep 5 13:48:10 2023 +0200
+
+    test 3
+
+[33mcommit b0564c46fdb92999852c6bbb222952d66e549c1b[m
+Merge: 1b6206a aea75c8
+Author: rafj58 <rafj@itu.dk>
+Date:   Tue Sep 5 13:47:25 2023 +0200
+
+    Merge branch 'main' of https://github.com/ITU-BDSA23-GROUP21/Chirp
+
+[33mcommit 6e90c6abae53c9ca23be632410a16e24a48379a2[m
+Author: chrolle69 <guldbrandsen102030@gmail.com>
+Date:   Tue Sep 5 13:47:17 2023 +0200
+
+    test 2
+
+[33mcommit aea75c89988050e1ad0e5d608870d71d528e19cf[m
+Author: Thøger Bro <bros@itu.dk>
+Date:   Tue Sep 5 13:43:50 2023 +0200
+
+    csv contents can be written to console
+
+[33mcommit 734c5454bf02c87cc11692ca665f01bc00e16498[m
+Author: chrolle69 <guldbrandsen102030@gmail.com>
+Date:   Tue Sep 5 13:40:21 2023 +0200
+
+    test
+
+[33mcommit 1b6206ad806f4517c21b9f75b337c00a04fd5eb1[m
+Author: rafj58 <rafj@itu.dk>
+Date:   Tue Sep 5 13:18:57 2023 +0200
+
+    Updated printCheeps function
+
+[33mcommit c70ed430990f53f426f3d140797124d168fa1151[m
+Merge: 8763e99 1fcea74
+Author: Emil Sondum <eson@itu.dk>
+Date:   Tue Sep 5 13:06:50 2023 +0200
+
+    Merge branch 'main' of https://github.com/ITU-BDSA23-GROUP21/Chirp into main
+
+[33mcommit 8763e99554f746fe2f58a65889d23a7d51b1cfea[m
+Author: Emil Sondum <eson@itu.dk>
+Date:   Tue Sep 5 13:06:32 2023 +0200
+
+    Enabled printing and saving of Cheeps
+    
+    Cheep class made, with ToString metods.
+    
+    Co-authored-by: Thøger bros@itu.dk
+
+[33mcommit 1fcea741fddbb07577582584ef9af115e6cd2ef9[m
+Author: Thøger Bro <bros@itu.dk>
+Date:   Tue Sep 5 12:39:33 2023 +0200
+
+    add check for cheep message
+
+[33mcommit 0f4871964acc45276a464f7390cd28d80ce4fd39[m
+Author: Emil Sondum <eson@itu.dk>
+Date:   Thu Aug 31 15:54:51 2023 +0200
+
+    Reading from csv file is now possible.
+    
+    Some structor for furture is added.
+    
+    Co-authored-by: Thøger bros@itu.dk
+    Co-authored-by: Lukas lgul@itu.dk
+    Co-authored-by: Tobias toen@itu.dk
+    Co-authored-by: Rafael rafj@itu.dk
+
+[33mcommit 72ce4c87fb7d4da5361cd19ee7ee9529c6998c40[m
+Author: Emil Sondum <eson@itu.dk>
+Date:   Thu Aug 31 15:15:23 2023 +0200
+
+    Csv added
+
+[33mcommit 95a09f94c33c5fbab8ae22d6cd5a9877d247aa40[m
+Author: Emil Sondum <eson@itu.dk>
+Date:   Thu Aug 31 14:55:50 2023 +0200
+
+    Initial commit
+
+[33mcommit f30e61bb8e5502a6012955fae2e807a9ee332b1d[m
+Author: Emil Andreas Sondum <118450345+PrinceMaren1@users.noreply.github.com>
+Date:   Thu Aug 31 14:46:39 2023 +0200
+
+    Initial commit
