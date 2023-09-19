@@ -4,11 +4,11 @@ using System.CommandLine;
 
 // IDatabaseRepository<Cheep> database = new CSVDatabase<Cheep>();
 
-internal class Program {
+public class Program {
     static IDatabaseRepository<Cheep>? CSVdb;
 
     private static async Task<int> Main(string[] args) {
-        CSVdb = new CSVDatabase<Cheep>("../../data/chirp_cli_db.csv");
+        setDB();
         // Workaround for CLI not printing help message if no arguments are passed
         // Inspired by https://stackoverflow.com/a/75734131
         if (args.Length == 0) {
@@ -51,10 +51,14 @@ internal class Program {
         }
     }
 
-    static private void AddCheep(string message) {
+    public static void AddCheep(string message) {
         DateTimeOffset dto = DateTimeOffset.Now.ToLocalTime();
         Cheep cheep = new(Environment.UserName, message, dto.ToUnixTimeSeconds());
         CSVdb.Store(cheep);
+    }
+
+    public static void setDB() {
+        CSVdb = new CSVDatabase<Cheep>("../../../../../data/chirp_cli_db.csv");
     }
 }
 // test
