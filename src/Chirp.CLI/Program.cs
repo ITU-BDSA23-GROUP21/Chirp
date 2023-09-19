@@ -8,7 +8,7 @@ internal class Program {
     static IDatabaseRepository<Cheep>? CSVdb;
 
     private static async Task<int> Main(string[] args) {
-        CSVdb = new CSVDatabase<Cheep>("../../data/chirp_cli_db.csv");
+        CSVdb = new CSVDatabase<Cheep>();
         // Workaround for CLI not printing help message if no arguments are passed
         // Inspired by https://stackoverflow.com/a/75734131
         if (args.Length == 0) {

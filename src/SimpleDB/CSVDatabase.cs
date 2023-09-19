@@ -8,8 +8,8 @@ namespace SimpleDB {
     public sealed class CSVDatabase<T> : IDatabaseRepository<T> {
         private string pathToCSV;
 
-        public CSVDatabase(string pathToCSV) {
-            this.pathToCSV = pathToCSV;
+        public CSVDatabase() {
+            this.pathToCSV = "../../data/chirp_cli_db.csv";
         }
 
 
@@ -44,5 +44,4 @@ namespace SimpleDB {
             }
         }
     }
-
 }
