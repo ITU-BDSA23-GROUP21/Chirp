@@ -46,16 +46,10 @@ public class Program {
         return await rootCommand.InvokeAsync(args);
     }
 
-    private static void HandleCommands(bool? read, string cheep) {
+    private static void PrintCheeps(int amount) {
         // You can currently read and cheep at the same time. Is this intended?
-        if (read == true) {
-            var cheeps = CSVdb.Read();
-            UserInterface.PrintCheeps(cheeps);
-        }
-
-        if (!string.IsNullOrEmpty(cheep)) {
-            AddCheep(cheep);
-        }
+        var cheeps = CSVdb.Read(amount);
+        UserInterface.PrintCheeps(cheeps);
     }
 
     public static void AddCheep(string message) {
@@ -64,7 +58,4 @@ public class Program {
         CSVdb.Store(cheep);
     }
 
-    public static void setDB() {
-        CSVdb = new CSVDatabase<Cheep>("../../../../../data/chirp_cli_db.csv");
-    }
 }
