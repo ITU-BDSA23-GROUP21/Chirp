@@ -48,7 +48,7 @@ internal class Program {
 
     private static void PrintCheeps(int amount) {
         IEnumerable<Cheep> cheeps = CSVdb.Read();
-        UserInterface.PrintCheeps(cheeps);
+        UserInterface.PrintCheeps(cheeps, amount);
     }
 
     static private void AddCheep(string message) {
