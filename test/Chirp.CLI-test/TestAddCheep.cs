@@ -15,7 +15,7 @@ namespace Chirp.CLI_test {
             Cheep cp1 = new Cheep(name, message, timestamp); //making cheep to be tested
             List<Cheep> cheeps = new List<Cheep> { cp1 }; // inserting cheep in iterable list
 
-            String expected = $"{name}, {timestamp}, \"{message}\""; //making the expected result
+            String expected = $"{Environment.UserName}, {message}, \"{timestamp}\""; //making the expected result
             //string actual =  File.ReadLines("data/chirp_cli_db.csv/").Last();
             String actual = new String("");
 
