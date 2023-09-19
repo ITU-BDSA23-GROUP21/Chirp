@@ -1,15 +1,15 @@
-name: 'Assert Branch Naming Convention'
-on: pull_request
+# name: 'Assert Branch Naming Convention'
+# on: pull_request
 
-jobs:
-  branch-naming-rules:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: deepakputhraya/action-branch-name@5f1cc199284b75145ec2d13434422e6987cf6af8
-        with:
-          # regex: '([a-z])+\/(issue-\d+)\/([a-z])+' # Regex the branch should match. This example enforces grouping
-          regex: '([a-z])+\/([a-z])+' # Regex the branch should match. This example enforces grouping
-          allowed_prefixes: 'issue' # 'feature,stable,fix' # All branches should start with the given prefix
-          ignore: main,develop # Ignore exactly matching branch names from convention
-          min_length: 5 # Min length of the branch name
-          max_length: 40 # Max length of the branch name
+# jobs:
+#   branch-naming-rules:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: deepakputhraya/action-branch-name@5f1cc199284b75145ec2d13434422e6987cf6af8
+#         with:
+#           # regex: '([a-z])+\/(issue-\d+)\/([a-z])+' # Regex the branch should match. This example enforces grouping
+#           regex: '([a-z])+\/([a-z])+' # Regex the branch should match. This example enforces grouping
+#           allowed_prefixes: 'issue' # 'feature,stable,fix' # All branches should start with the given prefix
+#           ignore: main,develop # Ignore exactly matching branch names from convention
+#           min_length: 5 # Min length of the branch name
+#           max_length: 40 # Max length of the branch name

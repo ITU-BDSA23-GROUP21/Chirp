@@ -6,6 +6,8 @@ on:
 jobs:
   issue-links:
     runs-on: ubuntu-latest
+    permissions:
+      issues: write
     steps:
       - uses: tkt-actions/add-issue-links@v1.8.1
         with:
