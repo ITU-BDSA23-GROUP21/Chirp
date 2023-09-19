@@ -15,25 +15,32 @@ internal class Program {
             args = new[] { "--help" };
         }
 
-        // Define available options for CLI input
-        var readOption = new Option<bool?>(
-            name: "read",
-            description: "Read chirps from the database"
-            ) {
-            // Disallow typing a value for "read", as cli library crashes if parsing to boolean fails
-            Arity = ArgumentArity.Zero
-        };
+        //The rootcommand
+        RootCommand rootCommand = new RootCommand("Welcome to Cheep. Get Chirping!");
+        rootCommand.SetHandler(() => { Console.WriteLine("Welcome to Cheep. Get Chirping!"); });
 
-        var cheepOption = new Option<string>(
-            name: "cheep",
-            description: "Send a new cheep"
+        //Subcommand read and arguments
+        Command readCommand = new Command("read", "Read cheeps.");
+        rootCommand.AddCommand(readCommand);
+
+        Argument<int> amountArgument = new Argument<int>(
+            name: "amount",
+            description: "Specifies the amount of cheeps to show",
+            getDefaultValue: () => 5
         );
-        var rootCommand = new RootCommand("Welcome to Cheep. Get Chirping.");
-        rootCommand.AddOption(cheepOption);
-        rootCommand.AddOption(readOption);
+        readCommand.AddArgument(amountArgument);
+        readCommand.SetHandler(PrintCheeps, amountArgument);
 
-        // Define handling of CLI input
-        rootCommand.SetHandler(HandleCommands, readOption, cheepOption);
+        //Subcommand cheep and arguments
+        Command cheepCommand = new Command("cheep", "Cheep a message.");
+        rootCommand.AddCommand(cheepCommand);
+
+        Argument<string> messageArgument = new Argument<string>(
+            name: "message",
+            description: "The message to cheep."
+        );
+        cheepCommand.AddArgument(messageArgument);
+        cheepCommand.SetHandler(AddCheep, messageArgument);
 
         // Invoke handler with input args
         return await rootCommand.InvokeAsync(args);
@@ -49,6 +56,11 @@ internal class Program {
         if (!string.IsNullOrEmpty(cheep)) {
             AddCheep(cheep);
         }
+    }
+
+    private static void PrintCheeps(int amount) {
+        IEnumerable<Cheep> cheeps = CSVdb.Read();
+        UserInterface.PrintCheeps(cheeps);
     }
 
     static private void AddCheep(string message) {
