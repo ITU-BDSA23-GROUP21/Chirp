@@ -2,7 +2,9 @@
 using System.CommandLine;
 
 
-internal class Program {
+
+
+public class Program {
     static IDatabaseRepository<Cheep>? CSVdb;
 
     private static async Task<int> Main(string[] args) {
