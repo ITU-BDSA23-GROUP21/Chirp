@@ -12,7 +12,7 @@ namespace SimpleDB_test {
         [InlineData(0)]
 
         public void ReadGivenAmoutOfLinesTest(int linesToRead) {
-            IDatabaseRepository<Cheep> database = new CSVDatabase<Cheep>("../../../../../data/chirp_cli_db.csv");
+            IDatabaseRepository<Cheep> database = CSVDatabase<Cheep>.Instance;
             var cheepsRead = database.Read(linesToRead);
 
             Assert.Equal(linesToRead, cheepsRead.Count());
@@ -25,7 +25,7 @@ namespace SimpleDB_test {
         [InlineData(2, new string[] { "ropf @ 01/09/23 14:09:20: Hello, BDSA students!", "rnie @ 02/19/23 14:19:38: Welcome to the course!" })]
 
         public void ReadTest(int linestoread, string[] expected) {
-            IDatabaseRepository<Cheep> database = new CSVDatabase<Cheep>("../../../../../data/chirp_cli_db.csv");
+            IDatabaseRepository<Cheep> database = CSVDatabase<Cheep>.Instance;
             var cheepsRead = database.Read(linestoread);
             string[] cheeps = new string[linestoread];
             var i = 0;

@@ -19,11 +19,6 @@ namespace Chirp.CLI_test {
             //string actual =  File.ReadLines("data/chirp_cli_db.csv/").Last();
             String actual = new String("");
 
-            Program pr = new Program();
-
-
-
-            Program.setDB();
             /*Program.AddCheep(message); */
             Program.AddCheep(message);
             String[] line = (string[])File.ReadLines("../../../../../data/chirp_cli_db.csv")
