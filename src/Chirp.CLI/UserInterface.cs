@@ -1,7 +1,6 @@
 static class UserInterface {
-    static public void PrintCheeps(IEnumerable<Cheep> cheeps, int amount) {
-        
-        foreach (Cheep cheep in cheeps.Reverse().Take(amount))
+    static public void PrintCheeps(IEnumerable<Cheep> cheeps) {
+        foreach (Cheep cheep in cheeps)
             Console.WriteLine(cheep.ToString());
     }
 }

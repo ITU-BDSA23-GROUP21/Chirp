@@ -40,7 +40,7 @@ namespace SimpleDB {
                 else {
                     // This is used to return 'limit' amount of records
                     // This works for all enumerable objects
-                    return recordsToReturn.Skip(0).Take((int)limit);
+                    return recordsToReturn.Take((int)limit);
                 }
             }
         }
