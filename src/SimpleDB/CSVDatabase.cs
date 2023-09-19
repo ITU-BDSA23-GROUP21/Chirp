@@ -7,11 +7,20 @@ namespace SimpleDB {
 
     public sealed class CSVDatabase<T> : IDatabaseRepository<T> {
         private string pathToCSV;
+        private static CSVDatabase<T> instance = null;
 
-        public CSVDatabase() {
-            this.pathToCSV = "../../data/chirp_cli_db.csv";
+        private CSVDatabase() {
+            pathToCSV = "../../data/chirp_cli_db.csv";
         }
 
+        public static CSVDatabase<T> Instance {
+            get {
+                if (instance == null) {
+                    instance = new CSVDatabase<T>();
+                }
+                return instance;
+            }
+        }
 
         public IEnumerable<T> Read(int? limit = null) {
             CsvConfiguration config = new CsvConfiguration(CultureInfo.InvariantCulture) {
