@@ -1,6 +1,7 @@
 ﻿using SimpleDB;
 using System.CommandLine;
 
+
 internal class Program {
     static IDatabaseRepository<Cheep>? CSVdb;
 
@@ -43,14 +44,25 @@ internal class Program {
         return await rootCommand.InvokeAsync(args);
     }
 
-    private static void PrintCheeps(int amount) {
-        IEnumerable<Cheep> cheeps = CSVdb.Read(amount);
-        UserInterface.PrintCheeps(cheeps);
+    private static void HandleCommands(bool? read, string cheep) {
+        // You can currently read and cheep at the same time. Is this intended?
+        if (read == true) {
+            var cheeps = CSVdb.Read();
+            UserInterface.PrintCheeps(cheeps);
+        }
+
+        if (!string.IsNullOrEmpty(cheep)) {
+            AddCheep(cheep);
+        }
     }
 
-    static private void AddCheep(string message) {
+    public static void AddCheep(string message) {
         DateTimeOffset dto = DateTimeOffset.Now.ToLocalTime();
         Cheep cheep = new(Environment.UserName, message, dto.ToUnixTimeSeconds());
         CSVdb.Store(cheep);
+    }
+
+    public static void setDB() {
+        CSVdb = new CSVDatabase<Cheep>("../../../../../data/chirp_cli_db.csv");
     }
 }
