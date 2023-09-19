@@ -16,9 +16,9 @@ namespace Chirp.CLI_test {
             List<Cheep> cheeps = new List<Cheep>{cp1}; // inserting cheep in iterable list
 
             String expected = $"{name}, {timestamp}, \"{message}\""; //making the expected result
-            String actual = File.ReadLines("../../data/chirp_cli_db.csv")
+            String actual = File.ReadLines("../../data/chirp_cli_db.csv");
 
-            Assert.Equal(expected, actual);
+            Assert.Equal(expected, actual)
         }
         #endregion
     }
