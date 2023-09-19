@@ -2,8 +2,6 @@
 using System.CommandLine;
 
 
-
-
 public class Program {
     static IDatabaseRepository<Cheep>? CSVdb;
 
@@ -48,14 +46,14 @@ public class Program {
 
     private static void PrintCheeps(int amount) {
         // You can currently read and cheep at the same time. Is this intended?
-        var cheeps = CSVdb.Read(amount);
+        var cheeps = CSVdb.Read(false, amount);
         UserInterface.PrintCheeps(cheeps);
     }
 
     public static void AddCheep(string message) {
         DateTimeOffset dto = DateTimeOffset.Now.ToLocalTime();
         Cheep cheep = new(Environment.UserName, message, dto.ToUnixTimeSeconds());
-        CSVdb.Store(cheep);
+        CSVdb.Store(false, cheep);
     }
 
     static public IDatabaseRepository<Cheep> setDB() {
