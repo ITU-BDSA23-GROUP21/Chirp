@@ -1,9 +1,6 @@
 ﻿using SimpleDB;
 using System.CommandLine;
 
-
-// IDatabaseRepository<Cheep> database = new CSVDatabase<Cheep>();
-
 internal class Program {
     static IDatabaseRepository<Cheep>? CSVdb;
 
@@ -47,8 +44,8 @@ internal class Program {
     }
 
     private static void PrintCheeps(int amount) {
-        IEnumerable<Cheep> cheeps = CSVdb.Read();
-        UserInterface.PrintCheeps(cheeps, amount);
+        IEnumerable<Cheep> cheeps = CSVdb.Read(amount);
+        UserInterface.PrintCheeps(cheeps);
     }
 
     static private void AddCheep(string message) {
@@ -57,4 +54,3 @@ internal class Program {
         CSVdb.Store(cheep);
     }
 }
-// test
