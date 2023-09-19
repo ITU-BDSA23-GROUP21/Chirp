@@ -13,7 +13,7 @@ namespace SimpleDB_test {
 
         public void ReadGivenAmoutOfLinesTest(int linesToRead) {
             IDatabaseRepository<Cheep> database = CSVDatabase<Cheep>.Instance;
-            var cheepsRead = database.Read(true, linesToRead);
+            var cheepsRead = database.Read(linesToRead);
 
             Assert.Equal(linesToRead, cheepsRead.Count());
         }
@@ -26,7 +26,7 @@ namespace SimpleDB_test {
 
         public void ReadTest(int linestoread, string[] expected) {
             IDatabaseRepository<Cheep> database = CSVDatabase<Cheep>.Instance;
-            var cheepsRead = database.Read(true, linestoread);
+            var cheepsRead = database.Read(linestoread);
             string[] cheeps = new string[linestoread];
             var i = 0;
             foreach (Cheep item in cheepsRead) // converting read data to string array, so it can be compared with the expected array.

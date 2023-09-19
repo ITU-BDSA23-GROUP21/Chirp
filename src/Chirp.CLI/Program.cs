@@ -46,14 +46,14 @@ public class Program {
 
     private static void PrintCheeps(int amount) {
         // You can currently read and cheep at the same time. Is this intended?
-        var cheeps = CSVdb.Read(false, amount);
+        var cheeps = CSVdb.Read(amount);
         UserInterface.PrintCheeps(cheeps);
     }
 
     public static void AddCheep(string message) {
         DateTimeOffset dto = DateTimeOffset.Now.ToLocalTime();
         Cheep cheep = new(Environment.UserName, message, dto.ToUnixTimeSeconds());
-        CSVdb.Store(false, cheep);
+        CSVdb.Store(cheep);
     }
 
     static public IDatabaseRepository<Cheep> setDB() {
