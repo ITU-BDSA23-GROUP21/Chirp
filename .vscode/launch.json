@@ -18,6 +18,9 @@
             "stopAtEntry": false,
             "logging": {
                 "moduleLoad": false
+            },
+            "env": {
+                "DOTNET_CLI_TELEMETRY_OPTOUT": true
             }
         },
         {
