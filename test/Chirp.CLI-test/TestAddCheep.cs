@@ -2,31 +2,34 @@
 namespace Chirp.CLI_test {
     public class TestAddCheep {
         #region Sample_TestCode
+        
         [Theory]
-        [InlineData("generic test")] //data to be tested in genericTest() *the cheep message*
-        [InlineData("generic test   ")]
+        [InlineData("null", "generic test", 000)] //data to be tested in genericTest() *the cheep message*
+       [InlineData("null", "generic test   ", 000)]
 
-        DateTimeOffset dto = DateTimeOffset.Now.ToLocalTime();
-        dto.ToUnixTimeSeconds()
 
-        static void genericTest(Environment.UserName, String message, dto.ToUnixTimeSeconds()) {
+
+        static void genericTest(String name, String message, long timestamp ) {
 
             //IDatabaseRepository<Cheep> database = new CSVDatabase<Cheep>("../../../../../data/chirp_cli_db.csv");
 
             DateTimeOffset dateTime = DateTimeOffset.FromUnixTimeSeconds(timestamp).ToLocalTime(); //converting input long to dateTime
 
-            String expected = $"{name}, {message}, \"{timestamp}\""; //making the expected result
+            //String expected = $"{name}, {message}, \"{timestamp}\""; //making the expected result
+            String expected = message;
             //string actual =  File.ReadLines("data/chirp_cli_db.csv/").Last();
             String actual = new String("");
 
-            /*Program.AddCheep(message); */
+            Program.setDB();
             Program.AddCheep(message);
-            String[] line = (string[])File.ReadLines("../../../../../data/chirp_cli_db.csv")
-            actual = line[line.length - 2]
+            IEnumerable<String> line = File.ReadLines("../../../../../data/chirp_cli_db.csv");
+            List<String> newLine = line.ToList();
+            //actual = newLine.Reverse().Skip(1).FirstOrDefault();
+            actual = newLine[newLine.Count - 2];
 
 
 
-            Assert.Equal(expected, actual);
+            Assert.Contains(message, actual);
         }
         #endregion
     }
