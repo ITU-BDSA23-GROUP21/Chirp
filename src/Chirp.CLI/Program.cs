@@ -46,18 +46,6 @@ internal class Program {
         return await rootCommand.InvokeAsync(args);
     }
 
-    private static void HandleCommands(bool? read, string cheep) {
-        // You can currently read and cheep at the same time. Is this intended?
-        if (read == true) {
-            var cheeps = CSVdb.Read();
-            UserInterface.PrintCheeps(cheeps);
-        }
-
-        if (!string.IsNullOrEmpty(cheep)) {
-            AddCheep(cheep);
-        }
-    }
-
     private static void PrintCheeps(int amount) {
         IEnumerable<Cheep> cheeps = CSVdb.Read();
         UserInterface.PrintCheeps(cheeps);
