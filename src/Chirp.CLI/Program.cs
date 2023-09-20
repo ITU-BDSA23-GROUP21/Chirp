@@ -1,11 +1,12 @@
 ﻿using SimpleDB;
 using System.CommandLine;
 
-internal class Program {
+
+public class Program {
     static IDatabaseRepository<Cheep>? CSVdb;
 
     private static async Task<int> Main(string[] args) {
-        CSVdb = CSVDatabase<Cheep>.Instance;
+        setDB();
         // Workaround for CLI not printing help message if no arguments are passed
         // Inspired by https://stackoverflow.com/a/75734131
         if (args.Length == 0) {
@@ -44,13 +45,21 @@ internal class Program {
     }
 
     private static void PrintCheeps(int amount) {
-        IEnumerable<Cheep> cheeps = CSVdb.Read(amount);
+        // You can currently read and cheep at the same time. Is this intended?
+        var cheeps = CSVdb.Read(amount);
         UserInterface.PrintCheeps(cheeps);
     }
 
-    static private void AddCheep(string message) {
+    public static void AddCheep(string message) {
         DateTimeOffset dto = DateTimeOffset.Now.ToLocalTime();
         Cheep cheep = new(Environment.UserName, message, dto.ToUnixTimeSeconds());
         CSVdb.Store(cheep);
     }
+
+    public static IDatabaseRepository<Cheep> setDB() {
+        CSVdb = CSVDatabase<Cheep>.Instance;
+        return CSVdb;
+    }
+
+
 }

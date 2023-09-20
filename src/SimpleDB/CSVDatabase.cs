@@ -1,16 +1,20 @@
 namespace SimpleDB {
     using CsvHelper;
     using CsvHelper.Configuration;
-    using System.ComponentModel.Design;
     using System.Globalization;
-    using System.Runtime.CompilerServices;
 
     public sealed class CSVDatabase<T> : IDatabaseRepository<T> {
-        private string pathToCSV;
         private static CSVDatabase<T>? instance = null;
 
-        private CSVDatabase() {
-            pathToCSV = "../../data/chirp_cli_db.csv";
+        private static string path;
+
+
+        public CSVDatabase() {
+            // Path to data file differs between development and the compiled program
+            // Kind of hacky solution to get the correct path in both cases
+            // Devs need to use the launch profile to get correct environment, i.e. use 'dotnet run --launch-profile Development'
+            var folder = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development" ? "../../data" : Directory.GetCurrentDirectory();
+            path = $"{folder}/chirp_cli_db.csv";
         }
 
         public static CSVDatabase<T> Instance {
@@ -28,11 +32,10 @@ namespace SimpleDB {
             CsvConfiguration config = new CsvConfiguration(CultureInfo.InvariantCulture) {
                 PrepareHeaderForMatch = args => args.Header.ToLower()
             };
-            using (var reader = new StreamReader(pathToCSV))
-            using (var csv = new CsvReader(reader, config)) {
+            using (var sr = new StreamReader(path))
+            using (var csv = new CsvReader(sr, config)) {
                 var records = csv.GetRecords<T>();
                 var recordsToReturn = records.ToList();
-
                 // If no limit is given, the program returns all records
                 if (limit == null) {
                     return recordsToReturn;
@@ -50,12 +53,13 @@ namespace SimpleDB {
                 HasHeaderRecord = false, // This tells the write to not duplicate the header when storing new records
                 PrepareHeaderForMatch = args => args.Header.ToLower()
             };
-            using (var stream = File.Open(pathToCSV, FileMode.Append))
-            using (var writer = new StreamWriter(stream))
-            using (var csv = new CsvWriter(writer, config)) {
+            using (var stream = File.Open(path, FileMode.Append))
+            using (var sr = new StreamWriter(stream))
+            using (var csv = new CsvWriter(sr, config)) {
                 csv.WriteRecord(record);
                 csv.NextRecord();
             }
+
         }
     }
 }

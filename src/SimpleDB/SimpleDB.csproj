@@ -9,6 +9,14 @@
 
   <ItemGroup>
     <PackageReference Include="CsvHelper" Version="30.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Fileproviders.Embedded" Version="7.0.11" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="../../data/chirp_cli_db.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 
 </Project>
