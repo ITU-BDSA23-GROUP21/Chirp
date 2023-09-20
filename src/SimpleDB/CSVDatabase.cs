@@ -61,6 +61,7 @@ namespace SimpleDB {
                 csv.WriteRecord(record);
                 csv.NextRecord();
             }
+
         }
     }
 }
