@@ -5,7 +5,7 @@ namespace Chirp.CLI_test {
         
         [Theory]
         [InlineData("null", "generic test", 000)] //data to be tested in genericTest() *the cheep message*
-       [InlineData("null", "generic test   ", 000)]
+       [InlineData("null", "generic test !)¤(%)", 000)]
 
 
 
@@ -16,7 +16,6 @@ namespace Chirp.CLI_test {
             DateTimeOffset dateTime = DateTimeOffset.FromUnixTimeSeconds(timestamp).ToLocalTime(); //converting input long to dateTime
 
             //String expected = $"{name}, {message}, \"{timestamp}\""; //making the expected result
-            String expected = message;
             //string actual =  File.ReadLines("data/chirp_cli_db.csv/").Last();
             String actual = new String("");
 
