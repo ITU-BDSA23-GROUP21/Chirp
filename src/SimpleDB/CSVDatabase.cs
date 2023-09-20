@@ -27,6 +27,10 @@ namespace SimpleDB {
                 PrepareHeaderForMatch = args => args.Header.ToLower()
             };
             var embeddedProvider = new EmbeddedFileProvider(Assembly.GetExecutingAssembly());
+            // There was a problem using the database, the path to the CSV file, was not the same when testing and running the program
+            // Therefore we added the CSV file as an embedded file in the database project, following these links:
+            // https://josef.codes/using-embedded-files-in-dotnet-core/
+            // https://stackoverflow.com/questions/38762368/embedded-resource-in-net-core-libraries/57811919#57811919
             using (var reader = embeddedProvider.GetFileInfo("chirp_cli_db.csv").CreateReadStream())
             using (var sr = new StreamReader(reader))
             using (var csv = new CsvReader(sr, config)) {
