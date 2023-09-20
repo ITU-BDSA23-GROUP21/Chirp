@@ -18,15 +18,15 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
     - name: Build Windows
-      run: dotnet build --no-restore --configuration Release -r win-x64
+      run: dotnet publish --no-restore --configuration Release -r win-x64
     - name: Test Windows
       run: dotnet test --no-build --verbosity normal -r win-x64
     - name: Build MacOS
-      run: dotnet build --no-restore --configuration Release -r osx-x64
+      run: dotnet publish --no-restore --configuration Release -r osx-x64
     - name: Test MacOS
       run: dotnet test --no-build --verbosity normal -r osx-x64
     - name: Build linux
-      run: dotnet build --no-restore --configuration Release -r linux-x64
+      run: dotnet publish --no-restore --configuration Release -r linux-x64
     - name: Test linux
       run: dotnet test --no-build --verbosity normal -r linux-x64
     - name: Zip Files
