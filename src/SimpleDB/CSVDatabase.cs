@@ -14,7 +14,9 @@ namespace SimpleDB {
 
 
         public CSVDatabase(){
-            path = "../../data/chirp_cli_db.csv";
+            var folder = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development" ? "../../data" : Directory.GetCurrentDirectory();
+            path = $"{folder}/chirp_cli_db.csv";
+            Console.WriteLine(path);
         }
 
         public static CSVDatabase<T> Instance {
