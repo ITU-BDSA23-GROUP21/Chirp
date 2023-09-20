@@ -10,6 +10,12 @@ namespace SimpleDB {
     public sealed class CSVDatabase<T> : IDatabaseRepository<T> {
         private static CSVDatabase<T>? instance = null;
 
+        private static string path;
+
+
+        public CSVDatabase(){
+            path = "../../data/chirp_cli_db.csv";
+        }
 
         public static CSVDatabase<T> Instance {
             get {
@@ -26,17 +32,10 @@ namespace SimpleDB {
             CsvConfiguration config = new CsvConfiguration(CultureInfo.InvariantCulture) {
                 PrepareHeaderForMatch = args => args.Header.ToLower()
             };
-            var embeddedProvider = new EmbeddedFileProvider(Assembly.GetExecutingAssembly());
-            // There was a problem using the database, the path to the CSV file, was not the same when testing and running the program
-            // Therefore we added the CSV file as an embedded file in the database project, following these links:
-            // https://josef.codes/using-embedded-files-in-dotnet-core/
-            // https://stackoverflow.com/questions/38762368/embedded-resource-in-net-core-libraries/57811919#57811919
-            using (var reader = embeddedProvider.GetFileInfo("chirp_cli_db.csv").CreateReadStream())
-            using (var sr = new StreamReader(reader))
+            using (var sr = new StreamReader(path))
             using (var csv = new CsvReader(sr, config)) {
                 var records = csv.GetRecords<T>();
                 var recordsToReturn = records.ToList();
-
                 // If no limit is given, the program returns all records
                 if (limit == null) {
                     return recordsToReturn;
@@ -54,9 +53,8 @@ namespace SimpleDB {
                 HasHeaderRecord = false, // This tells the write to not duplicate the header when storing new records
                 PrepareHeaderForMatch = args => args.Header.ToLower()
             };
-            var embeddedProvider = new EmbeddedFileProvider(Assembly.GetExecutingAssembly());
-            using (var reader = embeddedProvider.GetFileInfo("chirp_cli_db.csv").CreateReadStream())
-            using (var sr = new StreamWriter(reader))
+            using (var stream = File.Open(path, FileMode.Append))
+            using (var sr = new StreamWriter(stream))
             using (var csv = new CsvWriter(sr, config)) {
                 csv.WriteRecord(record);
                 csv.NextRecord();

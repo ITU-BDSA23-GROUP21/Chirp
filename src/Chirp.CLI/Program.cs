@@ -56,9 +56,8 @@ public class Program {
         CSVdb.Store(cheep);
     }
 
-    static public IDatabaseRepository<Cheep> setDB() {
+    public static void setDB() {
         CSVdb = CSVDatabase<Cheep>.Instance;
-        return CSVdb;
     }
 
 
