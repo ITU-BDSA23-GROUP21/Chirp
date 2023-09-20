@@ -17,7 +17,7 @@ namespace Chirp.CLI_test {
             Program.setDB();
             Program.AddCheep(message);
 
-            IEnumerable<String> lines = File.ReadLines("../../../../../data/chirp_cli_db.csv");
+            IEnumerable<String> lines = File.ReadLines("chirp_cli_db.csv");
             List<String> newLines = lines.ToList();
             actual = newLines[newLines.Count - 1]; //choosing the last record in csv file
 
