@@ -24,7 +24,7 @@ namespace Chirp.CLI_test {
             Cheep cp = new Cheep(name, message, timestamp);
             database.Store(cp);
 
-            IEnumerable<String> line = File.ReadLines("../../../../../data/chirp_cli_db.csv");
+            IEnumerable<String> line = File.ReadLines("chirp_cli_db.csv");
             List<String> newLines = line.ToList();
             actual = newLines[newLines.Count - 1];
             String expected = $"{name},{message},{timestamp}";
