@@ -1,11 +1,7 @@
 namespace SimpleDB {
     using CsvHelper;
     using CsvHelper.Configuration;
-    using Microsoft.Extensions.FileProviders;
-    using System.ComponentModel.Design;
     using System.Globalization;
-    using System.Reflection;
-    using System.Runtime.CompilerServices;
 
     public sealed class CSVDatabase<T> : IDatabaseRepository<T> {
         private static CSVDatabase<T>? instance = null;
@@ -13,8 +9,13 @@ namespace SimpleDB {
         private static string path;
 
 
-        public CSVDatabase(){
-            path = "../../../../../data/chirp_cli_db.csv";
+        public CSVDatabase() {
+            // Path to data file differs between development and the compiled program
+            // Kind of hacky solution to get the correct path in both cases
+            // Devs need to use the launch profile to get correct environment, i.e. use 'dotnet run --launch-profile Development'
+            var folder = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development" ? "../../data" : Directory.GetCurrentDirectory();
+            path = $"{folder}/chirp_cli_db.csv";
+            Console.WriteLine(path);
         }
 
         public static CSVDatabase<T> Instance {
