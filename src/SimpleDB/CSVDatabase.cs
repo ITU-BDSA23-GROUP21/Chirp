@@ -15,7 +15,6 @@ namespace SimpleDB {
             // Devs need to use the launch profile to get correct environment, i.e. use 'dotnet run --launch-profile Development'
             var folder = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development" ? "../../data" : Directory.GetCurrentDirectory();
             path = $"{folder}/chirp_cli_db.csv";
-            Console.WriteLine(path);
         }
 
         public static CSVDatabase<T> Instance {
