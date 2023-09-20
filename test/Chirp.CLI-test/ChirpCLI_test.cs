@@ -19,11 +19,11 @@ namespace Chirp.CLI_test {
 
             IEnumerable<String> lines = File.ReadLines("../../../../../data/chirp_cli_db.csv");
             List<String> newLines = lines.ToList();
-            actual = newLines[newLines.Count - 2]; //choosing the last record in csv file
+            actual = newLines[newLines.Count - 1]; //choosing the last record in csv file
 
-            String expected = $"{Environment.UserName}, {message}, {dto.ToUnixTimeSeconds()}";
+            String expected = $"{Environment.UserName},{message},{dto.ToUnixTimeSeconds()}";
 
-            Assert.Contains(message, actual);
+            Assert.Equal(expected, actual);
         }
         #endregion
 

@@ -26,10 +26,10 @@ namespace Chirp.CLI_test {
 
             IEnumerable<String> line = File.ReadLines("../../../../../data/chirp_cli_db.csv");
             List<String> newLines = line.ToList();
-            actual = newLines[newLines.Count - 2];
-            String expected = $"{name}, {message}, {timestamp}";
+            actual = newLines[newLines.Count - 1];
+            String expected = $"{name},{message},{timestamp}";
 
-            Assert.Contains(expected, actual);
+            Assert.Equal(expected, actual);
         }
         #endregion
 

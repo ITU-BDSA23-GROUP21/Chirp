@@ -14,7 +14,7 @@ namespace SimpleDB {
 
 
         public CSVDatabase(){
-            path = "../../data/chirp_cli_db.csv";
+            path = "../../../../../data/chirp_cli_db.csv";
         }
 
         public static CSVDatabase<T> Instance {
