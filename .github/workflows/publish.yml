@@ -27,9 +27,9 @@ jobs:
       run: dotnet publish ./src/Chirp.CLI/Chirp.CLI.csproj --no-restore --configuration Release -r linux-x64 --no-self-contained -p:PublishSingleFile=true
     - name: Zip Files
       run: |
-        zip Chirp.CLI-${{github.ref_name}}-win-x64.zip ./src/Chirp.CLI/bin/Release/net7.0/win-x64/publish/Chirp.CLI.exe
-        zip Chirp.CLI-${{github.ref_name}}-osx-x64.zip ./src/Chirp.CLI/bin/Release/net7.0/osx-x64/publish/Chirp.CLI
-        zip Chirp.CLI-${{github.ref_name}}-linux-x64.zip ./src/Chirp.CLI/bin/Release/net7.0/linux-x64/publish/Chirp.CLI
+        zip Chirp.CLI-${{github.ref_name}}-win-x64.zip ./src/Chirp.CLI/bin/Release/net7.0/win-x64/publish/Chirp.CLI.exe -j
+        zip Chirp.CLI-${{github.ref_name}}-osx-x64.zip ./src/Chirp.CLI/bin/Release/net7.0/osx-x64/publish/Chirp.CLI -j
+        zip Chirp.CLI-${{github.ref_name}}-linux-x64.zip ./src/Chirp.CLI/bin/Release/net7.0/linux-x64/publish/Chirp.CLI -j
     - name: Release
       uses: softprops/action-gh-release@v1
       with:
