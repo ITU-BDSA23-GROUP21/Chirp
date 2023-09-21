@@ -17,21 +17,24 @@ jobs:
         dotnet-version: 7.0.x
     - name: Restore dependencies
       run: dotnet restore
+    - name: Test
+      run: dotnet test --verbosity normal
     - name: Build Windows
-      run: dotnet publish ./src/Chirp.CLI/Chirp.CLI.csproj --no-restore --configuration Release -r win-x64 --self-contained
+      run: dotnet publish ./src/Chirp.CLI/Chirp.CLI.csproj --no-restore --configuration Release -r win-x64 --no-self-contained -p:PublishSingleFile=true
     - name: Build MacOS
-      run: dotnet publish ./src/Chirp.CLI/Chirp.CLI.csproj --no-restore --configuration Release -r osx-x64 --self-contained
+      run: dotnet publish ./src/Chirp.CLI/Chirp.CLI.csproj --no-restore --configuration Release -r osx-x64 --no-self-contained -p:PublishSingleFile=true
     - name: Build linux
-      run: dotnet publish ./src/Chirp.CLI/Chirp.CLI.csproj --no-restore --configuration Release -r linux-x64 --self-contained
+      run: dotnet publish ./src/Chirp.CLI/Chirp.CLI.csproj --no-restore --configuration Release -r linux-x64 --no-self-contained -p:PublishSingleFile=true
     - name: Zip Files
       run: |
-        cd ./src/Chirp.CLI/bin/Release/net7.0/win-x64/publish && zip ../../../../../../../win-x64.zip . -r
-        cd ../../osx-x64/publish && zip ../../../../../../../osx-x64.zip . -r
-        cd ../../win-x64/publish && zip ../../../../../../../linux-x64.zip . -r
+        cd ./src/Chirp.CLI/bin/Release/net7.0/win-x64/publish && zip ../../../../../../../Chirp.CLI-${{github.ref_name}}-win-x64.zip Chirp.CLI.exe
+        cd ../../osx-x64/publish && zip ../../../../../../../Chirp.CLI-${{github.ref_name}}-osx-x64.zip Chirp.CLI
+        cd ../../linux-x64/publish && zip ../../../../../../../Chirp.CLI-${{github.ref_name}}-linux-x64.zip Chirp.CLI 
     - name: Release
       uses: softprops/action-gh-release@v1
+      if: startsWith(github.ref, 'refs/tags/')
       with:
         files: |
-            win-x64.zip
-            osx-x64.zip
-            linux-x64.zip
+          Chirp.CLI-${{github.ref_name}}-win-x64.zip
+          Chirp.CLI-${{github.ref_name}}-osx-x64.zip
+          Chirp.CLI-${{github.ref_name}}-linux-x64.zip
