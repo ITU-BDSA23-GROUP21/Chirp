@@ -37,7 +37,7 @@ namespace SimpleDB {
                 var records = csv.GetRecords<T>();
                 var recordsToReturn = records.ToList();
                 // If no limit is given, the program returns all records
-                if (limit == null) {
+                if (limit == null || limit > records.Count()) {
                     return recordsToReturn;
                 }
                 else {
