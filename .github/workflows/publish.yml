@@ -1,0 +1,37 @@
+name: 'Publish Github Release'
+
+on:
+  push:
+    branches: [ main ]
+    tags: [ 'v*.*.*' ]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 7.0.x
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build Windows
+      run: dotnet publish ./src/Chirp.CLI/Chirp.CLI.csproj --no-restore --configuration Release -r win-x64 --self-contained
+    - name: Build MacOS
+      run: dotnet publish ./src/Chirp.CLI/Chirp.CLI.csproj --no-restore --configuration Release -r osx-x64 --self-contained
+    - name: Build linux
+      run: dotnet publish ./src/Chirp.CLI/Chirp.CLI.csproj --no-restore --configuration Release -r linux-x64 --self-contained
+    - name: Zip Files
+      run: |
+        cd ./src/Chirp.CLI/bin/Release/net7.0/win-x64/publish && zip ../../../../../../../win-x64.zip . -r
+        cd ../../osx-x64/publish && zip ../../../../../../../osx-x64.zip . -r
+        cd ../../win-x64/publish && zip ../../../../../../../linux-x64.zip . -r
+    - name: Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+            win-x64.zip
+            osx-x64.zip
+            linux-x64.zip
