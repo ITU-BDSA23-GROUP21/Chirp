@@ -6,7 +6,7 @@ on:
     tags: [ 'v*.*.*' ]
 
 jobs:
-  build:
+  publish:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
@@ -19,22 +19,22 @@ jobs:
       run: dotnet restore
     - name: Build Windows
       run: dotnet publish ./src/Chirp.CLI/Chirp.CLI.csproj --no-restore --configuration Release -r win-x64 --self-contained
-    # - name: Test Windows
-    #   run: dotnet test --no-build --verbosity normal -r win-x64
     - name: Build MacOS
       run: dotnet publish ./src/Chirp.CLI/Chirp.CLI.csproj --no-restore --configuration Release -r osx-x64 --self-contained
-    # - name: Test MacOS
-    #   run: dotnet test --no-build --verbosity normal -r osx-x64
     - name: Build linux
       run: dotnet publish ./src/Chirp.CLI/Chirp.CLI.csproj --no-restore --configuration Release -r linux-x64 --self-contained
-    # - name: Test linux
-    #   run: dotnet test --no-build --verbosity normal -r linux-x64
     - name: Zip Files
-      run: zip win-x64.zip ./src/Chirp.CLI/bin/Release/net7.0/win-x64/publish -r
+      run: |
+        zip win-x64.zip src/Chirp.CLI/bin/Release/net7.0/win-x64/publish/ -r
+        zip osx-x64.zip src/Chirp.CLI/bin/Release/net7.0/osx-x64/publish/ -r
+        zip linux-x64.zip src/Chirp.CLI/bin/Release/net7.0/win-x64/publish/ -r
     - name: Release
       uses: softprops/action-gh-release@v1
       if: startsWith(github.ref, 'refs/tags/')
       with:
-        files: win-x64.zip
+        files: |
+            win-x64.zip
+            osx-x64.zip
+            linux-x64.zip   
         draft: true
         name: test release draft
