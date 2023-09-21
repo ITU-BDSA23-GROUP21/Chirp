@@ -6,10 +6,10 @@ namespace SimpleDB {
     public sealed class CSVDatabase<T> : IDatabaseRepository<T> {
         private static CSVDatabase<T>? instance = null;
 
-        private static string path;
+        private static string? path;
 
 
-        public CSVDatabase() {
+        private CSVDatabase() {
             // Path to data file differs between development and the compiled program
             // Kind of hacky solution to get the correct path in both cases
             // Devs need to use the launch profile to get correct environment, i.e. use 'dotnet run --launch-profile Development'
@@ -38,6 +38,7 @@ namespace SimpleDB {
                 var recordsToReturn = records.ToList();
                 // If no limit is given, the program returns all records
                 if (limit == null) {
+                    Console.WriteLine(records.Count());
                     return recordsToReturn;
                 }
                 else {
