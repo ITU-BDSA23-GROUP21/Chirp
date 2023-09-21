@@ -29,7 +29,7 @@ jobs:
       run: |
         cd ./src/Chirp.CLI/bin/Release/net7.0/win-x64/publish && zip ../../../../../../../Chirp.CLI-${{github.ref_name}}-win-x64.zip Chirp.CLI.exe
         cd ../../osx-x64/publish && zip ../../../../../../../Chirp.CLI-${{github.ref_name}}-osx-x64.zip Chirp.CLI
-        cd ../../win-x64/publish && zip ../../../../../../../Chirp.CLI-${{github.ref_name}}-linux-x64.zip Chirp.CLI 
+        cd ../../linux-x64/publish && zip ../../../../../../../Chirp.CLI-${{github.ref_name}}-linux-x64.zip Chirp.CLI 
     - name: Release
       uses: softprops/action-gh-release@v1
       with:
