@@ -26,8 +26,8 @@ jobs:
     - name: Zip Files
       run: |
         cd ./src/Chirp.CLI/bin/Release/net7.0/win-x64/publish && zip ./win-x64.zip . -r
-        cd ./src/Chirp.CLI/bin/Release/net7.0/osx-x64/publish && zip ./osx-x64.zip . -r
-        cd ./src/Chirp.CLI/bin/Release/net7.0/win-x64/publish && zip ./linux-x64.zip . -r
+        cd ../../osx-x64/publish && zip ./osx-x64.zip . -r
+        cd ../../win-x64/publish && zip ./linux-x64.zip . -r
     - name: Release
       uses: softprops/action-gh-release@v1
       with:
