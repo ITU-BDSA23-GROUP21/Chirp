@@ -3,12 +3,15 @@ using System.CommandLine;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using System.Text.Json;
 
 public class Program {
     static IDatabaseRepository<Cheep>? CSVdb;
+    static HttpClient client;
 
     private static async Task<int> Main(string[] args) {
         setDB();
+        client = sharedClient;
         // Workaround for CLI not printing help message if no arguments are passed
         // Inspired by https://stackoverflow.com/a/75734131
         if (args.Length == 0) {
@@ -46,15 +49,17 @@ public class Program {
         return await rootCommand.InvokeAsync(args);
     }
 
-    public static void PrintCheeps(int amount) {
+    private static async void PrintCheeps(int amount) {
         // You can currently read and cheep at the same time. Is this intended?
-        var cheeps = CSVdb.Read(amount);
-        UserInterface.PrintCheeps(cheeps);
+        await GetFromJsonAsync(client);
+
     }
 
     public static void AddCheep(string message) {
         DateTimeOffset dto = DateTimeOffset.Now.ToLocalTime();
         Cheep cheep = new(Environment.UserName, message, dto.ToUnixTimeSeconds());
+
+        // Send POST request to DB
 
         //CSVdb.Store(cheep);
     }
@@ -64,5 +69,16 @@ public class Program {
         return CSVdb;
     }
 
+    private static HttpClient sharedClient = new() {
+        BaseAddress = new Uri("http://localhost:5193"),
+    };
 
+    // Only works if Cheeps are stored in a list
+    static async Task GetFromJsonAsync(HttpClient httpClient) {
+        var cheeps = await httpClient.GetFromJsonAsync<List<Cheep>>(
+            "/cheeps"
+        );
+
+        UserInterface.PrintCheeps(cheeps);
+    }
 }
