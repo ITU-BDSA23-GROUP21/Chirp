@@ -1,6 +1,8 @@
 ﻿using SimpleDB;
 using System.CommandLine;
-
+using System.Net;
+using System.Net.Http.Headers;
+using System.Net.Http.Json;
 
 public class Program {
     static IDatabaseRepository<Cheep>? CSVdb;
@@ -53,7 +55,8 @@ public class Program {
     public static void AddCheep(string message) {
         DateTimeOffset dto = DateTimeOffset.Now.ToLocalTime();
         Cheep cheep = new(Environment.UserName, message, dto.ToUnixTimeSeconds());
-        CSVdb.Store(cheep);
+
+        //CSVdb.Store(cheep);
     }
 
     public static IDatabaseRepository<Cheep> setDB() {
