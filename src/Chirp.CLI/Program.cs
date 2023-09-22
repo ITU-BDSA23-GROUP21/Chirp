@@ -44,7 +44,7 @@ public class Program {
         return await rootCommand.InvokeAsync(args);
     }
 
-    private static void PrintCheeps(int amount) {
+    public static void PrintCheeps(int amount) {
         // You can currently read and cheep at the same time. Is this intended?
         var cheeps = CSVdb.Read(amount);
         UserInterface.PrintCheeps(cheeps);
