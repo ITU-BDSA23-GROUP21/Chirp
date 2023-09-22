@@ -3,15 +3,17 @@ using System.CommandLine;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using System.Text;
 using System.Text.Json;
 
 public class Program {
     static IDatabaseRepository<Cheep>? CSVdb;
-    static HttpClient client;
+    static HttpClient? client;
 
     private static async Task<int> Main(string[] args) {
         setDB();
         client = sharedClient;
+        GetFromJsonAsync(client);
         // Workaround for CLI not printing help message if no arguments are passed
         // Inspired by https://stackoverflow.com/a/75734131
         if (args.Length == 0) {
@@ -80,5 +82,26 @@ public class Program {
         );
 
         UserInterface.PrintCheeps(cheeps);
+    }
+
+    static async Task PostAsync(HttpClient httpClient, string Message) {
+        DateTimeOffset dto = DateTimeOffset.Now.ToLocalTime();
+        using StringContent jsonContent = new(
+            JsonSerializer.Serialize(new {
+                Author = Environment.UserName,
+                Message = Message,
+                Timestamp = dto.ToUnixTimeSeconds()
+            }),
+            Encoding.UTF8,
+            "application/json");
+
+        using HttpResponseMessage response = await httpClient.PostAsync(
+            "cheep",
+            jsonContent);
+
+        response.EnsureSuccessStatusCode();
+
+        var jsonResponse = await response.Content.ReadAsStringAsync();
+        Console.WriteLine($"{jsonResponse}");
     }
 }
