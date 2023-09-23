@@ -29,7 +29,7 @@ namespace Chirp.CLI_test
             return output;
         }
 
-        // [Fact]
+        [Fact]
         static void NoCommand()
         {
             //Arrange
@@ -39,6 +39,18 @@ namespace Chirp.CLI_test
             string output = LaunchProgram(command);
             //Assert
             Assert.Matches(expectedOutput, output);
+        }
+
+        [Fact]
+        static void InvalidCommand()
+        {
+            //Arrange
+            string command = "Test";
+            string expectedOutput = START_OF_HELP;
+            //Act
+            string output = LaunchProgram(command);
+            //Assert
+            Assert.Contains(expectedOutput, output);
         }
 
         [Theory]
