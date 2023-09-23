@@ -13,7 +13,8 @@ public class Program {
     private static async Task<int> Main(string[] args) {
         setDB();
         client = sharedClient;
-        await GetFromJsonAsync(client);
+        //Console.WriteLine(client);
+        //await GetFromJsonAsync(client);
         // Workaround for CLI not printing help message if no arguments are passed
         // Inspired by https://stackoverflow.com/a/75734131
         if (args.Length == 0) {
@@ -51,19 +52,21 @@ public class Program {
         return await rootCommand.InvokeAsync(args);
     }
 
-    private static async void PrintCheeps(int amount) {
+    public static async Task PrintCheeps(int amount) {
         // You can currently read and cheep at the same time. Is this intended?
+
         await GetFromJsonAsync(client);
 
     }
 
-    public static void AddCheep(string message) {
+    public static async Task AddCheep(string message) {
         DateTimeOffset dto = DateTimeOffset.Now.ToLocalTime();
         Cheep cheep = new(Environment.UserName, message, dto.ToUnixTimeSeconds());
 
         // Send POST request to DB
 
         //CSVdb.Store(cheep);
+        await PostAsync(client, message);
     }
 
     public static IDatabaseRepository<Cheep> setDB() {
