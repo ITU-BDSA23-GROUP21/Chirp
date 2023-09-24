@@ -1,4 +1,3 @@
-//integration test
 namespace Chirp.CLI_test
 {
     public class TestAddCheep
