@@ -15,11 +15,11 @@ List<Cheep> list = new List<Cheep> {
 
 // TODO
 // Fetch all cheeps and return as JSON strings    
-app.MapGet("/cheeps", () => CSVdb.Read() );
+app.MapGet("/cheeps", () => CSVdb.Read());
 
 // TODO
 // Post a cheep into the database as a JSON object
-app.MapPost("/cheep", (Cheep cheep) => CSVdb.Store(cheep) );
+app.MapPost("/cheep", (Cheep cheep) => CSVdb.Store(cheep));
 
 app.Run();
 
@@ -27,4 +27,4 @@ app.Run();
 
 
 
-public record Cheep(string Author, string Message, long Timestamp);
+internal record Cheep(string Author, string Message, long Timestamp);
