@@ -23,8 +23,4 @@ app.MapPost("/cheep", (Cheep cheep) => CSVdb.Store(cheep));
 
 app.Run();
 
-
-
-
-
 internal record Cheep(string Author, string Message, long Timestamp);

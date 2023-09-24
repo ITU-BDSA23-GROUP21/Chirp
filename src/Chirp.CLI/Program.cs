@@ -6,11 +6,13 @@ using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
 
-public class Program {
+public class Program
+{
     static IDatabaseRepository<Cheep>? CSVdb;
     static HttpClient? client;
 
-    private static async Task<int> Main(string[] args) {
+    private static async Task<int> Main(string[] args)
+    {
         setDB();
         setClient();
 
@@ -18,7 +20,8 @@ public class Program {
         //await GetFromJsonAsync(client);
         // Workaround for CLI not printing help message if no arguments are passed
         // Inspired by https://stackoverflow.com/a/75734131
-        if (args.Length == 0) {
+        if (args.Length == 0)
+        {
             args = new[] { "--help" };
         }
 
@@ -53,13 +56,15 @@ public class Program {
         return await rootCommand.InvokeAsync(args);
     }
 
-    public static async Task PrintCheeps(int amount) {
+    public static async Task PrintCheeps(int amount)
+    {
         // You can currently read and cheep at the same time. Is this intended?
         await GetFromJsonAsync(client);
 
     }
 
-    public static async Task AddCheep(string message) {
+    public static async Task AddCheep(string message)
+    {
         DateTimeOffset dto = DateTimeOffset.Now.ToLocalTime();
         Cheep cheep = new(Environment.UserName, message, dto.ToUnixTimeSeconds());
 
@@ -69,21 +74,25 @@ public class Program {
         await PostAsync(client, message);
     }
 
-    public static IDatabaseRepository<Cheep> setDB() {
+    public static IDatabaseRepository<Cheep> setDB()
+    {
         CSVdb = CSVDatabase<Cheep>.Instance;
         return CSVdb;
     }
 
-    public static HttpClient setClient() {
+    public static HttpClient setClient()
+    {
         return client = sharedClient;
     }
 
-    private static HttpClient sharedClient = new() {
+    private static HttpClient sharedClient = new()
+    {
         BaseAddress = new Uri("http://localhost:5193"),
     };
 
     // Only works if Cheeps are stored in a list
-    static async Task GetFromJsonAsync(HttpClient httpClient) {
+    static async Task GetFromJsonAsync(HttpClient httpClient)
+    {
         var cheeps = await httpClient.GetFromJsonAsync<List<Cheep>>(
             "/cheeps"
         );
@@ -91,10 +100,12 @@ public class Program {
         UserInterface.PrintCheeps(cheeps);
     }
 
-    static async Task PostAsync(HttpClient httpClient, string Message) {
+    static async Task PostAsync(HttpClient httpClient, string Message)
+    {
         DateTimeOffset dto = DateTimeOffset.Now.ToLocalTime();
         using StringContent jsonContent = new(
-            JsonSerializer.Serialize(new {
+            JsonSerializer.Serialize(new
+            {
                 Author = Environment.UserName,
                 Message = Message,
                 Timestamp = dto.ToUnixTimeSeconds()
