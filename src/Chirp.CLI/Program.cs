@@ -87,7 +87,7 @@ public class Program
 
     private static HttpClient sharedClient = new()
     {
-        BaseAddress = new Uri("http://localhost:5193"),
+        BaseAddress = new Uri("https://bdsagroup21chirpremotedb.azurewebsites.net"),
     };
 
     // Only works if Cheeps are stored in a list
