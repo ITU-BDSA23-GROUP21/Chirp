@@ -23,10 +23,10 @@ jobs:
           include-prerelease: true
 
       - name: Build with dotnet
-        run: dotnet build src/Chirp.CSVDBService/bin/Debug/net7.0/Chirp.CSVDBService.dll --configuration Release
+        run: dotnet build  --configuration Release src/Chirp.CSVDBService/Chirp.CSVDBService.csproj
 
       - name: dotnet publish
-        run: dotnet publish src/Chirp.CSVDBService/bin/Debug/net7.0/Chirp.CSVDBService.dll -c Release -o ${{env.DOTNET_ROOT}}/myapp
+        run: dotnet publish -c Release src/Chirp.CSVDBService/Chirp.CSVDBService.csproj -o ${{env.DOTNET_ROOT}}/myapp
       
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
