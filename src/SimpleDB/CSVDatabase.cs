@@ -27,6 +27,10 @@ namespace SimpleDB {
         }
 
         public IEnumerable<T> Read(int? limit = null) {
+            // Workaround for issue #43. See https://github.com/ITU-BDSA23-GROUP21/Chirp/issues/43
+            if (!File.Exists(path)) {
+                return Array.Empty<T>();
+            }
             // A new CsvConfiguration is needed when not using default configuration
             // In this configuration, the header is taken in lower case, so that it is not case sensitive
             CsvConfiguration config = new CsvConfiguration(CultureInfo.InvariantCulture) {
@@ -50,6 +54,12 @@ namespace SimpleDB {
         }
 
         public void Store(T record) {
+            // Workaround for issue #43. See https://github.com/ITU-BDSA23-GROUP21/Chirp/issues/43
+            var writeHeader = false;
+            if (!File.Exists(path)) {
+                File.Create(path).Close();
+                writeHeader = true;
+            }
             CsvConfiguration config = new CsvConfiguration(CultureInfo.InvariantCulture) {
                 HasHeaderRecord = false, // This tells the write to not duplicate the header when storing new records
                 PrepareHeaderForMatch = args => args.Header.ToLower()
@@ -57,6 +67,10 @@ namespace SimpleDB {
             using (var stream = File.Open(path, FileMode.Append))
             using (var sr = new StreamWriter(stream))
             using (var csv = new CsvWriter(sr, config)) {
+                if (writeHeader) {
+                    csv.WriteHeader<T>();
+                    csv.NextRecord();
+                }
                 csv.WriteRecord(record);
                 csv.NextRecord();
             }
