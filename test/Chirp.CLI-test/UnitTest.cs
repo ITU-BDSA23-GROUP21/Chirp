@@ -1,4 +1,3 @@
-using Cheep;
 
 namespace Chirp.CLI_test
 {
