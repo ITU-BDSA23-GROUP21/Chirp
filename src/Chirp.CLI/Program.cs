@@ -12,7 +12,8 @@ public class Program {
 
     private static async Task<int> Main(string[] args) {
         setDB();
-        client = sharedClient;
+        setClient();
+
         //Console.WriteLine(client);
         //await GetFromJsonAsync(client);
         // Workaround for CLI not printing help message if no arguments are passed
@@ -54,7 +55,6 @@ public class Program {
 
     public static async Task PrintCheeps(int amount) {
         // You can currently read and cheep at the same time. Is this intended?
-
         await GetFromJsonAsync(client);
 
     }
@@ -72,6 +72,10 @@ public class Program {
     public static IDatabaseRepository<Cheep> setDB() {
         CSVdb = CSVDatabase<Cheep>.Instance;
         return CSVdb;
+    }
+
+    public static HttpClient setClient() {
+        return client = sharedClient;
     }
 
     private static HttpClient sharedClient = new() {
@@ -105,6 +109,6 @@ public class Program {
         response.EnsureSuccessStatusCode();
 
         var jsonResponse = await response.Content.ReadAsStringAsync();
-        Console.WriteLine($"{jsonResponse}");
+        //Console.WriteLine($"{jsonResponse}"); //  this line creates a "cannot write to a closed writer" exception
     }
 }
