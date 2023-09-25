@@ -1,26 +1,13 @@
-using System.Net;
-using System.Net.Http.Headers;
-using System.Net.Http.Json;
-using SimpleDB;
-
-using HttpClient client = new();
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
-IDatabaseRepository<Cheep>? CSVdb = CSVDatabase<Cheep>.Instance;
+var cheepHandler = new CheepHandler();
 
-List<Cheep> list = new List<Cheep> {
-        new Cheep("Mig", "Hej", 1),
-        new Cheep("Dig", "Dav", 2)
-    };
+// Fetch all cheeps and return as JSON    
+app.MapGet("/cheeps", (int amount) => cheepHandler.GetCheeps(amount));
 
-// TODO
-// Fetch all cheeps and return as JSON strings    
-app.MapGet("/cheeps", () => CSVdb.Read());
-
-// TODO
-// Post a cheep into the database as a JSON object
-app.MapPost("/cheep", (Cheep cheep) => CSVdb.Store(cheep));
+// Post a cheep into the database
+app.MapPost("/cheep", (Cheep cheep) => cheepHandler.AddCheep(cheep.Message, cheep.Author));
 
 app.Run();
 
-internal record Cheep(string Author, string Message, long Timestamp);
+public record Cheep(string Author, string Message, long Timestamp);
