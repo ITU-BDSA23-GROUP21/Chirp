@@ -1,17 +1,11 @@
 ﻿using System.CommandLine;
-using Chirp.CLI.Services.Interfaces;
 
 public class Program
 {
-    static IChirpHttpClient HttpClient = new ChirpHttpClient();
+    static readonly ChirpHttpClient HttpClient = ChirpHttpClient.Instance;
 
     private static async Task<int> Main(string[] args)
     {
-        // Maybe move this to startup class?
-        // Should this happen inside CommandLine Invoke method?
-        // HostApplicationBuilder builder = Host.CreateApplicationBuilder(args);
-        // builder.Services.AddSingleton<IChirpHttpClient, ChirpHttpClient>();
-
         // Workaround for CLI not printing help message if no arguments are passed
         // Inspired by https://stackoverflow.com/a/75734131
         if (args.Length == 0)

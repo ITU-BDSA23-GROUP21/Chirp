@@ -1,18 +1,26 @@
-using Chirp.CLI.Services.Interfaces;
 using Chirp.Shared;
 using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
 
-// This should only be instantiated once. Singleton or DI?
-public class ChirpHttpClient : IChirpHttpClient {
+// Singleton class, that exposes methods for communicating with Chirp API
+public class ChirpHttpClient {
+    private static ChirpHttpClient instance;
     private readonly HttpClient HttpClient;
 
-    public ChirpHttpClient() {
+    private ChirpHttpClient() {
         HttpClient = new() {
             BaseAddress = new Uri("http://localhost:5193"),
         };
     }
+    public static ChirpHttpClient Instance {
+            get {
+                if (instance == null) {
+                    instance = new ChirpHttpClient();
+                }
+                return instance;
+            }
+        }
 
     public Task<IEnumerable<Cheep>?> GetCheeps(int amount) {
         return HttpClient.GetFromJsonAsync<IEnumerable<Cheep>>(
@@ -21,7 +29,6 @@ public class ChirpHttpClient : IChirpHttpClient {
     }
 
     public async Task PostCheep(string message, string author) {
-        // Not implemented yet
         using StringContent jsonContent = new(
             JsonSerializer.Serialize(new {
                 Author = Environment.UserName,
@@ -35,6 +42,7 @@ public class ChirpHttpClient : IChirpHttpClient {
             jsonContent);
 
         response.EnsureSuccessStatusCode();
+
         // TODO: Error handling?
     }
 }
