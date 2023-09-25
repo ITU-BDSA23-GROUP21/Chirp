@@ -14,9 +14,9 @@ public class ChirpHttpClient : IChirpHttpClient {
         };
     }
 
-    public Task<IEnumerable<Cheep>?> GetCheeps() {
+    public Task<IEnumerable<Cheep>?> GetCheeps(int amount) {
         return HttpClient.GetFromJsonAsync<IEnumerable<Cheep>>(
-            "/cheeps"
+            $"/cheeps?amount={amount}"
         );
     }
 

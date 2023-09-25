@@ -53,7 +53,7 @@ public class Program
     public static async Task PrintCheeps(int amount)
     {
         // You can currently read and cheep at the same time. Is this intended?
-        var cheeps = await HttpClient.GetCheeps();
+        var cheeps = await HttpClient.GetCheeps(amount);
         UserInterface.PrintCheeps(cheeps);
     }
 
