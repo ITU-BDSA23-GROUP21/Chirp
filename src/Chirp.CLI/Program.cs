@@ -1,11 +1,9 @@
-﻿using SimpleDB;
-using System.CommandLine;
+﻿using System.CommandLine;
 using Chirp.CLI.Services.Interfaces;
 
 public class Program
 {
-    static IDatabaseRepository<Cheep>? CSVdb;
-    static IChirpHttpClient HttpClient;
+    static IChirpHttpClient HttpClient = new ChirpHttpClient();
 
     private static async Task<int> Main(string[] args)
     {
@@ -13,9 +11,6 @@ public class Program
         // Should this happen inside CommandLine Invoke method?
         // HostApplicationBuilder builder = Host.CreateApplicationBuilder(args);
         // builder.Services.AddSingleton<IChirpHttpClient, ChirpHttpClient>();
-
-        setDB();
-        HttpClient = new ChirpHttpClient();
 
         // Workaround for CLI not printing help message if no arguments are passed
         // Inspired by https://stackoverflow.com/a/75734131
@@ -64,12 +59,11 @@ public class Program
 
     public static async Task AddCheep(string message)
     {
-        await HttpClient.PostCheep(message, Environment.UserName);
+        await AddCheep(message, Environment.UserName);
     }
 
-    public static IDatabaseRepository<Cheep> setDB()
+    public static async Task AddCheep(string message, string userName)
     {
-        CSVdb = CSVDatabase<Cheep>.Instance;
-        return CSVdb;
+        await HttpClient.PostCheep(message, userName);
     }
 }

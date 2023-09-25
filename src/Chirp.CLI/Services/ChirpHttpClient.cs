@@ -1,4 +1,5 @@
 using Chirp.CLI.Services.Interfaces;
+using Chirp.Shared;
 using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;

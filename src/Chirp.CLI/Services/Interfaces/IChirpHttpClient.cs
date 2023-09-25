@@ -1,3 +1,5 @@
+using Chirp.Shared;
+
 namespace Chirp.CLI.Services.Interfaces {
     public interface IChirpHttpClient {
         Task<IEnumerable<Cheep>?> GetCheeps();

@@ -1,4 +1,6 @@
 
+using Chirp.Shared;
+
 namespace Chirp.CLI_test
 {
     public class UnitTest
