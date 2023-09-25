@@ -1,3 +1,5 @@
+using Chirp.Shared;
+
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
 var cheepHandler = new CheepHandler();
@@ -9,5 +11,3 @@ app.MapGet("/cheeps", (int amount) => cheepHandler.GetCheeps(amount));
 app.MapPost("/cheep", (Cheep cheep) => cheepHandler.AddCheep(cheep.Message, cheep.Author));
 
 app.Run();
-
-public record Cheep(string Author, string Message, long Timestamp);

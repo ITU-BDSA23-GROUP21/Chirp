@@ -1,3 +1,7 @@
+
+using Chirp.Shared;
+using SimpleDB;
+
 namespace Chirp.CLI_test
 {
     public class TestAddCheep
@@ -9,18 +13,17 @@ namespace Chirp.CLI_test
         [InlineData("generic name", "generic test", 000)] //data to be tested in genericTest() *the cheep message*
         [InlineData("æøå", "æøå testing ¤%&", 111111)]
 
-        static void Store_generic_integration(String name, String message, long timestamp)
+        // Is this a unit test? It tests multiple methods
+        static async void Store_generic_integration(string name, string message, long timestamp)
         {
-            var database = Program.setDB();
-            String actual = new String("");
-
-            Cheep fakeCheep = new Cheep(name, message, timestamp);
+            var database = CSVDatabase<Cheep>.Instance;
+            Cheep fakeCheep = new(name, message, timestamp);
             database.Store(fakeCheep);
 
-            IEnumerable<String> line = File.ReadLines("chirp_cli_db.csv");
-            List<String> newLines = line.ToList();
-            actual = newLines[newLines.Count - 1];
-            String expected = $"{name},{message},{timestamp}";
+            IEnumerable<string> line = File.ReadLines("chirp_cli_db.csv");
+            List<string> newLines = line.ToList();
+            var actual = newLines[newLines.Count - 1];
+            string expected = $"{name},{message},{timestamp}";
 
             Assert.Equal(expected, actual);
         }
@@ -36,7 +39,7 @@ namespace Chirp.CLI_test
 
         public void Read_ReadGivenAmoutOfLinesTest_Unit(int linesToRead)
         {
-            var database = Program.setDB();
+            var database = CSVDatabase<Cheep>.Instance;
             var cheepsRead = database.Read(linesToRead);
 
             Assert.Equal(linesToRead, cheepsRead.Count());
@@ -52,7 +55,7 @@ namespace Chirp.CLI_test
         public void ReadTest(int linesToRead, string[] expected)
         {
             // Test modified to only check message, as the timestamp test failed on github server, due to it being in a different timezone
-            var database = Program.setDB();
+            var database = CSVDatabase<Cheep>.Instance;
             var cheepsRead = database.Read(linesToRead);
             var i = 0;
             foreach (Cheep item in cheepsRead)
