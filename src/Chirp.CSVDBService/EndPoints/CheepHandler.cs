@@ -11,7 +11,7 @@ public class CheepHandler {
         CsvDb.Store(new Cheep(author, message, dto.ToUnixTimeSeconds()));
     }
 
-    public IEnumerable<Cheep> GetCheeps(int amount) {
+    public IEnumerable<Cheep> GetCheeps(int? amount) {
         return CsvDb.Read(amount);
     }
 }
