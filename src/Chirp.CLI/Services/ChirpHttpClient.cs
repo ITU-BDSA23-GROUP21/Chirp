@@ -5,22 +5,23 @@ using System.Text.Json;
 
 // Singleton class, that exposes methods for communicating with Chirp API
 public class ChirpHttpClient {
-    private static ChirpHttpClient instance;
+    private static ChirpHttpClient? instance;
     private readonly HttpClient HttpClient;
 
     private ChirpHttpClient() {
+        var uri = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development" ? "http://localhost:5193" : "https://bdsagroup21chirpremotedb.azurewebsites.net";
         HttpClient = new() {
-            BaseAddress = new Uri("http://localhost:5193"),
+            BaseAddress = new Uri(uri),
         };
     }
     public static ChirpHttpClient Instance {
-            get {
-                if (instance == null) {
-                    instance = new ChirpHttpClient();
-                }
-                return instance;
+        get {
+            if (instance == null) {
+                instance = new ChirpHttpClient();
             }
+            return instance;
         }
+    }
 
     public Task<IEnumerable<Cheep>?> GetCheeps(int amount) {
         return HttpClient.GetFromJsonAsync<IEnumerable<Cheep>>(
