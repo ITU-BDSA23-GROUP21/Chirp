@@ -6,6 +6,10 @@ namespace Chirp.Razor.Pages;
 public class UserTimelineModel : PageModel
 {
     private readonly ICheepService _service;
+
+    [FromQuery(Name = "page")]
+    public int? Pageno { get; set; }
+
     public List<CheepViewModel> Cheeps { get; set; }
 
     public UserTimelineModel(ICheepService service)
