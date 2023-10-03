@@ -10,7 +10,7 @@
     <PackageReference Include="Microsoft.Data.Sqlite" Version="7.0.11" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="../../data/**/*" />
+    <EmbeddedResource Include="../../data/**/*"/>
   </ItemGroup>
 
 </Project>
