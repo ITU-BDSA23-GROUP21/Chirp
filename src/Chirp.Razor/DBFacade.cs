@@ -3,8 +3,7 @@ using Microsoft.Extensions.FileProviders;
 using System.Data;
 using System.Reflection;
 
-public interface IDBFacade
-{
+public interface IDBFacade {
     public List<CheepViewModel> GetCheeps(int page, string? author = null);
 }
 
@@ -39,12 +38,10 @@ public class DBFacade : IDBFacade {
             INNER JOIN user
             ON user.user_id = message.author_id";
 
-        if (String.IsNullOrEmpty(author)) {
-            query += ";";
+        if (!String.IsNullOrEmpty(author)) {
+            query += " WHERE message.author_id = ($name)";
         }
-        else {
-            query += " WHERE message.author_id = ($name);";
-        }
+
         query += @" ORDER BY message.pub_date 
                     LIMIT 32 OFFSET ($offset)";
 
@@ -56,7 +53,7 @@ public class DBFacade : IDBFacade {
             if (!String.IsNullOrEmpty(author)) {
                 command.Parameters.AddWithValue("$name", author);
             }
-                command.Parameters.AddWithValue("$offset", (page - 1) * 32 );
+            command.Parameters.AddWithValue("$offset", (page - 1) * 32);
 
             using var reader = command.ExecuteReader();
             var retVal = new List<CheepViewModel>();
