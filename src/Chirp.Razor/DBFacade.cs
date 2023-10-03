@@ -19,12 +19,17 @@ public class DBFacade : IDBFacade {
         Console.WriteLine(Path.GetTempPath());
 
         if (!File.Exists(sqlDBFilePath)) {
-            var embeddedProvider = new EmbeddedFileProvider(Assembly.GetExecutingAssembly());
-            using var reader = embeddedProvider.GetFileInfo("Schema.sql").CreateReadStream();
-            using var sr = new StreamReader(reader);
-            var query = sr.ReadToEnd();
-            ExecuteCommand(query);
+            executeEmbeddedCommand("Schema.sql");
+            executeEmbeddedCommand("dump.sql");
         }
+    }
+
+    private void executeEmbeddedCommand(string fileName) {
+        var embeddedProvider = new EmbeddedFileProvider(Assembly.GetExecutingAssembly());
+        using var reader = embeddedProvider.GetFileInfo(fileName).CreateReadStream();
+        using var sr = new StreamReader(reader);
+        var query = sr.ReadToEnd();
+        ExecuteCommand(query);
     }
 
 
@@ -34,9 +39,12 @@ public class DBFacade : IDBFacade {
             FROM message
             INNER JOIN user
             ON user.user_id = message.author_id";
-        
-        if (!String.IsNullOrEmpty(author)) {
-            query += " WHERE message.author_id = ($name)";
+
+        if (String.IsNullOrEmpty(author)) {
+            query += ";";
+        }
+        else {
+            query += " WHERE message.author_id = ($name);";
         }
         query += @" ORDER BY message.pub_date 
                     LIMIT 32 OFFSET ($offset)";
