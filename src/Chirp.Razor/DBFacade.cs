@@ -16,7 +16,6 @@ public class DBFacade : IDBFacade {
         sqlDBFilePath = String.IsNullOrEmpty(Environment.GetEnvironmentVariable("CHIRPDBPATH"))
             ? Path.GetTempPath() + "chirp.db"
             : Environment.GetEnvironmentVariable("CHIRPDBPATH");
-        Console.WriteLine(Path.GetTempPath());
 
         if (!File.Exists(sqlDBFilePath)) {
             executeEmbeddedCommand("Schema.sql");
