@@ -3,13 +3,13 @@ using System.Data;
 
 public interface IDBFacade
 {
-    public List<CheepViewModel> GetCheeps(string? author = null);
+    public List<CheepViewModel> GetCheeps(int page, string? author = null);
 }
 
 public class DBFacade : IDBFacade
 {
     string sqlDBFilePath = "../../data/chirp.db";
-    public List<CheepViewModel> GetCheeps(string? author = null)
+    public List<CheepViewModel> GetCheeps(int page, string? author = null)
     {
         string query = @"
             SELECT user.username as username, message.text as message, message.pub_date as timestamp
@@ -17,11 +17,11 @@ public class DBFacade : IDBFacade
             INNER JOIN user
             ON user.user_id = message.author_id";
         
-        if (String.IsNullOrEmpty(author)) {
-            query += ";";
-        } else {
-            query += "WHERE message.author_id = ($name);";
+        if (!String.IsNullOrEmpty(author)) {
+            query += " WHERE message.author_id = ($name)";
         }
+        query += @" ORDER BY message.pub_date 
+                    LIMIT 32 OFFSET ($offset)";
 
         using (var connection = new SqliteConnection($"Data Source={sqlDBFilePath}"))
         {
@@ -32,6 +32,7 @@ public class DBFacade : IDBFacade
             if (!String.IsNullOrEmpty(author)) {
                 command.Parameters.AddWithValue("$name", author);
             }
+                command.Parameters.AddWithValue("$offset", (page - 1) * 32 );
 
             using var reader = command.ExecuteReader();
             var retVal = new List<CheepViewModel>();
