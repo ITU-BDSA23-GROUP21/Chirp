@@ -39,7 +39,7 @@ public class DBFacade : IDBFacade {
             ON user.user_id = message.author_id";
 
         if (!String.IsNullOrEmpty(author)) {
-            query += " WHERE message.author_id = ($name)";
+            query += " WHERE user.username = ($name)";
         }
 
         query += @" ORDER BY message.pub_date 
