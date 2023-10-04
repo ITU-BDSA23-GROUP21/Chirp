@@ -53,7 +53,7 @@ public class DBFacade : IDBFacade {
             if (!String.IsNullOrEmpty(author)) {
                 command.Parameters.AddWithValue("$name", author);
             }
-            command.Parameters.AddWithValue("$offset", (page - 1) * 32);
+            command.Parameters.AddWithValue("$offset", (page) * 32);
 
             using var reader = command.ExecuteReader();
             var retVal = new List<CheepViewModel>();
