@@ -4,8 +4,6 @@
 name: Build and deploy Razor App
 on:
   push:
-    branches:
-      - issue-67/razor-cd
     tags: [ 'v*.*.*' ]
   workflow_dispatch:
 
