@@ -19,7 +19,10 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <ProjectReference Include="../src/Chirp.Razor/Chirp.Razor.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Chirp.Razor\Chirp.Razor.csproj" />
   </ItemGroup>
 
 </Project>
