@@ -42,7 +42,7 @@ public class DBFacade : IDBFacade {
             query += " WHERE user.username = ($name)";
         }
 
-        query += @" ORDER BY message.pub_date 
+        query += @" ORDER BY message.pub_date DESC
                     LIMIT 32 OFFSET ($offset)";
 
         using (var connection = new SqliteConnection($"Data Source={sqlDBFilePath}")) {
