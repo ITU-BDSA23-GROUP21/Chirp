@@ -3,26 +3,31 @@ using Microsoft.Extensions.FileProviders;
 using System.Data;
 using System.Reflection;
 
-public interface IDBFacade {
+public interface IDBFacade
+{
     public List<CheepViewModel> GetCheeps(int page, string? author = null);
 }
 
-public class DBFacade : IDBFacade {
+public class DBFacade : IDBFacade
+{
     string sqlDBFilePath;
 
-    public DBFacade() {
+    public DBFacade()
+    {
         // False warning, since we check for null
         sqlDBFilePath = String.IsNullOrEmpty(Environment.GetEnvironmentVariable("CHIRPDBPATH"))
             ? Path.GetTempPath() + "chirp.db"
             : Environment.GetEnvironmentVariable("CHIRPDBPATH");
 
-        if (!File.Exists(sqlDBFilePath)) {
+        if (!File.Exists(sqlDBFilePath))
+        {
             executeEmbeddedCommand("Schema.sql");
             executeEmbeddedCommand("dump.sql");
         }
     }
 
-    private void executeEmbeddedCommand(string fileName) {
+    private void executeEmbeddedCommand(string fileName)
+    {
         var embeddedProvider = new EmbeddedFileProvider(Assembly.GetExecutingAssembly());
         using var reader = embeddedProvider.GetFileInfo(fileName).CreateReadStream();
         using var sr = new StreamReader(reader);
@@ -31,7 +36,8 @@ public class DBFacade : IDBFacade {
     }
 
 
-    public List<CheepViewModel> GetCheeps(int page, string? author = null) {
+    public List<CheepViewModel> GetCheeps(int page, string? author = null)
+    {
         string query = @"
             SELECT user.username as username, message.text as message, message.pub_date as timestamp
             FROM message
@@ -45,19 +51,22 @@ public class DBFacade : IDBFacade {
         query += @" ORDER BY message.pub_date DESC
                     LIMIT 32 OFFSET ($offset)";
 
-        using (var connection = new SqliteConnection($"Data Source={sqlDBFilePath}")) {
+        using (var connection = new SqliteConnection($"Data Source={sqlDBFilePath}"))
+        {
             connection.Open();
 
             var command = connection.CreateCommand();
             command.CommandText = query;
-            if (!String.IsNullOrEmpty(author)) {
+            if (!String.IsNullOrEmpty(author))
+            {
                 command.Parameters.AddWithValue("$name", author);
             }
             command.Parameters.AddWithValue("$offset", (page) * 32);
 
             using var reader = command.ExecuteReader();
             var retVal = new List<CheepViewModel>();
-            while (reader.Read()) {
+            while (reader.Read())
+            {
                 var msg = reader.GetString("message");
                 var timeStamp = reader.GetInt64("timestamp");
                 var username = reader.GetString("username");
@@ -69,8 +78,10 @@ public class DBFacade : IDBFacade {
         }
     }
 
-    private int ExecuteCommand(string cmd) {
-        using (var connection = new SqliteConnection($"Data Source={sqlDBFilePath}")) {
+    private int ExecuteCommand(string cmd)
+    {
+        using (var connection = new SqliteConnection($"Data Source={sqlDBFilePath}"))
+        {
             connection.Open();
 
             var command = connection.CreateCommand();
@@ -80,7 +91,8 @@ public class DBFacade : IDBFacade {
         }
     }
 
-    private static string UnixTimeStampToDateTimeString(double unixTimeStamp) {
+    private static string UnixTimeStampToDateTimeString(double unixTimeStamp)
+    {
         // Unix timestamp is seconds past epoch
         DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
         dateTime = dateTime.AddSeconds(unixTimeStamp);
