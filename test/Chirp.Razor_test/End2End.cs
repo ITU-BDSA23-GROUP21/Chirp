@@ -1,7 +1,7 @@
 // using Microsoft.AspNetCore.Mvc.Testing;
 // using Microsoft.VisualStudio.TestPlatform.TestHost;
 
-// public class TestAPI : IClassFixture<WebApplicationFactory<Program>> {
+// public class End2End : IClassFixture<WebApplicationFactory<Program>> {
 //     private readonly WebApplicationFactory<Program> _fixture;
 //     private readonly HttpClient _client;
 
