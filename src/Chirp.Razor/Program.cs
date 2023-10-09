@@ -1,9 +1,19 @@
+using Chirp.Core;
+using Chirp.Infrastructure;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddSingleton<ICheepService, CheepService>();
-builder.Services.AddSingleton<IDBFacade, DBFacade>();
+builder.Services.AddSingleton<ICheepRepository, CheepRepository>();
+
+// Seed data into database. Is it correct to have this code here?
+using (var context = new ChirpContext())
+{
+    context.Database.EnsureCreated();
+    DbInitializer.SeedDatabase(context);
+}
 
 var app = builder.Build();
 

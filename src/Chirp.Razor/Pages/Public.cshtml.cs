@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Chirp.Core;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Chirp.Razor.Pages;
@@ -10,7 +11,7 @@ public class PublicModel : PageModel
     [FromQuery(Name = "page")]
     public int Pageno { get; set; }
 
-    public List<CheepViewModel> Cheeps { get; set; }
+    public IEnumerable<CheepDto> Cheeps { get; set; }
 
     public PublicModel(ICheepService service)
     {

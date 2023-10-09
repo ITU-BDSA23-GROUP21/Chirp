@@ -1,25 +1,21 @@
-public record CheepViewModel(string Author, string Message, string Timestamp);
+using Chirp.Core;
 
-public interface ICheepService
-{
-    public List<CheepViewModel> GetCheeps(int page = 1);
-    public List<CheepViewModel> GetCheepsFromAuthor(string author, int page = 1);
+public interface ICheepService {
+    public IEnumerable<CheepDto> GetCheeps(int page = 1);
+    public IEnumerable<CheepDto> GetCheepsFromAuthor(string author, int page = 1);
 }
 
-public class CheepService : ICheepService
-{
-    private readonly IDBFacade dBFacade;
+public class CheepService : ICheepService {
+    private readonly ICheepRepository cheepRepository;
 
-    public CheepService(IDBFacade _dBFacade) => dBFacade = _dBFacade;
+    public CheepService(ICheepRepository _cheepRepository) => cheepRepository = _cheepRepository;
 
-    public List<CheepViewModel> GetCheeps(int page)
-    {
-        return dBFacade.GetCheeps(page);
+    public IEnumerable<CheepDto> GetCheeps(int page) {
+        return cheepRepository.GetCheeps(page);
     }
 
-    public List<CheepViewModel> GetCheepsFromAuthor(string author, int page)
-    {
+    public IEnumerable<CheepDto> GetCheepsFromAuthor(string author, int page) {
         // filter by the provided author name
-        return dBFacade.GetCheeps(page, author);
+        return cheepRepository.GetCheeps(page);
     }
 }
