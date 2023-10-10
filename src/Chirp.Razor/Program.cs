@@ -1,6 +1,7 @@
 using Chirp.Core;
 using Chirp.Infrastructure;
-using Microsoft.EntityFrameworkCore;
+
+// Code architecture inspired by code example from Rasmus from lecture 6 (05.10.2023)  
 
 var builder = WebApplication.CreateBuilder(args);
 
