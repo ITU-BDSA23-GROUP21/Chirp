@@ -52,4 +52,34 @@ public class Integration
         Assert.Equal(expectedFirstCheep, actualFirstCheep);
         Assert.Equal(expectedLastCheep, actualLastCheep);
     }
+
+    [Theory]
+    [InlineData("Helge")]
+    [InlineData("Roger Histand")]
+    public static async void CheepService_GetCheepsFromAuthor_ValidAuthorParameterValue(string author)
+    {
+        //Arrange
+        CheepService cheepService = new(new CheepRepository());
+        string expectedValue = author;
+        //Act
+        IEnumerable<CheepDto> cheeps = await cheepService.GetCheepsFromAuthor(author, 1);
+         
+        //Assert
+        Assert.All<CheepDto>(cheeps, (cheep) => { cheep.Author.Equals(expectedValue); });
+    }
+
+    [Fact]
+    public static async void CheepService_GetCheepsFromAuthor_NonExistingAuthorParameterValue()
+    {
+        //Arrange 
+        CheepService cheepService = new(new CheepRepository());
+        int expectedValue = 0;
+
+        //Act
+        IEnumerable<CheepDto> cheeps = await cheepService.GetCheepsFromAuthor("NonExistingAuther", 1);
+        int actualValue = cheeps.Count();
+
+        //Assert
+        Assert.Equal(expectedValue, actualValue);
+    }
 }
