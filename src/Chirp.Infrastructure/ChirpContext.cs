@@ -18,10 +18,4 @@ public class ChirpContext : DbContext {
     protected override void OnConfiguring(DbContextOptionsBuilder options)
             => options.UseSqlite($"Data Source={DbPath}");
 
-    // protected override void OnModelCreating(ModelBuilder modelBuilder) {
-    //     var (authors, cheeps) = DbInitializer.SeedDatabase();
-    //     modelBuilder.Entity<Author>().HasData(authors);
-    //     modelBuilder.Entity<Cheep>().HasData(cheeps);
-    //     base.OnModelCreating(modelBuilder);
-    // }
 }
