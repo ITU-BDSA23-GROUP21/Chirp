@@ -1,37 +1,44 @@
 using Chirp.Core;
 using Chirp.Infrastructure;
 
-// Code architecture inspired by code example from Rasmus from lecture 6 (05.10.2023)  
+namespace Chirp.Razor;
 
-var builder = WebApplication.CreateBuilder(args);
+public class Program{
+    public static void Main(string[] args)
+    {
+        // Code architecture inspired by code example from Rasmus from lecture 6 (05.10.2023)  
 
-// Add services to the container.
-builder.Services.AddRazorPages();
-builder.Services.AddSingleton<ICheepService, CheepService>();
-builder.Services.AddSingleton<ICheepRepository, CheepRepository>();
+        var builder = WebApplication.CreateBuilder(args);
 
-// Seed data into database. Is it correct to have this code here?
-using (var context = new ChirpContext())
-{
-    context.Database.EnsureCreated();
-    DbInitializer.SeedDatabase(context);
+        // Add services to the container.
+        builder.Services.AddRazorPages();
+        builder.Services.AddSingleton<ICheepService, CheepService>();
+        builder.Services.AddSingleton<ICheepRepository, CheepRepository>();
+
+        // Seed data into database. Is it correct to have this code here?
+        using (var context = new ChirpContext())
+        {
+        context.Database.EnsureCreated();
+            DbInitializer.SeedDatabase(context);    
+        }
+
+        var app = builder.Build();
+
+        // Configure the HTTP request pipeline.
+        if (!app.Environment.IsDevelopment())
+        {
+            app.UseExceptionHandler("/Error");
+            // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+            app.UseHsts();
+        }
+
+        app.UseHttpsRedirection();
+        app.UseStaticFiles();
+
+        app.UseRouting();
+
+        app.MapRazorPages();
+
+        app.Run();
+    }
 }
-
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
-{
-    app.UseExceptionHandler("/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
-}
-
-app.UseHttpsRedirection();
-app.UseStaticFiles();
-
-app.UseRouting();
-
-app.MapRazorPages();
-
-app.Run();
