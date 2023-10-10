@@ -7,14 +7,20 @@ namespace Chirp.Razor_test;
 [Collection("Environment Variable")]
 public class Integration
 {
+    CheepService cheepService;
+
+    public Integration()
+    {
+        cheepService = new(new CheepRepository());
+    }
+
     [Theory]
     [InlineData(0)]
     [InlineData(4)]
-    public static async void CheepService_GetCheeps_Return32Cheeps(int page) {
+    public async void CheepService_GetCheeps_Return32Cheeps(int page) {
         //Arrange
         int expectedValue = 32;
         // This test is dangerous, as it will fail when we start adding new cheeps
-        CheepService cheepService = new(new CheepRepository());
 
         //Act
         IEnumerable<CheepDto> cheeps = await cheepService.GetCheeps(page);
@@ -27,7 +33,7 @@ public class Integration
     [Theory]
     [InlineData(0)]
     [InlineData(-1)]
-    public static async void CheepService_GetCheeps_ZeroAndBelowParameterValues(int page)
+    public async void CheepService_GetCheeps_ZeroAndBelowParameterValues(int page)
     {
         //Arrange
         int expectedCheepAmount = 32;
@@ -39,7 +45,6 @@ public class Integration
                                           "08/01/23 13:16:58");
 
         // ExecuteCommand("Your command here");
-        CheepService cheepService = new(new CheepRepository());
         //Act
         IEnumerable<CheepDto> cheeps = await cheepService.GetCheeps(page);
         int      actualCheepAmount = cheeps.Count();
@@ -56,10 +61,9 @@ public class Integration
     [Theory]
     [InlineData("Helge")]
     [InlineData("Roger Histand")]
-    public static async void CheepService_GetCheepsFromAuthor_ValidAuthorParameterValue(string author)
+    public async void CheepService_GetCheepsFromAuthor_ValidAuthorParameterValue(string author)
     {
         //Arrange
-        CheepService cheepService = new(new CheepRepository());
         string expectedValue = author;
         //Act
         IEnumerable<CheepDto> cheeps = await cheepService.GetCheepsFromAuthor(author, 1);
@@ -69,14 +73,27 @@ public class Integration
     }
 
     [Fact]
-    public static async void CheepService_GetCheepsFromAuthor_NonExistingAuthorParameterValue()
+    public async void CheepService_GetCheepsFromAuthor_NonExistingAuthorParameterValue()
     {
         //Arrange 
-        CheepService cheepService = new(new CheepRepository());
         int expectedValue = 0;
 
         //Act
         IEnumerable<CheepDto> cheeps = await cheepService.GetCheepsFromAuthor("NonExistingAuther", 1);
+        int actualValue = cheeps.Count();
+
+        //Assert
+        Assert.Equal(expectedValue, actualValue);
+    }
+
+    [Fact]
+    public async void CheepService_GetCheepsFromAuthor_ValidAuthorReturning32Cheeps()
+    {
+        //Arrange 
+        int expectedValue = 32;
+
+        //Act
+        IEnumerable<CheepDto> cheeps = await cheepService.GetCheepsFromAuthor("Jacqualine Gilcoine", 1);
         int actualValue = cheeps.Count();
 
         //Assert
