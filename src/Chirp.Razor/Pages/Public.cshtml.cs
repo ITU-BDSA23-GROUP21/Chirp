@@ -18,9 +18,9 @@ public class PublicModel : PageModel
         _service = service;
     }
 
-    public ActionResult OnGet()
+    public async Task<ActionResult> OnGet()
     {
-        Cheeps = _service.GetCheeps(Pageno);
+        Cheeps = await _service.GetCheeps(Pageno);
         Console.WriteLine(Pageno);
         return Page();
     }
