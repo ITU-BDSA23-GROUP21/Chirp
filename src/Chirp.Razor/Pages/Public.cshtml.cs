@@ -16,6 +16,7 @@ public class PublicModel : PageModel
     public PublicModel(ICheepService service)
     {
         _service = service;
+        Cheeps = new List<CheepDto>(0);
     }
 
     public async Task<ActionResult> OnGet()
