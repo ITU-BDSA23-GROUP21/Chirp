@@ -10,9 +10,8 @@ public class ChirpContext : DbContext {
 
     public ChirpContext() {
         // False warning, since we check for null
-        DbPath = String.IsNullOrEmpty(Environment.GetEnvironmentVariable("CHIRPDBPATH"))
-            ? Path.GetTempPath() + "chirp.db"
-            : Environment.GetEnvironmentVariable("CHIRPDBPATH");
+        DbPath = Environment.GetEnvironmentVariable("CHIRPDBPATH") 
+            ?? Path.Combine(Path.GetTempPath(), "chirp.db");
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder options)
