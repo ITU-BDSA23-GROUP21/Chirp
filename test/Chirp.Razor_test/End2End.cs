@@ -1,34 +1,38 @@
-// using Microsoft.AspNetCore.Mvc.Testing;
-// using Microsoft.VisualStudio.TestPlatform.TestHost;
+using Microsoft.AspNetCore.Mvc.Testing;
+using Chirp.Razor;
 
-// public class End2End : IClassFixture<WebApplicationFactory<Program>> {
-//     private readonly WebApplicationFactory<Program> _fixture;
-//     private readonly HttpClient _client;
+namespace Chirp.Razor_test;
 
-//     public TestAPI(WebApplicationFactory<Program> fixture) {
-//         _fixture = fixture;
-//         _client = _fixture.CreateClient(new WebApplicationFactoryClientOptions { AllowAutoRedirect = true, HandleCookies = true });
-//     }
+[Collection("Environment Variable")]
+public class End2End : IClassFixture<WebApplicationFactory<Program>> {
+    private readonly WebApplicationFactory<Program> _fixture;
+    private readonly HttpClient _client;
 
-//     [Fact]
-//     public async void CanSeePublicTimeline() {
-//         var response = await _client.GetAsync("/public");
-//         response.EnsureSuccessStatusCode();
-//         var content = await response.Content.ReadAsStringAsync();
+    public End2End(WebApplicationFactory<Program> fixture) {
+        _fixture = fixture;
+        _client = _fixture.CreateClient(new WebApplicationFactoryClientOptions { AllowAutoRedirect = true, HandleCookies = true });
+    }
 
-//         Assert.Contains("Chirp!", content);
-//         Assert.Contains("Public Timeline", content);
-//     }
+    //Test case taking from lecture slides
+    [Fact]
+    public async void CanSeePublicTimeline() {
+        var response = await _client.GetAsync("/");
+        response.EnsureSuccessStatusCode();
+        var content = await response.Content.ReadAsStringAsync();
 
-//     [Theory]
-//     [InlineData("Helge")]
-//     [InlineData("Rasmus")]
-//     public async void CanSeePrivateTimeline(string author) {
-//         var response = await _client.GetAsync($"/{author}");
-//         response.EnsureSuccessStatusCode();
-//         var content = await response.Content.ReadAsStringAsync();
+        Assert.Contains("Chirp!", content);
+        Assert.Contains("Public Timeline", content);
+    }
 
-//         Assert.Contains("Chirp!", content);
-//         Assert.Contains($"{author}'s Timeline", content);
-//     }
-// }
+    [Theory]
+    [InlineData("Octavio Wagganer")]
+    [InlineData("Quintin Sitts")]
+    public async void CanSeePrivateTimeline(string author) {
+        var response = await _client.GetAsync($"/{author}");
+        response.EnsureSuccessStatusCode();
+        var content = await response.Content.ReadAsStringAsync();
+
+        Assert.Contains("Chirp!", content);
+        Assert.Contains($"{author}'s Timeline", content);
+    }
+}
