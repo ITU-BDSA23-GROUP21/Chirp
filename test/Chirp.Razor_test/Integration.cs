@@ -3,6 +3,8 @@ using Chirp.Infrastructure;
 using System.Collections.Generic;
 
 namespace Chirp.Razor_test;
+
+[Collection("Environment Variable")]
 public class Integration
 {
     [Theory]
@@ -12,7 +14,6 @@ public class Integration
         //Arrange
         int expectedValue = 32;
         // This test is dangerous, as it will fail when we start adding new cheeps
-        Environment.SetEnvironmentVariable("CHIRPDBPATH", "./TestChirp.db");
         CheepService cheepService = new(new CheepRepository());
 
         //Act
@@ -30,10 +31,14 @@ public class Integration
     {
         //Arrange
         int expectedCheepAmount = 32;
-        CheepDto expectedFirstCheep = new("Helge", "Hello", "08/");
-        CheepDto expectedLastCheep = new("", "", "");
+        CheepDto expectedFirstCheep = new("Jacqualine Gilcoine", 
+                                          "Starbuck now is what we hear the worst.", 
+                                          "08/01/23 13:17:39");
+        CheepDto expectedLastCheep =  new("Jacqualine Gilcoine",
+                                          "With back to my friend, patience!",
+                                          "08/01/23 13:16:58");
 
-        Environment.SetEnvironmentVariable("CHIRPDBPATH", "./TestChirp.db");
+        // ExecuteCommand("Your command here");
         CheepService cheepService = new(new CheepRepository());
         //Act
         IEnumerable<CheepDto> cheeps = await cheepService.GetCheeps(page);

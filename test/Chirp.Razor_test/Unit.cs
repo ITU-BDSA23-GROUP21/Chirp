@@ -3,16 +3,15 @@ namespace Chirp.Razor_test;
 using Chirp.Core;
 using Chirp.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
+
+[Collection("Environment Variable")]
 public class Unit {
-
-
     [Theory]
     [InlineData(0, null)]
-    public static void GetFirstCheepOnPage(int page, string auther) {
+    public static async void GetFirstCheepOnPage(int page, string auther) {
         // This test is dangerous, as it will fail when we start adding new cheeps
-
         ICheepRepository mockFacade = new CheepRepository();
-        IEnumerable<CheepDto> cheeps = mockFacade.GetCheeps(page, auther);
+        IEnumerable<CheepDto> cheeps = await mockFacade.GetCheeps(page, auther);
         CheepDto firstCheep = cheeps.First();
 
         Assert.Equal("Jacqualine Gilcoine", firstCheep.Author);
