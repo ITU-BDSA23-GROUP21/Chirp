@@ -99,4 +99,28 @@ public class Integration
         //Assert
         Assert.Equal(expectedValue, actualValue);
     }
+
+    [Theory]
+    [InlineData(0)]
+    [InlineData(-1)]
+    public async void CheepService_GetCheepsFromAuthor_ValidAuthorZeroAndBelowPageValue(int page)
+    {
+        //Arrange
+        CheepDto expectedFirstCheep = new("Jacqualine Gilcoine", 
+                                          "Starbuck now is what we hear the worst.",
+                                          "08/01/23 13:17:39");
+                                        
+        CheepDto expectedLastCheep =  new("Jacqualine Gilcoine",
+                                          "Now, amid the cloud-scud.",
+                                          "08/01/23 13:16:30");
+        
+        //Act
+        IEnumerable<CheepDto> cheeps = await cheepService.GetCheepsFromAuthor("Jacqualine Gilcoine", page);
+        CheepDto actualFirstCheep = cheeps.First();
+        CheepDto actualLastCheep = cheeps.Last();
+        
+        //Assert
+        Assert.Equal(expectedFirstCheep, actualFirstCheep);
+        Assert.Equal(expectedLastCheep, actualLastCheep);
+    }
 }
