@@ -9,7 +9,6 @@ public class ChirpContext : DbContext {
     public string DbPath { get; }
 
     public ChirpContext() {
-        // False warning, since we check for null
         DbPath = Environment.GetEnvironmentVariable("CHIRPDBPATH") 
             ?? Path.Combine(Path.GetTempPath(), "chirp.db");
     }
