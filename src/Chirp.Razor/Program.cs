@@ -3,9 +3,8 @@ using Chirp.Infrastructure;
 
 namespace Chirp.Razor;
 
-public class Program{
-    public static void Main(string[] args)
-    {
+public class Program {
+    public static void Main(string[] args) {
         // Code architecture inspired by code example from Rasmus from lecture 6 (05.10.2023)  
 
         var builder = WebApplication.CreateBuilder(args);
@@ -16,17 +15,15 @@ public class Program{
         builder.Services.AddSingleton<ICheepRepository, CheepRepository>();
 
         // Seed data into database. Is it correct to have this code here?
-        using (var context = new ChirpContext())
-        {
-        context.Database.EnsureCreated();
-            DbInitializer.SeedDatabase(context);    
+        using (var context = new ChirpContext()) {
+            context.Database.EnsureCreated();
+            DbInitializer.SeedDatabase(context);
         }
 
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
-        if (!app.Environment.IsDevelopment())
-        {
+        if (!app.Environment.IsDevelopment()) {
             app.UseExceptionHandler("/Error");
             // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
             app.UseHsts();
