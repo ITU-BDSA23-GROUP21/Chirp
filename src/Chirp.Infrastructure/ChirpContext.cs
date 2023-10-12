@@ -17,4 +17,9 @@ public class ChirpContext : DbContext {
     protected override void OnConfiguring(DbContextOptionsBuilder options)
             => options.UseSqlite($"Data Source={DbPath}");
 
+    protected override void OnModelCreating(ModelBuilder modelBuilder) {
+        modelBuilder.Entity<Cheep>().Property(c => c.Text).HasMaxLength(160);
+        modelBuilder.Entity<Author>().Property(a => a.Email).HasMaxLength(60);
+    }
+
 }
