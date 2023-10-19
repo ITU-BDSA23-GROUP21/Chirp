@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace Chirp.Infrastructure;
 public class Author {
     public Guid Id { get; set; }
