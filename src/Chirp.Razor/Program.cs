@@ -14,7 +14,7 @@ public class Program {
         builder.Services.AddSingleton<ICheepService, CheepService>();
         builder.Services.AddSingleton<ICheepRepository, CheepRepository>();
 
-        // Seed data into database. Is it correct to have this code here?
+        // Seed data into database.
         using (var context = new ChirpContext()) {
             context.Database.EnsureCreated();
             DbInitializer.SeedDatabase(context);
