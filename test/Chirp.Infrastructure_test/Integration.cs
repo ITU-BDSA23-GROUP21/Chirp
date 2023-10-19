@@ -18,7 +18,6 @@ public class Integration
     public async void CheepRepository_GetCheeps_Return32Cheeps(int page) {
         //Arrange
         int expectedValue = 32;
-        // This test is dangerous, as it will fail when we start adding new cheeps
 
         //Act
         IEnumerable<CheepDto> cheeps = await cheepRepository.GetCheeps(page);
