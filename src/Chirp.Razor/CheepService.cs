@@ -6,16 +6,16 @@ public interface ICheepService {
 }
 
 public class CheepService : ICheepService {
-    private readonly ICheepRepository cheepRepository;
+    private readonly ICheepRepository _cheepRepository;
 
-    public CheepService(ICheepRepository _cheepRepository) => cheepRepository = _cheepRepository;
+    public CheepService(ICheepRepository cheepRepository) => _cheepRepository = cheepRepository;
 
     public Task<List<CheepDto>> GetCheeps(int page) {
-        return cheepRepository.GetCheeps(page);
+        return _cheepRepository.GetCheeps(page);
     }
 
     public Task<List<CheepDto>> GetCheepsFromAuthor(string author, int page) {
         // filter by the provided author name
-        return cheepRepository.GetCheeps(page, author);
+        return _cheepRepository.GetCheeps(page, author);
     }
 }

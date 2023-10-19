@@ -11,16 +11,20 @@ public class Program {
 
         // Add services to the container.
         builder.Services.AddRazorPages();
-        builder.Services.AddSingleton<ICheepService, CheepService>();
-        builder.Services.AddSingleton<ICheepRepository, CheepRepository>();
+        builder.Services.AddScoped<ICheepService, CheepService>();
+        builder.Services.AddScoped<ICheepRepository, CheepRepository>();
+        builder.Services.AddDbContext<ChirpContext>();
+
+
+        var app = builder.Build();
 
         // Seed data into database.
-        using (var context = new ChirpContext()) {
+        using (var scope = app.Services.CreateScope()) {
+            var context = scope.ServiceProvider.GetRequiredService<ChirpContext>();
             context.Database.EnsureCreated();
             DbInitializer.SeedDatabase(context);
         }
 
-        var app = builder.Build();
 
         // Configure the HTTP request pipeline.
         if (!app.Environment.IsDevelopment()) {
