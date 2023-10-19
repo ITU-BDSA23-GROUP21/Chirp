@@ -11,7 +11,7 @@ public class Integration
 
     public Integration()
     {
-        cheepService = new(new CheepRepository());
+        cheepService = new(new CheepRepository(new ChirpContext()));
     }
 
     [Theory]

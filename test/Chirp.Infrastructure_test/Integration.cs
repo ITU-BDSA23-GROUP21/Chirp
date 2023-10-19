@@ -9,7 +9,7 @@ public class Integration
     CheepRepository cheepRepository;
     public Integration()
     {
-        cheepRepository = new CheepRepository();
+        cheepRepository = new CheepRepository(new ChirpContext());
     }
 
     [Theory]
