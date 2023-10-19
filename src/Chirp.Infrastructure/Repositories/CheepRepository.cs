@@ -4,11 +4,12 @@ using Microsoft.EntityFrameworkCore;
 namespace Chirp.Infrastructure;
 
 public class CheepRepository : ICheepRepository {
-    
-    public Task<List<CheepDto>> GetCheeps(int page, string? author = null) {
-        using var context = new ChirpContext();
+    private readonly ChirpContext _dbContext;
 
-        return context.Cheeps
+    public CheepRepository(ChirpContext dbContext) => _dbContext = dbContext;
+
+    public Task<List<CheepDto>> GetCheeps(int page, string? author = null) {
+        return _dbContext.Cheeps
             .Where( cheep => cheep.Author.Name == author || author == null)
             .OrderByDescending(cheep => cheep.TimeStamp)
             .Skip( 32 * (page - 1))
