@@ -7,7 +7,7 @@ namespace Chirp.Infrastructure_test;
 [Collection("Environment Variable")]
 public class Integration : BaseDBTest
 {
-    CheepRepository cheepRepository;
+    readonly CheepRepository cheepRepository;
     public Integration()
     {
         cheepRepository = new CheepRepository(CreateContext());

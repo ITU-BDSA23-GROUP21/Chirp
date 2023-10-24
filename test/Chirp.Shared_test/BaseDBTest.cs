@@ -28,19 +28,7 @@ public class BaseDBTest
         if (context.Database.EnsureCreated())
         {
             DbInitializer.SeedDatabase(context);
-
-//             using var viewCommand = context.Database.GetDbConnection().CreateCommand();
-//             viewCommand.CommandText = @"
-// CREATE VIEW AllResources AS
-// SELECT Url
-// FROM Blogs;";
-//             viewCommand.ExecuteNonQuery();
         }
-
-        // context.AddRange(
-        //     new  { Author = "Author1", Message = "Chirp message 1", Timestamp = "000" },
-        //     new  { Author = "Author2", Message = "Chirp message 2", Timestamp = "000"});
-        // context.SaveChanges();
     }
 
     protected ChirpContext CreateContext() => new(_contextOptions);
