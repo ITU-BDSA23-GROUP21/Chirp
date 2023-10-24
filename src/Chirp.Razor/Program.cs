@@ -1,5 +1,7 @@
 using Chirp.Core;
 using Chirp.Infrastructure;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace Chirp.Razor;
 
@@ -8,13 +10,15 @@ public class Program {
         // Code architecture inspired by code example from Rasmus from lecture 6 (05.10.2023)  
 
         var builder = WebApplication.CreateBuilder(args);
+        var dbPath = Environment.GetEnvironmentVariable("CHIRPDBPATH")
+            ?? Path.Combine(Path.GetTempPath(), "chirp.db");
 
         // Add services to the container.
         builder.Services.AddRazorPages();
         builder.Services.AddScoped<ICheepService, CheepService>();
         builder.Services.AddScoped<ICheepRepository, CheepRepository>();
         builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
-        builder.Services.AddDbContext<ChirpContext>();
+        builder.Services.AddDbContext<ChirpContext>(Options => Options.UseSqlite($"Data Source={dbPath}"));
 
 
         var app = builder.Build();
