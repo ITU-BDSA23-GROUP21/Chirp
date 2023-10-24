@@ -21,12 +21,18 @@ public class CheepRepository : ICheepRepository {
 
     public async Task AddCheep(string message, string authorName) {
         // We have no way of knowing the correct email if author does not exist already
-        var author = _dbContext.Authors.Where(author => author.Name == authorName).FirstOrDefault(new Author() {
-            Id = Guid.NewGuid(),
-            Name = authorName,
-            Email = "thisisalegitemail@email.email",
-            Cheeps = new List<Cheep>()
-        });
+        var author = await _dbContext.Authors.Where(author => author.Name == authorName).FirstOrDefaultAsync();
+
+        if (author == null) {
+            author = new Author() {
+                Id = Guid.NewGuid(),
+                Name = authorName,
+                Email = "thisisalegitemail@email.email",
+                Cheeps = new List<Cheep>()
+            };
+
+            await _dbContext.Authors.AddAsync(author);
+        }
 
         await _dbContext.Cheeps.AddAsync(new Cheep() { Id = Guid.NewGuid(), AuthorId = author.Id, Author = author, Text = message });
         _dbContext.SaveChanges();
