@@ -13,6 +13,7 @@ public class Program {
         builder.Services.AddRazorPages();
         builder.Services.AddScoped<ICheepService, CheepService>();
         builder.Services.AddScoped<ICheepRepository, CheepRepository>();
+        builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
         builder.Services.AddDbContext<ChirpContext>();
 
 
