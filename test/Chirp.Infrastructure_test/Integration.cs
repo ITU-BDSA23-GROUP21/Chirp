@@ -76,7 +76,7 @@ public class Integration : BaseDBTest
         //Arrange 
         int expectedValue = 0;
 
-        //Actadd
+        //Act
         IEnumerable<CheepDto> cheeps = await cheepRepository.GetCheeps(1, "NonExistingAuther");
         int actualValue = cheeps.Count();
 
