@@ -1,15 +1,16 @@
 using Chirp.Infrastructure;
 using Chirp.Core;
+using Chirp.Shared_test;
 
 namespace Chirp.Infrastructure_test;
 
 [Collection("Environment Variable")]
-public class Integration
+public class Integration : BaseDBTest
 {
     CheepRepository cheepRepository;
     public Integration()
     {
-        cheepRepository = new CheepRepository(new ChirpContext());
+        cheepRepository = new CheepRepository(CreateContext());
     }
 
     [Theory]
@@ -75,7 +76,7 @@ public class Integration
         //Arrange 
         int expectedValue = 0;
 
-        //Act
+        //Actadd
         IEnumerable<CheepDto> cheeps = await cheepRepository.GetCheeps(1, "NonExistingAuther");
         int actualValue = cheeps.Count();
 
@@ -103,16 +104,16 @@ public class Integration
     public async void CheepRepository_GetCheeps_ValidAuthorZeroAndBelowPageValue(int page)
     {
         //Arrange
-        CheepDto expectedFirstCheep = new("Jacqualine Gilcoine", 
-                                          "Starbuck now is what we hear the worst.",
-                                          "08/01/23 13:17:39");
+        CheepDto expectedFirstCheep = new("Mellie Yost", 
+                                          "But what was behind the barricade.",
+                                          "08/01/23 13:17:33");
                                         
-        CheepDto expectedLastCheep =  new("Jacqualine Gilcoine",
-                                          "Now, amid the cloud-scud.",
-                                          "08/01/23 13:16:30");
+        CheepDto expectedLastCheep =  new("Mellie Yost",
+                                          "A well-fed, plump Huzza Porpoise will yield you about saying, sir?",
+                                          "08/01/23 13:13:32");
         
         //Act
-        IEnumerable<CheepDto> cheeps = await cheepRepository.GetCheeps(page, "Jacqualine Gilcoine");
+        IEnumerable<CheepDto> cheeps = await cheepRepository.GetCheeps(page, "Mellie Yost");
         CheepDto actualFirstCheep = cheeps.First();
         CheepDto actualLastCheep = cheeps.Last();
         
