@@ -25,6 +25,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Chirp.Razor\Chirp.Razor.csproj" />
+    <ProjectReference Include="..\Chirp.Shared_test\Chirp.Shared_test.csproj" />
   </ItemGroup>
 
 </Project>
