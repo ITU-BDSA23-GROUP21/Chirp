@@ -29,5 +29,6 @@ public class CheepRepository : ICheepRepository {
         });
 
         await _dbContext.Cheeps.AddAsync(new Cheep() { Id = Guid.NewGuid(), AuthorId = author.Id, Author = author, Text = message });
+        _dbContext.SaveChanges();
     }
 }

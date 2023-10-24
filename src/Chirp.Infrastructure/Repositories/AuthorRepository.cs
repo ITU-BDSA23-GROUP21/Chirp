@@ -23,5 +23,6 @@ public class AuthorRepository : IAuthorRepository {
     }
     public async Task CreateAuthor(AuthorDto author) {
         await _dbContext.Authors.AddAsync(new Author() {Id = Guid.NewGuid(), Email = author.Email, Name = author.Name, Cheeps = new List<Cheep>()});
+        _dbContext.SaveChanges();
     }
 }
