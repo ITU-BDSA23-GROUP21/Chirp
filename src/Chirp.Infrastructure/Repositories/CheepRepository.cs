@@ -1,9 +1,10 @@
 using Chirp.Core;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace Chirp.Infrastructure;
 
-public class CheepRepository : ICheepRepository {
+public class CheepRepository : ICheepRepository, IClientModelValidatorProvider {
     private readonly ChirpContext _dbContext;
 
     public CheepRepository(ChirpContext dbContext) =>
@@ -36,5 +37,9 @@ public class CheepRepository : ICheepRepository {
 
         await _dbContext.Cheeps.AddAsync(new Cheep() { Id = Guid.NewGuid(), AuthorId = author.Id, Author = author, Text = message });
         _dbContext.SaveChanges();
+    }
+
+    public void CreateValidators(ClientValidatorProviderContext context) {
+        throw new NotImplementedException();
     }
 }
