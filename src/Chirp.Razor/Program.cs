@@ -1,7 +1,11 @@
 using Chirp.Core;
 using Chirp.Infrastructure;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
+using Microsoft.Identity.Web;
+using Microsoft.Identity.Web.UI;
 
 namespace Chirp.Razor;
 
@@ -14,12 +18,15 @@ public class Program {
             ?? Path.Combine(Path.GetTempPath(), "chirp.db");
 
         // Add services to the container.
-        builder.Services.AddRazorPages();
         builder.Services.AddScoped<ICheepService, CheepService>();
         builder.Services.AddScoped<ICheepRepository, CheepRepository>();
         builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
         builder.Services.AddDbContext<ChirpContext>(Options => Options.UseSqlite($"Data Source={dbPath}"));
 
+        builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
+        .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAdB2C"));
+        builder.Services.AddRazorPages()
+        .AddMicrosoftIdentityUI();
 
         var app = builder.Build();
 
@@ -37,13 +44,21 @@ public class Program {
             // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
             app.UseHsts();
         }
+        else {
+            app.UseCookiePolicy(new CookiePolicyOptions() {
+                MinimumSameSitePolicy = SameSiteMode.None,
+                Secure = CookieSecurePolicy.Always
+            });
+        }
 
         app.UseHttpsRedirection();
         app.UseStaticFiles();
 
         app.UseRouting();
+        app.UseAuthorization();
 
         app.MapRazorPages();
+        app.MapControllers();
 
         app.Run();
     }
