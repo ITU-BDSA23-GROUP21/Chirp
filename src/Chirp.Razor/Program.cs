@@ -1,9 +1,9 @@
 using Chirp.Core;
 using Chirp.Infrastructure;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
 
@@ -18,7 +18,6 @@ public class Program {
             ?? Path.Combine(Path.GetTempPath(), "chirp.db");
 
         // Add services to the container.
-        builder.Services.AddRazorPages();
         builder.Services.AddScoped<ICheepService, CheepService>();
         builder.Services.AddScoped<ICheepRepository, CheepRepository>();
         builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
@@ -45,12 +44,17 @@ public class Program {
             // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
             app.UseHsts();
         }
+        else {
+            app.UseCookiePolicy(new CookiePolicyOptions() {
+                MinimumSameSitePolicy = SameSiteMode.None,
+                Secure = CookieSecurePolicy.Always
+            });
+        }
 
         app.UseHttpsRedirection();
         app.UseStaticFiles();
 
         app.UseRouting();
-
         app.UseAuthorization();
 
         app.MapRazorPages();
