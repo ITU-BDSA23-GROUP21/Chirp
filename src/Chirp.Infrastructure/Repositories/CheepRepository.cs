@@ -47,6 +47,10 @@ public class CheepRepository : ICheepRepository {
         return results;
 
     }
+
+    Task ICheepRepository.AddCheep(string message, string authorName) {
+        throw new NotImplementedException();
+    }
 }
 public class NewCheepValidator : AbstractValidator<Cheep> {
     public NewCheepValidator() {
