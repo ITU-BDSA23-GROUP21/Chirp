@@ -21,7 +21,8 @@ public class CheepRepository : ICheepRepository {
             .ToListAsync();
     }
 
-    public async Task AddCheep(string message, string authorName) {
+
+    public async Task<FluentValidation.Results.ValidationResult> AddCheep(string message, string authorName) {
 
         // We have no way of knowing the correct email if author does not exist already
         var author = await _dbContext.Authors.Where(author => author.Name == authorName).FirstOrDefaultAsync();
@@ -38,12 +39,15 @@ public class CheepRepository : ICheepRepository {
         }
         var cheep = new Cheep() { Id = Guid.NewGuid(), AuthorId = author.Id, Author = author, Text = message };
         FluentValidation.Results.ValidationResult results = newCheepValidator.Validate(cheep);
+        if (results.IsValid) {
+            await _dbContext.Cheeps.AddAsync(cheep);
+            _dbContext.SaveChanges();
+            return null;
+        }
+        return results;
 
-        await _dbContext.Cheeps.AddAsync(cheep);
-        _dbContext.SaveChanges();
     }
 }
-
 public class NewCheepValidator : AbstractValidator<Cheep> {
     public NewCheepValidator() {
         RuleFor(x => x.Id).NotEmpty();
@@ -52,3 +56,5 @@ public class NewCheepValidator : AbstractValidator<Cheep> {
         RuleFor(x => x.Text).Length(0, 160);
     }
 }
+
+
