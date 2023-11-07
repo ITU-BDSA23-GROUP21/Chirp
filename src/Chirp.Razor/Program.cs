@@ -3,6 +3,7 @@ using Chirp.Infrastructure;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
@@ -14,14 +15,15 @@ public class Program {
         // Code architecture inspired by code example from Rasmus from lecture 6 (05.10.2023)  
 
         var builder = WebApplication.CreateBuilder(args);
-        var dbPath = Environment.GetEnvironmentVariable("CHIRPDBPATH")
-            ?? Path.Combine(Path.GetTempPath(), "chirp.db");
+        var conStrBuilder = new SqlConnectionStringBuilder(builder.Configuration.GetConnectionString("AZURE_SQL_CONNECTIONSTRING"));
+        conStrBuilder.Password = builder.Configuration["DatabasePassword"];
+        var connectionString = conStrBuilder.ConnectionString;
 
         // Add services to the container.
         builder.Services.AddScoped<ICheepService, CheepService>();
         builder.Services.AddScoped<ICheepRepository, CheepRepository>();
         builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
-        builder.Services.AddDbContext<ChirpContext>(Options => Options.UseSqlite($"Data Source={dbPath}"));
+        builder.Services.AddDbContext<ChirpContext>(Options => Options.UseSqlServer(connectionString));
 
         builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
         .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAdB2C"));
