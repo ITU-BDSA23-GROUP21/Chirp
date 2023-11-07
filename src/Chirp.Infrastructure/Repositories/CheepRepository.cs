@@ -37,19 +37,15 @@ public class CheepRepository : ICheepRepository {
 
             await _dbContext.Authors.AddAsync(author);
         }
-        var cheep = new Cheep() { Id = Guid.NewGuid(), AuthorId = author.Id, Author = author, Text = message };
+        var cheep = new Cheep() { Id = Guid.NewGuid(), AuthorId = author.Id, Author = author, Text = message, TimeStamp = DateTime.Now};
         FluentValidation.Results.ValidationResult results = newCheepValidator.Validate(cheep);
         if (results.IsValid) {
             await _dbContext.Cheeps.AddAsync(cheep);
             _dbContext.SaveChanges();
-            return null;
-        }
+            return results;
+        } 
         return results;
 
-    }
-
-    Task ICheepRepository.AddCheep(string message, string authorName) {
-        throw new NotImplementedException();
     }
 }
 public class NewCheepValidator : AbstractValidator<Cheep> {
