@@ -1,6 +1,7 @@
 ﻿using Chirp.Core;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using FluentValidation;
 
 namespace Chirp.Razor.Pages;
 
@@ -23,11 +24,12 @@ public class PublicModel : PageModel {
         return Page();
     }
     //fluent validation may not be the right return type since its been casted ealier.
-    public async Task<FluentValidation.Results.ValidationResult> OnPostAsync() {
+    public async void OnPost() {
+        Console.WriteLine("hey");
         string message = Request.Form["Text"];
         if (message != null) {
-            return await _service.AddCheep(message, User.Identity.Name);
+            await _service.AddCheep(message, User.Identity.Name);
         }
-        return null;
+
     }
 }
