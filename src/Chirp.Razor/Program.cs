@@ -17,6 +17,7 @@ public class Program {
         var builder = WebApplication.CreateBuilder(args);
         var connectionString = string.Empty;
         if (builder.Environment.IsDevelopment()) {
+            //Should probably be changed to use a sql server launched from docker
             var conStrBuilder = new SqlConnectionStringBuilder(builder.Configuration.GetConnectionString("AZURE_SQL_CONNECTIONSTRING"));
             conStrBuilder.Password = builder.Configuration["DatabasePassword"];
             connectionString = conStrBuilder.ConnectionString;
