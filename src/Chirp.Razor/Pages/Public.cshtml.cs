@@ -20,18 +20,17 @@ public class PublicModel : PageModel {
 
     public async Task<ActionResult> OnGet() {
         Cheeps = await _service.GetCheeps(Pageno);
-        Console.WriteLine(Pageno);
         return Page();
     }
     //fluent validation may not be the right return type since its been casted ealier.
-    public async Task OnPostAsync() {
-        string ?message = Request.Form["NewMessage"];
-        Console.WriteLine(message);
+    public async Task<IActionResult> OnPostAsync() {
+        string? message = Request.Form["NewMessage"];
         if (message != null) {
-            Console.WriteLine(User.Claims);
             FluentValidation.Results.ValidationResult task = await _service.AddCheep(message, User.Identity.Name);
             HandleClientValidation(task);
+            Cheeps = await _service.GetCheeps(Pageno);
         }
+        return Page();
     }
 
     public void HandleClientValidation(FluentValidation.Results.ValidationResult task) {
