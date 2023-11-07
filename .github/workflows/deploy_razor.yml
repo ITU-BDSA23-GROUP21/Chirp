@@ -34,6 +34,11 @@ jobs:
       - name: Zip files for GitHub release
         run: |
           cd ${{env.DOTNET_ROOT}}/myapp && zip -r ${{env.DOTNET_ROOT}}/myapp/${{github.ref_name}}.zip ${{env.DOTNET_ROOT}}/myapp
+      - name: Publish release on github
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with: 
+          files: ${{env.DOTNET_ROOT}}/myapp/${{github.ref_name}}.zip
 
   deploy:
     runs-on: ubuntu-latest
@@ -43,13 +48,6 @@ jobs:
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
     steps:
-      - name: Publish release on github
-        uses: softprops/action-gh-release@v1
-        if: startsWith(github.ref, 'refs/tags/')
-        with: 
-          files: ${{env.DOTNET_ROOT}}/myapp/${{github.ref_name}}.zip
-
-
       - name: Download artifact from build job
         uses: actions/download-artifact@v2
         with:
