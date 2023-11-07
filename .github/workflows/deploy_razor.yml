@@ -38,7 +38,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         with: 
-          files: Chirp-${{env.DOTNET_ROOT}}/myapp/${{github.ref_name}}.zip
+          files: ${{env.DOTNET_ROOT}}/myapp/Chirp-${{github.ref_name}}.zip
 
   deploy:
     runs-on: ubuntu-latest
