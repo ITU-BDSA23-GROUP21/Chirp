@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using FluentValidation;
+using System.Security.Claims;
 
 namespace Chirp.Razor.Pages;
 
@@ -26,7 +27,8 @@ public class PublicModel : PageModel {
     public async Task<IActionResult> OnPostAsync() {
         string? message = Request.Form["NewMessage"];
         if (message != null) {
-            FluentValidation.Results.ValidationResult task = await _service.AddCheep(message, User.Identity.Name);
+            var email = User.Claims.Where(c => c.Type == "emails").Single().Value;
+            FluentValidation.Results.ValidationResult task = await _service.AddCheep(message, User.Identity.Name, email);
             HandleClientValidation(task);
             Cheeps = await _service.GetCheeps(Pageno);
         }

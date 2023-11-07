@@ -3,7 +3,7 @@ using FluentValidation;
 public interface ICheepService {
     public Task<List<CheepDto>> GetCheeps(int page = 1);
     public Task<List<CheepDto>> GetCheepsFromAuthor(string author, int page = 1);
-    public Task<FluentValidation.Results.ValidationResult> AddCheep(string message, string authorName);
+    public Task<FluentValidation.Results.ValidationResult> AddCheep(string message, string authorName, string email);
 }
 
 public class CheepService : ICheepService {
@@ -21,7 +21,7 @@ public class CheepService : ICheepService {
     }
 
     //validationresult not same type as in cheepRepository?? casting as quick fix
-    public async Task<FluentValidation.Results.ValidationResult> AddCheep(string message, string authorName) {
-        return await _cheepRepository.AddCheep(message, authorName);
+    public async Task<FluentValidation.Results.ValidationResult> AddCheep(string message, string authorName, string email) {
+        return await _cheepRepository.AddCheep(message, authorName, email);
     }
 }

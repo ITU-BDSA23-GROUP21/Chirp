@@ -22,7 +22,7 @@ public class CheepRepository : ICheepRepository {
     }
 
 
-    public async Task<FluentValidation.Results.ValidationResult> AddCheep(string message, string authorName) {
+    public async Task<FluentValidation.Results.ValidationResult> AddCheep(string message, string authorName, string email) {
 
         // We have no way of knowing the correct email if author does not exist already
         var author = await _dbContext.Authors.Where(author => author.Name == authorName).FirstOrDefaultAsync();
@@ -31,7 +31,7 @@ public class CheepRepository : ICheepRepository {
             author = new Author() {
                 Id = Guid.NewGuid(),
                 Name = authorName,
-                Email = "thisisalegitemail@email.email",
+                Email = email,
                 Cheeps = new List<Cheep>()
             };
 
