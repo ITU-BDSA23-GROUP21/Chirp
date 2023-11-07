@@ -24,12 +24,23 @@ public class PublicModel : PageModel {
         return Page();
     }
     //fluent validation may not be the right return type since its been casted ealier.
-    public async void OnPost() {
-        Console.WriteLine("hey");
-        string message = Request.Form["Text"];
+    public async Task OnPostAsync() {
+        string ?message = Request.Form["NewMessage"];
+        Console.WriteLine(message);
         if (message != null) {
-            await _service.AddCheep(message, User.Identity.Name);
+            Console.WriteLine(User.Claims);
+            FluentValidation.Results.ValidationResult task = await _service.AddCheep(message, User.Identity.Name);
+            HandleClientValidation(task);
         }
+    }
 
+    public void HandleClientValidation(FluentValidation.Results.ValidationResult task) {
+        if (!task.IsValid) {
+            Console.WriteLine("Not a valid message");
+        }
+        else {
+            Console.WriteLine("Valid");
+        }
     }
 }
+
