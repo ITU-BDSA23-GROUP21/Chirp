@@ -31,6 +31,9 @@ jobs:
         with:
           name: .net-app
           path: ${{env.DOTNET_ROOT}}/myapp
+      - name: Zip files for GitHub release
+        run: |
+          cd ${{env.DOTNET_ROOT}}/myapp && zip -r ${{env.DOTNET_ROOT}}/myapp/${{github.ref_name}}.zip ${{env.DOTNET_ROOT}}/myapp
 
   deploy:
     runs-on: ubuntu-latest
@@ -43,6 +46,9 @@ jobs:
       - name: Publish release on github
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
+        with: 
+          files: ${{env.DOTNET_ROOT}}/myapp/${{github.ref_name}}.zip
+
 
       - name: Download artifact from build job
         uses: actions/download-artifact@v2
