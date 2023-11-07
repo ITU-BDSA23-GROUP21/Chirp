@@ -15,10 +15,16 @@ public class Program {
         // Code architecture inspired by code example from Rasmus from lecture 6 (05.10.2023)  
 
         var builder = WebApplication.CreateBuilder(args);
-        var conStrBuilder = new SqlConnectionStringBuilder(builder.Configuration.GetConnectionString("AZURE_SQL_CONNECTIONSTRING"));
-        conStrBuilder.Password = builder.Configuration["DatabasePassword"];
-        var connectionString = conStrBuilder.ConnectionString;
-
+        var connectionString = string.Empty;
+        if (builder.Environment.IsDevelopment()) {
+            var conStrBuilder = new SqlConnectionStringBuilder(builder.Configuration.GetConnectionString("AZURE_SQL_CONNECTIONSTRING"));
+            conStrBuilder.Password = builder.Configuration["DatabasePassword"];
+            connectionString = conStrBuilder.ConnectionString;
+        }
+        else {
+            connectionString = Environment.GetEnvironmentVariable("AZURE_SQL_CONNECTIONSTRING");
+        }
+       
         // Add services to the container.
         builder.Services.AddScoped<ICheepService, CheepService>();
         builder.Services.AddScoped<ICheepRepository, CheepRepository>();
