@@ -1,6 +1,7 @@
 ﻿using Chirp.Core;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.ComponentModel;
 
 namespace Chirp.Razor.Pages;
 
@@ -21,6 +22,7 @@ public class PublicModel : PageModel
 
     public async Task<ActionResult> OnGet()
     {
+        if(Pageno <= 0) Pageno = 1;
         Cheeps = await _service.GetCheeps(Pageno);
         Console.WriteLine(Pageno);
         return Page();
