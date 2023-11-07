@@ -22,7 +22,7 @@ public class Program {
             connectionString = conStrBuilder.ConnectionString;
         }
         else {
-            connectionString = Environment.GetEnvironmentVariable("AZURE_SQL_CONNECTIONSTRING");
+            connectionString = Environment.GetEnvironmentVariable("SQLAZURECONNSTR_AZURE_SQL_CONNECTIONSTRING");
         }
        
         // Add services to the container.
