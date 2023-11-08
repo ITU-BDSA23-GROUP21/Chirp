@@ -28,7 +28,7 @@ public abstract class TimelineModel : PageModel {
     //fluent validation may not be the right return type since its been casted ealier.
     public async Task<IActionResult> OnPostAsync() {
         string? message = Request.Form["NewMessage"];
-        if (message != null) {
+        if (message != null && User.Identity?.Name != null) {
             var email = User.Claims.Where(c => c.Type == "emails").Single().Value;
             FluentValidation.Results.ValidationResult task = await _service.AddCheep(message, User.Identity.Name, email);
             HandleClientValidation(task);
