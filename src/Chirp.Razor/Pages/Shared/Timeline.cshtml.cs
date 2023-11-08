@@ -1,4 +1,5 @@
 using Chirp.Core;
+using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -30,14 +31,14 @@ public abstract class TimelineModel : PageModel {
         string? message = Request.Form["NewMessage"];
         if (message != null && User.Identity?.Name != null) {
             var email = User.Claims.Where(c => c.Type == "emails").Single().Value;
-            FluentValidation.Results.ValidationResult task = await _service.AddCheep(message, User.Identity.Name, email);
+            ValidationResult task = await _service.AddCheep(message, User.Identity.Name, email);
             HandleClientValidation(task);
             Cheeps = await GetCheeps();
         }
         return Page();
     }
 
-    public void HandleClientValidation(FluentValidation.Results.ValidationResult task) {
+    public void HandleClientValidation(ValidationResult task) {
         if (!task.IsValid) {
             Console.WriteLine("Not a valid message");
         }
