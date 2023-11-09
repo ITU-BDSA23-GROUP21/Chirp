@@ -1,7 +1,7 @@
 using Chirp.Core;
 using Microsoft.EntityFrameworkCore;
 using FluentValidation;
-using System.ComponentModel.DataAnnotations;
+using FluentValidation.Results;
 namespace Chirp.Infrastructure;
 
 public class CheepRepository : ICheepRepository {
@@ -22,7 +22,7 @@ public class CheepRepository : ICheepRepository {
     }
 
 
-    public async Task<FluentValidation.Results.ValidationResult> AddCheep(string message, string authorName, string email) {
+    public async Task<ValidationResult> AddCheep(string message, string authorName, string email) {
 
         // We have no way of knowing the correct email if author does not exist already
         var author = await _dbContext.Authors.Where(author => author.Name == authorName).FirstOrDefaultAsync();
@@ -38,7 +38,7 @@ public class CheepRepository : ICheepRepository {
             await _dbContext.Authors.AddAsync(author);
         }
         var cheep = new Cheep() { Id = Guid.NewGuid(), AuthorId = author.Id, Author = author, Text = message, TimeStamp = DateTime.Now};
-        FluentValidation.Results.ValidationResult results = newCheepValidator.Validate(cheep);
+        ValidationResult results = newCheepValidator.Validate(cheep);
         if (results.IsValid) {
             await _dbContext.Cheeps.AddAsync(cheep);
             _dbContext.SaveChanges();
