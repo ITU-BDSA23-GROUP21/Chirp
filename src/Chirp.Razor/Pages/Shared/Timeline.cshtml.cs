@@ -22,6 +22,7 @@ public abstract class TimelineModel : PageModel {
     protected abstract Task<List<CheepDto>> GetCheeps();
 
     public async Task<ActionResult> OnGet() {
+        if (Pageno <= 0) Pageno = 1;
         Cheeps = await GetCheeps();
         return Page();
     }
