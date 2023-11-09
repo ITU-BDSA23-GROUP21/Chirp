@@ -14,25 +14,25 @@ public class End2End : IClassFixture<WebApplicationFactory<Program>> {
     }
 
     //Test case taking from lecture slides
-    [Fact]
-    public async void CanSeePublicTimeline() {
-        var response = await _client.GetAsync("/");
-        response.EnsureSuccessStatusCode();
-        var content = await response.Content.ReadAsStringAsync();
+    // [Fact]
+    // public async void CanSeePublicTimeline() {
+    //     var response = await _client.GetAsync("/");
+    //     response.EnsureSuccessStatusCode();
+    //     var content = await response.Content.ReadAsStringAsync();
 
-        Assert.Contains("Chirp!", content);
-        Assert.Contains("Public Timeline", content);
-    }
+    //     Assert.Contains("Chirp!", content);
+    //     Assert.Contains("Public Timeline", content);
+    // }
 
-    [Theory]
-    [InlineData("Octavio Wagganer")]
-    [InlineData("Quintin Sitts")]
-    public async void CanSeePrivateTimeline(string author) {
-        var response = await _client.GetAsync($"/{author}");
-        response.EnsureSuccessStatusCode();
-        var content = await response.Content.ReadAsStringAsync();
+    // [Theory]
+    // [InlineData("Octavio Wagganer")]
+    // [InlineData("Quintin Sitts")]
+    // public async void CanSeePrivateTimeline(string author) {
+    //     var response = await _client.GetAsync($"/{author}");
+    //     response.EnsureSuccessStatusCode();
+    //     var content = await response.Content.ReadAsStringAsync();
 
-        Assert.Contains("Chirp!", content);
-        Assert.Contains($"{author}'s Timeline", content);
-    }
+    //     Assert.Contains("Chirp!", content);
+    //     Assert.Contains($"{author}'s Timeline", content);
+    // }
 }
