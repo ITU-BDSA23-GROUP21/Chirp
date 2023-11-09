@@ -7,19 +7,17 @@ namespace Chirp.Razor_test;
 [Collection("Environment Variable")]
 public class End2End : IClassFixture<WebApplicationFactory<Program>>, IAsyncLifetime {
     private readonly MsSqlContainer _sqlContainer;
-    private readonly WebApplicationFactory<Program> _fixture;
-    private readonly HttpClient _client;
+    private WebApplicationFactory<Program> _fixture;
 
     public End2End(WebApplicationFactory<Program> fixture) {
         _sqlContainer = new MsSqlBuilder().Build();
-        Environment.SetEnvironmentVariable("TEST_CONNECTIONSTRING", _sqlContainer.GetConnectionString());
         _fixture = fixture;
-        _client = _fixture.CreateClient(new WebApplicationFactoryClientOptions { AllowAutoRedirect = true, HandleCookies = true });
     }
 
     // Test case taking from lecture slides
     [Fact]
     public async Task CanSeePublicTimeline() {
+        HttpClient _client = InitializeClient();
         var response = await _client.GetAsync("/");
         response.EnsureSuccessStatusCode();
         var content = await response.Content.ReadAsStringAsync();
@@ -32,6 +30,7 @@ public class End2End : IClassFixture<WebApplicationFactory<Program>>, IAsyncLife
     [InlineData("Octavio Wagganer")]
     [InlineData("Quintin Sitts")]
     public async Task CanSeePrivateTimeline(string author) {
+        HttpClient _client = InitializeClient();
         var response = await _client.GetAsync($"/{author}");
         response.EnsureSuccessStatusCode();
         var content = await response.Content.ReadAsStringAsync();
@@ -40,8 +39,16 @@ public class End2End : IClassFixture<WebApplicationFactory<Program>>, IAsyncLife
         Assert.Contains($"{author}'s Timeline", content);
     }
 
-    public Task InitializeAsync()
-        => _sqlContainer.StartAsync();
+    public async Task InitializeAsync()
+    {
+        await _sqlContainer.StartAsync();
+        Environment.SetEnvironmentVariable("TEST_CONNECTIONSTRING", _sqlContainer.GetConnectionString());
+    }
+
+    public HttpClient InitializeClient()
+    {
+        return _fixture.CreateClient(new WebApplicationFactoryClientOptions { AllowAutoRedirect = true, HandleCookies = true });
+    }
 
     public Task DisposeAsync()
         => _sqlContainer.DisposeAsync().AsTask();
