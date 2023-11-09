@@ -15,9 +15,10 @@ public class Program {
         // Code architecture inspired by code example from Rasmus from lecture 6 (05.10.2023)  
 
         var builder = WebApplication.CreateBuilder(args);
-        var connectionString = string.Empty;
+        string? connectionString = string.Empty;
         if (builder.Environment.IsDevelopment()) {
-            connectionString = builder.Configuration["ConnectionString"];
+            connectionString = Environment.GetEnvironmentVariable("TEST_CONNECTIONSTRING") ??
+                builder.Configuration["ConnectionString"];
         } else {
             connectionString = Environment.GetEnvironmentVariable("SQLAZURECONNSTR_AZURE_SQL_CONNECTIONSTRING");
         }
