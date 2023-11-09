@@ -9,7 +9,45 @@
 <div>
     <h2> @routeName's Timeline </h2>
 
-    @if (Model.Cheeps.Any())
+    @if (User.Identity?.IsAuthenticated == true)
+    {
+        @if (Model.Cheeps.Any())
+        {
+            <div class="cheepbox">
+                <h3>What's on your mind @(User.Identity.Name)?</h3>
+                <form method="POST">
+                    <input style="float: left" type="text" name="NewMessage" for="Text">
+                    <input type="submit" maxlength="10" value="Share">
+                </form>
+            </div>
+            <ul id="messagelist" class="cheeps">
+                @foreach (var cheep in Model.Cheeps)
+                {
+                    <li>
+                        <p>
+                            <strong>
+                                <a href="/@cheep.Author">@cheep.Author</a>
+                            </strong>
+                            @cheep.Message
+                            <small>&mdash; @cheep.Timestamp</small>
+                        </p>
+                    </li>
+                }
+            </ul>
+        }
+        else
+        {
+            <div class="cheepbox">
+                <h3>What's on your mind @(User.Identity.Name)?</h3>
+                <form method="POST">
+                    <input style="float: left" type="text" name="NewMessage" for="Text">
+                    <input type="submit" maxlength="10" value="Share">
+                </form>
+            </div>
+            <em>There are no cheeps so far.</em>
+        }
+    }
+    else
     {
         <ul id="messagelist" class="cheeps">
             @foreach (var cheep in Model.Cheeps)
@@ -26,8 +64,5 @@
             }
         </ul>
     }
-    else
-    {
-        <em>There are no cheeps so far.</em>
     }
 </div>
