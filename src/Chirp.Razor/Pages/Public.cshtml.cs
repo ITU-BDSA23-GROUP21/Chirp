@@ -1,4 +1,4 @@
-﻿using Chirp.Core;
+using Chirp.Core;
 
 namespace Chirp.Razor.Pages;
 
