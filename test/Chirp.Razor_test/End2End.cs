@@ -42,6 +42,7 @@ public class End2End : IClassFixture<WebApplicationFactory<Program>>, IAsyncLife
     public async Task InitializeAsync()
     {
         await _sqlContainer.StartAsync();
+        Console.WriteLine(_sqlContainer.GetConnectionString());
         Environment.SetEnvironmentVariable("TEST_CONNECTIONSTRING", _sqlContainer.GetConnectionString());
     }
 
