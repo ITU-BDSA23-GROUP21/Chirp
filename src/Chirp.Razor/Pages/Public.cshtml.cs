@@ -7,8 +7,8 @@ using System.Security.Claims;
 
 namespace Chirp.Razor.Pages;
 
-public class PublicModel : PageModel {
-    private readonly ICheepService _service;
+public class PublicModel : TimelineModel {
+    public PublicModel(ICheepService service): base(service) {
 
     [FromQuery(Name = "page")]
     public int Pageno { get; set; }
@@ -36,14 +36,9 @@ public class PublicModel : PageModel {
         }
         return Page();
     }
-
-    public void HandleClientValidation(FluentValidation.Results.ValidationResult task) {
-        if (!task.IsValid) {
-            Console.WriteLine("Not a valid message");
-        }
-        else {
-            Console.WriteLine("Valid");
-        }
+    
+    protected override Task<List<CheepDto>> GetCheeps() {
+        return _service.GetCheeps(Pageno);
     }
 }
 
