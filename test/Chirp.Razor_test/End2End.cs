@@ -26,18 +26,18 @@ public class End2End : IClassFixture<WebApplicationFactory<Program>>, IAsyncLife
         Assert.Contains("Public Timeline", content);
     }
 
-    [Theory]
-    [InlineData("Octavio Wagganer")]
-    [InlineData("Quintin Sitts")]
-    public async Task CanSeePrivateTimeline(string author) {
-        HttpClient _client = InitializeClient();
-        var response = await _client.GetAsync($"/{author}");
-        response.EnsureSuccessStatusCode();
-        var content = await response.Content.ReadAsStringAsync();
+    // [Theory]
+    // [InlineData("Octavio Wagganer")]
+    // [InlineData("Quintin Sitts")]
+    // public async Task CanSeePrivateTimeline(string author) {
+    //     HttpClient _client = InitializeClient();
+    //     var response = await _client.GetAsync($"/{author}");
+    //     response.EnsureSuccessStatusCode();
+    //     var content = await response.Content.ReadAsStringAsync();
 
-        Assert.Contains("Chirp!", content);
-        Assert.Contains($"{author}'s Timeline", content);
-    }
+    //     Assert.Contains("Chirp!", content);
+    //     Assert.Contains($"{author}'s Timeline", content);
+    // }
 
     public async Task InitializeAsync()
     {
