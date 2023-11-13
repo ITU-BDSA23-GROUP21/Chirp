@@ -12,6 +12,7 @@ public class CheepService : ICheepService {
     public CheepService(ICheepRepository cheepRepository) => _cheepRepository = cheepRepository;
 
     public Task<List<CheepDto>> GetCheeps(int page) {
+        if (page <= 0) page = 1;
         return _cheepRepository.GetCheeps(page);
     }
 
