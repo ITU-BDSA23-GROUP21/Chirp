@@ -16,8 +16,10 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.Identity.Web" Version="2.15.5" />
-    <PackageReference Include="Microsoft.Identity.Web.UI" Version="2.15.5" />
+    <PackageReference Include="Microsoft.Identity.Web" Version="2.15.3" />
+    <PackageReference Include="Microsoft.Identity.Web.UI" Version="2.15.3" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostGreSQL" Version="7.0.11" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL.Design" Version="1.1.0" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="../../data/**/*" />
