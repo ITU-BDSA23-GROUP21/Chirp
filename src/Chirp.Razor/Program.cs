@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
+using System.Runtime.InteropServices;
 
 namespace Chirp.Razor;
 
@@ -24,8 +25,11 @@ public class Program {
         builder.Services.AddScoped<IAuthorService, AuthorService>();
         builder.Services.AddScoped<ICheepRepository, CheepRepository>();
         builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
-        builder.Services.AddDbContext<ChirpContext>(Options => Options.UseSqlServer(connectionString));
-
+        if(RuntimeInformation.IsOSPlatform(OSPlatform.OSX)) {
+            builder.Services.AddDbContext<ChirpContext>(Options => Options.UseNpgsql(connectionString));
+        } else {
+            builder.Services.AddDbContext<ChirpContext>(Options => Options.UseSqlServer(connectionString));
+        }
         builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
         .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAdB2C"));
         builder.Services.AddRazorPages()
