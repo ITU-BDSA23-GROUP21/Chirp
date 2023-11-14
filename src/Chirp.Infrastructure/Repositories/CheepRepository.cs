@@ -1,7 +1,7 @@
 using Chirp.Core;
-using Microsoft.EntityFrameworkCore;
 using FluentValidation;
 using FluentValidation.Results;
+using Microsoft.EntityFrameworkCore;
 namespace Chirp.Infrastructure;
 
 public class CheepRepository : ICheepRepository {
@@ -37,13 +37,13 @@ public class CheepRepository : ICheepRepository {
 
             await _dbContext.Authors.AddAsync(author);
         }
-        var cheep = new Cheep() { Id = Guid.NewGuid(), AuthorId = author.Id, Author = author, Text = message, TimeStamp = DateTime.Now};
+        var cheep = new Cheep() { Id = Guid.NewGuid(), AuthorId = author.Id, Author = author, Text = message, TimeStamp = DateTime.UtcNow.AddHours(1) }; // Using local datetime will give the wrong time since the servers local time is not equal to ours.
         ValidationResult results = newCheepValidator.Validate(cheep);
         if (results.IsValid) {
             await _dbContext.Cheeps.AddAsync(cheep);
             _dbContext.SaveChanges();
             return results;
-        } 
+        }
         return results;
 
     }
