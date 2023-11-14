@@ -54,7 +54,7 @@ public class NewCheepValidator : AbstractValidator<Cheep> {
         RuleFor(x => x.Id).NotEmpty();
         RuleFor(x => x.AuthorId).NotEmpty();
         RuleFor(x => x.Author).NotEmpty();
-        RuleFor(x => x.Text).Length(0, 160);
+        RuleFor(x => x.Text).Length(1, 160);
     }
 }
 
