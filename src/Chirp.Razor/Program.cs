@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
+using System.Runtime.InteropServices;
 
 namespace Chirp.Razor;
 
@@ -13,7 +14,7 @@ public class Program {
 
         var builder = WebApplication.CreateBuilder(args);
         var connectionString = string.Empty;
-        var usePostgres = true;// RuntimeInformation.IsOSPlatform(OSPlatform.OSX);
+        var usePostgres = RuntimeInformation.IsOSPlatform(OSPlatform.OSX);
         if (builder.Environment.IsDevelopment()) {
             connectionString = builder.Configuration["ConnectionString"];
         }
