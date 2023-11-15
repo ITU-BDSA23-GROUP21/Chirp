@@ -2,12 +2,8 @@ using Chirp.Core;
 using Chirp.Infrastructure;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
-using System.Runtime.InteropServices;
 
 namespace Chirp.Razor;
 
@@ -17,7 +13,7 @@ public class Program {
 
         var builder = WebApplication.CreateBuilder(args);
         var connectionString = string.Empty;
-        var usePostgres = RuntimeInformation.IsOSPlatform(OSPlatform.OSX);
+        var usePostgres = true;// RuntimeInformation.IsOSPlatform(OSPlatform.OSX);
         if (builder.Environment.IsDevelopment()) {
             connectionString = builder.Configuration["ConnectionString"];
         }
@@ -34,12 +30,6 @@ public class Program {
             false => options.UseSqlServer(connectionString, x => x.MigrationsAssembly("Chirp.Migrations")),
             true => options.UseNpgsql(builder.Configuration["PostgresConnectionString"], x => x.MigrationsAssembly("Chirp.PostgresMigrations"))
         });
-        // if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX)) { // We love Mac :)
-        //     builder.Services.AddDbContext<ChirpContext>(Options => Options.UseNpgsql(connectionString));
-        // }
-        // else {
-        //     builder.Services.AddDbContext<ChirpContext>(Options => Options.UseSqlServer(connectionString));
-        // }
         builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
         .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAdB2C"));
         builder.Services.AddRazorPages()
