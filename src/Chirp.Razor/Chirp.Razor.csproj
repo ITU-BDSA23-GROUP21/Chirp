@@ -27,6 +27,8 @@
   <ItemGroup>
     <ProjectReference Include="..\Chirp.Infrastructure\Chirp.Infrastructure.csproj" />
     <ProjectReference Include="..\Chirp.Core\Chirp.Core.csproj" />
+    <ProjectReference Include="..\Chirp.Migrations\Chirp.Migrations.csproj" />
+    <ProjectReference Include="..\Chirp.PostgresMigrations\Chirp.PostgresMigrations.csproj" />
   </ItemGroup>
 
 </Project>
