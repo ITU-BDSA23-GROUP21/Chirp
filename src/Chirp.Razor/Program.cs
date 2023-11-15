@@ -16,18 +16,20 @@ public class Program {
         var connectionString = string.Empty;
         if (builder.Environment.IsDevelopment()) {
             connectionString = builder.Configuration["ConnectionString"];
-        } else {
+        }
+        else {
             connectionString = Environment.GetEnvironmentVariable("SQLAZURECONNSTR_AZURE_SQL_CONNECTIONSTRING");
         }
-       
+
         // Add services to the container.
         builder.Services.AddScoped<ICheepService, CheepService>();
         builder.Services.AddScoped<IAuthorService, AuthorService>();
         builder.Services.AddScoped<ICheepRepository, CheepRepository>();
         builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
-        if(RuntimeInformation.IsOSPlatform(OSPlatform.OSX)) {
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX)) { // We love Mac :)
             builder.Services.AddDbContext<ChirpContext>(Options => Options.UseNpgsql(connectionString));
-        } else {
+        }
+        else {
             builder.Services.AddDbContext<ChirpContext>(Options => Options.UseSqlServer(connectionString));
         }
         builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
