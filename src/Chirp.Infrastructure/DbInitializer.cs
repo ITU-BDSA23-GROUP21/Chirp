@@ -1,12 +1,11 @@
 // Taken from https://github.com/itu-bdsa/lecture_notes/blob/main/sessions/session_06/data/DbInitializer.cs
 
+using System.Runtime.InteropServices;
+
 namespace Chirp.Infrastructure;
-public static class DbInitializer
-{
-    public static void SeedDatabase(ChirpContext chirpContext)
-    {
-        if (!(chirpContext.Authors.Any() && chirpContext.Cheeps.Any()))
-        {
+public static class DbInitializer {
+    public static void SeedDatabase(ChirpContext chirpContext) {
+        if (!(chirpContext.Authors.Any() && chirpContext.Cheeps.Any())) {
             var a1 = new Author() { Id = Guid.NewGuid(), Name = "Roger Histand", Email = "Roger+Histand@hotmail.com", Cheeps = new List<Cheep>(), Followers = new List<Author>(), Following = new List<Author>() };
             var a2 = new Author() { Id = Guid.NewGuid(), Name = "Luanna Muro", Email = "Luanna-Muro@ku.dk", Cheeps = new List<Cheep>(), Followers = new List<Author>(), Following = new List<Author>() };
             var a3 = new Author() { Id = Guid.NewGuid(), Name = "Wendell Ballan", Email = "Wendell-Ballan@gmail.com", Cheeps = new List<Cheep>(), Followers = new List<Author>(), Following = new List<Author>() };
@@ -693,6 +692,13 @@ public static class DbInitializer
             a8.Cheeps = new List<Cheep>() { c55, c124, c139, c151, c164, c263, c310, c328, c360, c375, c430, c470, c564, c576, c605 };
             a11.Cheeps = new List<Cheep>() { c656 };
             a12.Cheeps = new List<Cheep>() { c657 };
+
+            var usePostgres = RuntimeInformation.IsOSPlatform(OSPlatform.OSX); //Required for fix to run on arm based cpu
+
+            if (usePostgres) {
+                foreach (var cheep in authors.SelectMany(a => a.Cheeps))
+                    cheep.TimeStamp = DateTime.SpecifyKind(cheep.TimeStamp, DateTimeKind.Utc);
+            }
 
             chirpContext.Authors.AddRange(authors);
             chirpContext.Cheeps.AddRange(cheeps);
