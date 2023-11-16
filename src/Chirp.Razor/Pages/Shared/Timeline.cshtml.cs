@@ -50,7 +50,7 @@ public abstract class TimelineModel : PageModel {
         if (!results.IsValid) {
             FailedValidationString = "\n";
             foreach (var failure in results.Errors) {
-                FailedValidationString += "Property " + failure.PropertyName + " failed validation. Error was: " + failure.ErrorMessage + "\n";
+                FailedValidationString += "Message not valid. Error was: " + failure.ErrorMessage + "\n";
             }
         }
         else {

@@ -50,6 +50,12 @@
                 }
             </ul>
         }
+        @if (Model.FailedValidationString != null)
+        {
+            <div class="cheepbox">
+                @Model.FailedValidationString
+            </div>
+        }
     }
     else if (Model.Cheeps.Any())
     {
