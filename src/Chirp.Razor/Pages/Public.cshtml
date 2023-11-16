@@ -16,6 +16,12 @@
                 <input style="float: left" type="text" name="NewMessage" for="Text">
                 <input type="submit" maxlength="10" value="Share">
             </form>
+            @if (Model.FailedValidationString != null)
+            {
+                <div class="cheepbox">
+                    @Model.FailedValidationString
+                </div>
+            }
         </div>
 
         if (Model.Cheeps.Any())
