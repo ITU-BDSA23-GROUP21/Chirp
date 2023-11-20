@@ -28,6 +28,19 @@
                     <p>
                         <strong>
                             <a href="/@cheep.Author">@cheep.Author</a>
+                            @if (!cheep.Author.Equals(User.Identity.Name))
+                            {
+                                @if (!Model.IsFollowing(User.Identity.Name, cheep.Author))
+                                {
+                                    <button onclick="Model.UnFollow(User.Identity.Name, cheep.Author)"
+                                        style="border: none; color: red">[Follow]</button>
+                                }
+                                else
+                                {
+                                    <button onclick="Model.Follow(User.Identity.Name, cheep,Author)"
+                                        style="border: none; color: grey">[Un-Follow]</button>
+                                }
+                            }
                         </strong>
                         @cheep.Message
                         <small>&mdash; @cheep.Timestamp</small>
@@ -38,6 +51,6 @@
     }
     else
     {
-    <em>There are no cheeps so far.</em>
+        <em>There are no cheeps so far.</em>
     }
 </div>

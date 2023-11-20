@@ -46,4 +46,17 @@ public abstract class TimelineModel : PageModel {
             Console.WriteLine("Valid");
         }
     }
+
+    public bool IsFollowing(string follower, string following) {
+        return false;
+    }
+    
+    public bool Follow(string follower, string following) {
+        return false;
+    }
+
+    public bool UnFollow(string follower, string following) {
+        return false;
+    }
+
 }
