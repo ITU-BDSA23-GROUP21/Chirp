@@ -32,12 +32,12 @@
                                     @if (!Model.IsFollowing(User.Identity.Name, cheep.Author))
                                     {
                                         <button onclick="Model.UnFollow(User.Identity.Name, cheep.Author)"
-                                            style="border: none; color: red">[Follow]</button>
+                                            style="border: none; color: red; cursor: pointer;">[Follow]</button>
                                     }
                                     else
                                     {
                                         <button onclick="Model.Follow(User.Identity.Name, cheep,Author)"
-                                            style="border: none; color: grey">[Un-Follow]</button>
+                                            style="border: none; color: grey; cursor: pointer;">[Un-Follow]</button>
                                     }
                                 }
                             </strong>
