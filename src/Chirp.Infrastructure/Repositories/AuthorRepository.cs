@@ -22,7 +22,14 @@ public class AuthorRepository : IAuthorRepository {
             .FirstAsync();
     }
     public async Task CreateAuthor(AuthorDto author) {
-        await _dbContext.Authors.AddAsync(new Author() { Id = Guid.NewGuid(), Email = author.Email, Name = author.Name, Cheeps = new List<Cheep>() });
+        await _dbContext.Authors.AddAsync(new Author() {
+            Id = Guid.NewGuid(),
+            Email = author.Email,
+            Name = author.Name,
+            Cheeps = new List<Cheep>(),
+            Followers = new List<Author>(),
+            Following = new List<Author>() }
+        );
         _dbContext.SaveChanges();
     }
 
@@ -36,13 +43,19 @@ public class AuthorRepository : IAuthorRepository {
     }
 
     public async Task Follow(string followerName, string followingName) {
-        var author = await _dbContext.Authors
+        var followingAuthor = await _dbContext.Authors
             .Where(author => author.Name == followingName)
             .FirstAsync();
 
-        // author.Followers.Append()
-        throw new NotImplementedException();
-        // List<CheepDto> cheep = _dbContext.Where(cheep => cheep.Author.Name =)
+        var followerAuthor = await _dbContext.Authors
+            .Where(author => author.Name == followerName)
+            .FirstAsync();
+
+        if (followingAuthor == null || followerAuthor == null) {
+            throw new ArgumentException("Follower or following does not exist");
+        }
+
+        followingAuthor.Followers.Append(followerAuthor);
     }
 
     public Task UnFollow(string followerName, string followingName) {
