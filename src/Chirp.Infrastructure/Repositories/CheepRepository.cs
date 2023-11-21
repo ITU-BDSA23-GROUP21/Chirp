@@ -24,8 +24,6 @@ public class CheepRepository : ICheepRepository {
 
 
     public async Task<ValidationResult> AddCheep(string message, string authorName, string email) {
-
-        // We have no way of knowing the correct email if author does not exist already
         var author = await _dbContext.Authors.Where(author => author.Name == authorName).FirstOrDefaultAsync();
 
         if (author == null) {

@@ -9,7 +9,7 @@ public interface IAuthorService {
 
     public Task UnFollow(string followerName, string followingName);
 
-    public Task<IEnumerable<AuthorDto>> GetFollowings(string? name);
+    public Task<IEnumerable<AuthorDto>> GetFollowings(string? name, string? email);
 }
 
 public class AuthorService : IAuthorService {
@@ -25,10 +25,10 @@ public class AuthorService : IAuthorService {
         await _authorRepository.UnFollow(followerName, followingName);
     }
 
-    public async Task<IEnumerable<AuthorDto>> GetFollowings(string? name) {
-        if (name == null) {
+    public async Task<IEnumerable<AuthorDto>> GetFollowings(string? name, string? email) {
+        if (name == null || email == null) {
             return Enumerable.Empty<AuthorDto>();
         }
-        return await _authorRepository.GetFollowings(name);
+        return await _authorRepository.GetFollowings(name, email);
     }
 }
