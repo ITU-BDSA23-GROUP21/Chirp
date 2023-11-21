@@ -10,13 +10,16 @@ public class UserTimelineModel : TimelineModel {
         // We access route data directly here, as saving it as a property in OnGet, did not make it available in OnPost
         // Is this the right way to access route data?
 
-        if (User.Identity.Name == RouteData?.Values?["author"]?.ToString()) {
+        if (User.Identity.Name == RouteData?.Values?["author"]?.ToString()) 
+        {
             List<AuthorDto> followings = this.Followings.ToList();
-            return _cheepService.GetCheepsFromAuthors(followings, Pageno);
+            return _cheepService.GetCheepsFromAuthors(followings,RouteData?.Values?["author"]?.ToString() , Pageno);
         }
-        else {
+        else
+        {
             return _cheepService.GetCheepsFromAuthor(RouteData?.Values?["author"]?.ToString(), Pageno);
         }
+        
     }
 }
 

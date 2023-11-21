@@ -8,7 +8,7 @@ public interface ICheepService {
     public Task<List<CheepDto>> GetCheepsFromAuthor(string? author, int page = 1);
     public Task<ValidationResult> AddCheep(string message, string authorName, string email);
 
-    public Task<List<CheepDto>> GetCheepsFromAuthors(List<AuthorDto> authors, int page = 1);
+    public Task<List<CheepDto>> GetCheepsFromAuthors(List<AuthorDto> authors,string authorName, int page = 1);
 }
 
 public class CheepService : ICheepService {
@@ -29,7 +29,7 @@ public class CheepService : ICheepService {
         return _cheepRepository.GetCheeps(page, author);
     }
 
-    public async Task<List<CheepDto>> GetCheepsFromAuthors(List<AuthorDto> authors, int page){
+    public async Task<List<CheepDto>> GetCheepsFromAuthors(List<AuthorDto> authors,string authorName, int page){
         List<CheepDto> cheepDtos = new List<CheepDto>();        
 
         foreach (var author in authors){
@@ -37,8 +37,10 @@ public class CheepService : ICheepService {
             foreach (var cheep in cheeps){
                 cheepDtos.Add(cheep);
             }
-            
         }
+        foreach (var cheep in  await _cheepRepository.GetCheeps(page, authorName)){
+                cheepDtos.Add(cheep);
+            }
         List<CheepDto> returnList = cheepDtos.OrderByDescending(o => o.Timestamp).ToList();
         
         return returnList;
