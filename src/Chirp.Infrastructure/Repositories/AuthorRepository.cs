@@ -1,5 +1,6 @@
 using Chirp.Core;
 using Microsoft.EntityFrameworkCore;
+using System.Xml.Linq;
 
 namespace Chirp.Infrastructure;
 
@@ -37,7 +38,11 @@ public class AuthorRepository : IAuthorRepository {
         var followings = await _dbContext.Authors
             .Where(author => author.Name == name)
             .Select(author => author.Following)
-            .FirstAsync();
+            .FirstOrDefaultAsync();
+
+        if (followings == null) {
+            return Enumerable.Empty<AuthorDto>();
+        }
 
         return followings.Select(author => new AuthorDto(author.Name, author.Email));
     }
@@ -55,10 +60,22 @@ public class AuthorRepository : IAuthorRepository {
             throw new ArgumentException("Follower or following does not exist");
         }
 
-        followingAuthor.Followers.Append(followerAuthor);
+        followingAuthor.Followers.Add(followerAuthor);
     }
 
-    public Task UnFollow(string followerName, string followingName) {
-        throw new NotImplementedException();
+    public async Task UnFollow(string followerName, string followingName) {
+        var followingAuthor = await _dbContext.Authors
+            .Where(author => author.Name == followingName)
+            .FirstAsync();
+
+        var followerAuthor = await _dbContext.Authors
+            .Where(author => author.Name == followerName)
+            .FirstAsync();
+
+        if (followingAuthor == null || followerAuthor == null) {
+            throw new ArgumentException("Follower or following does not exist");
+        }
+
+        followingAuthor.Followers.Remove(followerAuthor);
     }
 }
