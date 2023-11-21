@@ -38,7 +38,9 @@ public class Program {
         // Seed data into database.
         using (var scope = app.Services.CreateScope()) {
             var context = scope.ServiceProvider.GetRequiredService<ChirpContext>();
-            context.Database.EnsureCreated();
+            // Migrating this way might be unsafe in azure environment.
+            // See https://learn.microsoft.com/en-us/ef/core/managing-schemas/migrations/applying?tabs=dotnet-core-cli
+            context.Database.Migrate();
             DbInitializer.SeedDatabase(context);
         }
 

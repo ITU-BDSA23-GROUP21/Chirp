@@ -50,15 +50,16 @@ public class CheepRepository : ICheepRepository {
     }
 
     public Task<bool> IsFollowing(string follower, string following) {
-
+        throw new NotImplementedException();
     }
 
     public Task<bool> Follow(string follower, string following) {
-        List<CheepDto> cheep = _dbContext.Where(cheep => cheep.Author.Name =)
+        throw new NotImplementedException();
+        // List<CheepDto> cheep = _dbContext.Where(cheep => cheep.Author.Name =)
     }
 
-    public Task<bool> Unfollow(string follower, string following) {
-
+    public Task<bool> UnFollow(string follower, string following) {
+        throw new NotImplementedException();
     }
 }
 
