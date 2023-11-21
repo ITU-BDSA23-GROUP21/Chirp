@@ -8,5 +8,5 @@ public interface IAuthorRepository {
 
     Task UnFollow(string followerName, string followingName);
 
-    Task<IEnumerable<AuthorDto>> GetFollowings(string name);
+    Task<IEnumerable<AuthorDto>> GetFollowings(string name, string email);
 }
