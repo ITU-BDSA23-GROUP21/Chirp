@@ -28,7 +28,8 @@ public abstract class TimelineModel : PageModel {
 
     public async Task<ActionResult> OnGet() {
         Cheeps = await GetCheeps();
-        Followings = await _authorService.GetFollowings(User?.Identity?.Name);
+        var email = User.Claims.Where(c => c.Type == "emails").FirstOrDefault()?.Value;
+        Followings = await _authorService.GetFollowings(User?.Identity?.Name, email);
         return Page();
     }
 
@@ -57,8 +58,9 @@ public abstract class TimelineModel : PageModel {
         return Followings.Any(author => author.Name == following);
     }
 
-    public void Follow(string followerName, string followingName) {
+    public IActionResult Follow(string followerName, string followingName) {
         _authorService.Follow(followerName, followingName);
+        return Page();
     }
 
     public void UnFollow(string followerName, string followingName) {
