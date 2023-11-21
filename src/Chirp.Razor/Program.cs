@@ -1,9 +1,6 @@
 using Chirp.Core;
 using Chirp.Infrastructure;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
@@ -24,6 +21,7 @@ public class Program {
        
         // Add services to the container.
         builder.Services.AddScoped<ICheepService, CheepService>();
+        builder.Services.AddScoped<IAuthorService, AuthorService>();
         builder.Services.AddScoped<ICheepRepository, CheepRepository>();
         builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
         builder.Services.AddDbContext<ChirpContext>(Options => Options.UseSqlServer(connectionString));
