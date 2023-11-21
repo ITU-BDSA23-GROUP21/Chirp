@@ -12,7 +12,7 @@ public class CheepRepository : ICheepRepository {
         _dbContext = dbContext;
 
     public Task<List<CheepDto>> GetCheeps(int page, string? author = null) {
-        if(page <= 0) page = 1;
+        if (page <= 0) page = 1;
         return _dbContext.Cheeps
             .Where(cheep => cheep.Author.Name == author || author == null)
             .OrderByDescending(cheep => cheep.TimeStamp)
@@ -49,6 +49,8 @@ public class CheepRepository : ICheepRepository {
 
     }
 }
+
+
 public class NewCheepValidator : AbstractValidator<Cheep> {
     public NewCheepValidator() {
         RuleFor(x => x.Id).NotEmpty();
@@ -57,5 +59,7 @@ public class NewCheepValidator : AbstractValidator<Cheep> {
         RuleFor(x => x.Text).Length(1, 160);
     }
 }
+
+
 
 
