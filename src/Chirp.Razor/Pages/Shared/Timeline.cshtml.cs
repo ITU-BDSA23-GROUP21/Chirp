@@ -57,12 +57,11 @@ public abstract class TimelineModel : PageModel {
         return Followings.Any(author => author.Name == following);
     }
 
-    public bool Follow(string follower, string following) {
-        return false;
+    public void Follow(string followerName, string followingName) {
+        _authorService.Follow(followerName, followingName);
     }
 
-    public bool UnFollow(string follower, string following) {
-        return false;
+    public void UnFollow(string followerName, string followingName) {
+        _authorService.UnFollow(followerName, followingName);
     }
-
 }
