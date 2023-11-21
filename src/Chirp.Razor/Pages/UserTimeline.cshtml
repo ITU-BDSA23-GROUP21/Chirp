@@ -49,7 +49,7 @@
             </ul>
         }
     }
-    @if (Model.Cheeps.Any())
+    else if (Model.Cheeps.Any())
     {
         <ul id="messagelist" class="cheeps">
             @foreach (var cheep in Model.Cheeps)
