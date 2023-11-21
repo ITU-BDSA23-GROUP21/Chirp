@@ -48,6 +48,18 @@ public class CheepRepository : ICheepRepository {
         return results;
 
     }
+
+    public Task<bool> IsFollowing(string follower, string following) {
+
+    }
+
+    public Task<bool> Follow(string follower, string following) {
+        List<CheepDto> cheep = _dbContext.Where(cheep => cheep.Author.Name =)
+    }
+
+    public Task<bool> Unfollow(string follower, string following) {
+
+    }
 }
 
 
