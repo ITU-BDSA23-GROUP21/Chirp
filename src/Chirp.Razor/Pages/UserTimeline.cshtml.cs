@@ -8,7 +8,7 @@ public class UserTimelineModel : TimelineModel {
     protected override Task<List<CheepDto>> GetCheeps() {
         // We access route data directly here, as saving it as a property in OnGet, did not make it available in OnPost
         // Is this the right way to access route data?
-        return _service.GetCheepsFromAuthor(RouteData?.Values?["author"]?.ToString(), Pageno);
+        return _cheepService.GetCheepsFromAuthor(RouteData?.Values?["author"]?.ToString(), Pageno);
     }
 }
 

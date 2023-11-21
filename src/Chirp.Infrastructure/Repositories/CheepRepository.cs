@@ -48,19 +48,6 @@ public class CheepRepository : ICheepRepository {
         return results;
 
     }
-
-    public Task<bool> IsFollowing(string follower, string following) {
-        throw new NotImplementedException();
-    }
-
-    public Task<bool> Follow(string follower, string following) {
-        throw new NotImplementedException();
-        // List<CheepDto> cheep = _dbContext.Where(cheep => cheep.Author.Name =)
-    }
-
-    public Task<bool> UnFollow(string follower, string following) {
-        throw new NotImplementedException();
-    }
 }
 
 
