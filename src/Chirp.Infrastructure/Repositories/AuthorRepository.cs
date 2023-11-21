@@ -72,6 +72,8 @@ public class AuthorRepository : IAuthorRepository {
             throw new ArgumentException("Follower or following does not exist");
         }
 
+        followingAuthor.Followers ??= new List<Author>();
+
         followingAuthor.Followers.Add(followerAuthor);
     }
 
