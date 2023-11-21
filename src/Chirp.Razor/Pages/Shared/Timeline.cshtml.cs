@@ -17,8 +17,9 @@ public abstract class TimelineModel : PageModel {
     public IEnumerable<CheepDto> Cheeps { get; set; }
     public IEnumerable<AuthorDto> Followings { get; set; }
 
-    public TimelineModel(ICheepService service) {
-        _cheepService = service;
+    public TimelineModel(ICheepService cheepService, IAuthorService authorService) {
+        _cheepService = cheepService;
+        _authorService = authorService;
         Cheeps = new List<CheepDto>(0);
         Followings = new List<AuthorDto>(0);
     }

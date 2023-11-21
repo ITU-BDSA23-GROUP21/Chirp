@@ -33,7 +33,9 @@ public class CheepRepository : ICheepRepository {
                 Id = Guid.NewGuid(),
                 Name = authorName,
                 Email = email,
-                Cheeps = new List<Cheep>()
+                Cheeps = new List<Cheep>(),
+                Followers = new List<Author>(),
+                Following = new List<Author>()
             };
 
             await _dbContext.Authors.AddAsync(author);
