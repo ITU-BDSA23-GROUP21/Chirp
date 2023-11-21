@@ -29,7 +29,7 @@
                                 <a href="/@cheep.Author">@cheep.Author</a>
                                 @if (!cheep.Author.Equals(User.Identity.Name))
                                 {
-                                    @if (!Model.IsFollowing(User.Identity.Name, cheep.Author))
+                                    @if (!Model.IsFollowing(cheep.Author))
                                     {
                                         <button onclick="Model.UnFollow(User.Identity.Name, cheep.Author)"
                                             style="border: none; color: red; cursor: pointer;">[Follow]</button>
