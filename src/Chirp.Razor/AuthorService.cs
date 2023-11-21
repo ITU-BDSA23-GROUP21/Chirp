@@ -9,7 +9,7 @@ public interface IAuthorService {
 
     public Task UnFollow(string followerName, string followingName);
 
-    public Task<IEnumerable<AuthorDto>> GetFollowings(string name);
+    public Task<IEnumerable<AuthorDto>> GetFollowings(string? name);
 }
 
 public class AuthorService : IAuthorService {
