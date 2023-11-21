@@ -1,5 +1,8 @@
 using Chirp.Core;
 using FluentValidation.Results;
+
+namespace Chirp.Razor;
+
 public interface ICheepService {
     public Task<List<CheepDto>> GetCheeps(int page = 1);
     public Task<List<CheepDto>> GetCheepsFromAuthor(string? author, int page = 1);
@@ -24,7 +27,6 @@ public class CheepService : ICheepService {
         return _cheepRepository.GetCheeps(page, author);
     }
 
-    //validationresult not same type as in cheepRepository?? casting as quick fix
     public async Task<ValidationResult> AddCheep(string message, string authorName, string email) {
         return await _cheepRepository.AddCheep(message, authorName, email);
     }
