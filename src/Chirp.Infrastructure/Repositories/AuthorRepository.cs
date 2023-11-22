@@ -37,6 +37,7 @@ public class AuthorRepository : IAuthorRepository {
     public async Task<IEnumerable<AuthorDto>> GetFollowings(string name, string email) {
         var author = await _dbContext.Authors
             .Where(author => author.Name == name)
+            .Include(author => author.Following)
             .FirstOrDefaultAsync();
 
         if (author == null) {
