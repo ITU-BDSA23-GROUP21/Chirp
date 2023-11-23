@@ -37,6 +37,7 @@ public class AuthorRepository : IAuthorRepository {
     public async Task<IEnumerable<AuthorDto>> GetFollowings(string name, string email) {
         var author = await _dbContext.Authors
             .Where(author => author.Name == name)
+            .Include(author => author.Following)
             .FirstOrDefaultAsync();
 
         if (author == null) {
@@ -50,6 +51,7 @@ public class AuthorRepository : IAuthorRepository {
             };
 
             await _dbContext.Authors.AddAsync(author);
+            _dbContext.SaveChanges();
         }
 
         if (author.Following == null) {
@@ -75,6 +77,7 @@ public class AuthorRepository : IAuthorRepository {
         followingAuthor.Followers ??= new List<Author>();
 
         followingAuthor.Followers.Add(followerAuthor);
+        _dbContext.SaveChanges();
     }
 
     public async Task UnFollow(string followerName, string followingName) {
@@ -91,5 +94,6 @@ public class AuthorRepository : IAuthorRepository {
         }
 
         followingAuthor.Followers.Remove(followerAuthor);
+        _dbContext.SaveChanges();
     }
 }
