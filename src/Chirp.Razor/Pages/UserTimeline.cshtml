@@ -29,16 +29,18 @@
                                 <a href="/@cheep.Author">@cheep.Author</a>
                                 @if (!cheep.Author.Equals(User.Identity.Name))
                                 {
-                                    @if (!Model.IsFollowing(User.Identity.Name, cheep.Author))
-                                    {
-                                        <button onclick="Model.UnFollow(User.Identity.Name, cheep.Author)"
-                                            style="border: none; color: red; cursor: pointer;">[Follow]</button>
-                                    }
-                                    else
-                                    {
-                                        <button onclick="Model.Follow(User.Identity.Name, cheep,Author)"
-                                            style="border: none; color: grey; cursor: pointer;">[Un-Follow]</button>
-                                    }
+                                    <form method="post">
+                                        @if (!Model.IsFollowing(cheep.Author))
+                                        {
+                                            <button type="submit" asp-page-handler="Follow" asp-route-author="@cheep.Author"
+                                                style="border: none; color: red; cursor: pointer;">[Follow]</button>
+                                        }
+                                        else
+                                        {
+                                            <button type="submit" asp-page-handler="UnFollow" asp-route-author="@cheep.Author"
+                                                style="border: none; color: grey; cursor: pointer;">[Un-Follow]</button>
+                                        }
+                                    </form>
                                 }
                             </strong>
                             @cheep.Message
