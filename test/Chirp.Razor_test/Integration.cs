@@ -1,5 +1,6 @@
 using Chirp.Core;
 using Chirp.Infrastructure;
+using Chirp.Razor;
 using Chirp.Shared_test;
 
 namespace Chirp.Razor_test;
@@ -98,11 +99,11 @@ public class Integration : BaseDBTest {
     [InlineData(-1)]
     public async void CheepService_GetCheepsFromAuthor_ValidAuthorZeroAndBelowPageValue(int page) {
         //Arrange
-        CheepDto expectedFirstCheep = new("Mellie Yost", 
+        CheepDto expectedFirstCheep = new("Mellie Yost",
                                           "But what was behind the barricade.",
                                           "08/01/23 13:17:33");
-                                        
-        CheepDto expectedLastCheep =  new("Mellie Yost",
+
+        CheepDto expectedLastCheep = new("Mellie Yost",
                                           "A well-fed, plump Huzza Porpoise will yield you about saying, sir?",
                                           "08/01/23 13:13:32");
 
