@@ -10,21 +10,14 @@ public class UserTimelineModel : TimelineModel {
         // We access route data directly here, as saving it as a property in OnGet, did not make it available in OnPost
         // Is this the right way to access route data?
 
-        if (User.Identity.Name == RouteData?.Values?["author"]?.ToString()) 
-        {
+        if (User.Identity.Name == RouteData?.Values?["author"]?.ToString()) {
             IEnumerable<AuthorDto> followings = await _authorService.GetFollowings(User.Identity.Name, User.Claims.Where(c => c.Type == "emails").Single().Value);
-            
-            foreach (var Follower in followings){
-                Console.WriteLine("FOREACH");
-                Console.WriteLine(Follower.Name);
-            }
-            return await _cheepService.GetCheepsFromAuthors(followings,RouteData?.Values?["author"]?.ToString() , Pageno);
+            return await _cheepService.GetCheepsFromAuthors(followings, RouteData?.Values?["author"]?.ToString(), Pageno);
         }
-        else
-        {
+        else {
             return await _cheepService.GetCheepsFromAuthor(RouteData?.Values?["author"]?.ToString(), Pageno);
         }
-        
+
     }
 }
 
