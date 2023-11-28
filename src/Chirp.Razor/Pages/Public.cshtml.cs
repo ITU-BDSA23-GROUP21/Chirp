@@ -1,4 +1,5 @@
 using Chirp.Core;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Chirp.Razor.Pages;
 
@@ -10,9 +11,11 @@ public class PublicModel : TimelineModel {
         return _cheepService.GetCheeps(Pageno);
     }
 
-    public void Anonymize() {
+    public async Task<IActionResult> OnPostAnonymizeAsync() {
         Console.WriteLine("hey");
-        _authorService.Anonymize("Jacqualine Gilcoine");
+        await _authorService.Anonymize("Jacqualine Gilcoine");
+        return RedirectToPage();
+
     }
 }
 
