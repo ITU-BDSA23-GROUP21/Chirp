@@ -22,6 +22,15 @@ public class CheepRepository : ICheepRepository {
             .ToListAsync();
     }
 
+    // Used only for getting all cheeps following GDPR
+    public Task<List<CheepDto>> GetAllCheeps(string author) {
+        return _dbContext.Cheeps
+            .Where(cheep => cheep.Author.Name == author)
+            .OrderByDescending(cheep => cheep.TimeStamp)
+            .Select(cheep => new CheepDto(cheep.Author.Name, cheep.Text, cheep.TimeStamp.ToString("MM/dd/yy H:mm:ss")))
+            .ToListAsync();
+    }
+
 
     public async Task<ValidationResult> AddCheep(string message, string authorName, string email) {
         var author = await _dbContext.Authors.Where(author => author.Name == authorName).FirstOrDefaultAsync();
