@@ -18,6 +18,14 @@
                 <input type="submit" maxlength="10" value="Share">
             </form>
         </div>
+
+        @if (Model.FailedValidationString != null)
+        {
+            <div class="cheepbox">
+                @Model.FailedValidationString
+            </div>
+        }
+
         @if (Model.Cheeps.Any())
         {
             <ul id="messagelist" class="cheeps">
@@ -49,12 +57,6 @@
                     </li>
                 }
             </ul>
-        }
-        @if (Model.FailedValidationString != null)
-        {
-            <div class="cheepbox">
-                @Model.FailedValidationString
-            </div>
         }
     }
     else if (Model.Cheeps.Any())
