@@ -101,4 +101,15 @@ public class AuthorRepository : IAuthorRepository {
         followingAuthor.Followers.Remove(followerAuthor);
         _dbContext.SaveChanges();
     }
+
+    public async Task Anonymize(string name) {
+        var author = await _dbContext.Authors
+        .Where(author => author.Name == name)
+        .FirstAsync();
+
+        Guid guid = author.Id;
+        author.Name = guid.ToString("D");
+        author.Email = guid.ToString("D");
+        _dbContext.SaveChanges();
+    }
 }

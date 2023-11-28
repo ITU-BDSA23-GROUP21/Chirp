@@ -9,6 +9,8 @@ public interface IAuthorService {
     public Task UnFollow(string followerName, string followingName);
 
     public Task<IEnumerable<AuthorDto>> GetFollowings(string? name, string? email);
+
+    public Task Anonymize(string name);
 }
 
 public class AuthorService : IAuthorService {
@@ -30,4 +32,6 @@ public class AuthorService : IAuthorService {
         }
         return await _authorRepository.GetFollowings(name, email);
     }
+
+    public async Task Anonymize(string name) => await _authorRepository.Anonymize(name);
 }
