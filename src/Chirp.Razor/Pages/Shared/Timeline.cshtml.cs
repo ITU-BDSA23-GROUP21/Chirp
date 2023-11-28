@@ -65,7 +65,7 @@ public abstract class TimelineModel : PageModel {
 
     public async Task<IActionResult> OnPostUnFollowAsync(string author) {
         await _authorService.UnFollow(User.Identity.Name, author);
-        return RedirectToPage();
+        return RedirectToPage(new { author = User.Identity.Name });
     }
 
     public async Task<IActionResult> OnPostFollowAsync(string author) {
