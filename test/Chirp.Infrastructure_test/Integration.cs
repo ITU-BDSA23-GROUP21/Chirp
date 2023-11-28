@@ -1,23 +1,45 @@
 using Chirp.Core;
 using Chirp.Infrastructure;
-using Chirp.Shared_test;
+using FluentValidation.Results;
+using Microsoft.EntityFrameworkCore;
+using Testcontainers.MsSql;
 
 namespace Chirp.Infrastructure_test;
 
-[Collection("Environment Variable")]
-public class Integration : BaseDBTest {
-    readonly CheepRepository cheepRepository;
-    readonly AuthorRepository authorRepository;
-    public Integration() {
-        cheepRepository = new CheepRepository(CreateContext());
-        authorRepository = new AuthorRepository(CreateContext());
+public class Integration : IAsyncLifetime {
+    private readonly MsSqlContainer _msSqlContainer
+        = new MsSqlBuilder().Build();
+
+    public Task InitializeAsync()
+        => _msSqlContainer.StartAsync();
+
+    public Task DisposeAsync()
+        => _msSqlContainer.DisposeAsync().AsTask();
+
+    public async Task<CheepRepository> CheepRepoInit()
+    {
+        ChirpContext context = new(new DbContextOptionsBuilder().UseSqlServer(_msSqlContainer.GetConnectionString()).Options);
+        await context.Database.EnsureCreatedAsync();
+        DbInitializer.SeedDatabase(context);
+        return new(context);
     }
 
+    public async Task<AuthorRepository> AuthorRepoInit() 
+    {
+        ChirpContext context = new(new DbContextOptionsBuilder().UseSqlServer(_msSqlContainer.GetConnectionString()).Options);
+        await context.Database.EnsureCreatedAsync();
+        DbInitializer.SeedDatabase(context);
+        return new(context);    
+    }
+
+    #region Cheep Repository Tests
+    #region Get Cheeps Method
     [Theory]
     [InlineData(0)]
     [InlineData(4)]
-    public async void CheepRepository_GetCheeps_Return32Cheeps(int page) {
+    public async Task CheepRepository_GetCheeps_Return32Cheeps(int page) {
         //Arrange
+        CheepRepository cheepRepository = await CheepRepoInit();
         int expectedValue = 32;
 
         //Act
@@ -31,8 +53,9 @@ public class Integration : BaseDBTest {
     [Theory]
     [InlineData(0)]
     [InlineData(-1)]
-    public async void CheepRepository_GetCheeps_ZeroAndBelowParameterValues(int page) {
+    public async Task CheepRepository_GetCheeps_ZeroAndBelowParameterValues(int page) {
         //Arrange
+        CheepRepository cheepRepository = await CheepRepoInit();
         int expectedCheepAmount = 32;
         CheepDto expectedFirstCheep = new("Jacqualine Gilcoine",
                                           "Starbuck now is what we hear the worst.",
@@ -58,8 +81,9 @@ public class Integration : BaseDBTest {
     [Theory]
     [InlineData("Helge")]
     [InlineData("Roger Histand")]
-    public async void CheepRepository_GetCheeps_ValidAuthorParameterValue(string author) {
+    public async Task CheepRepository_GetCheeps_ValidAuthorParameterValue(string author) {
         //Arrange
+        CheepRepository cheepRepository = await CheepRepoInit();
         string expectedValue = author;
         //Act
         IEnumerable<CheepDto> cheeps = await cheepRepository.GetCheeps(1, author);
@@ -69,8 +93,9 @@ public class Integration : BaseDBTest {
     }
 
     [Fact]
-    public async void CheepRepository_GetCheeps_NonExistingAuthorParameterValue() {
-        //Arrange 
+    public async Task CheepRepository_GetCheeps_NonExistingAuthorParameterValue() {
+        //Arrange
+        CheepRepository cheepRepository = await CheepRepoInit();
         int expectedValue = 0;
 
         //Act
@@ -82,8 +107,9 @@ public class Integration : BaseDBTest {
     }
 
     [Fact]
-    public async void CheepRepository_GetCheeps_ValidAuthorReturning32Cheeps() {
-        //Arrange 
+    public async Task CheepRepository_GetCheeps_ValidAuthorReturning32Cheeps() {
+        //Arrange
+        CheepRepository cheepRepository = await CheepRepoInit();
         int expectedValue = 32;
 
         //Act
@@ -97,8 +123,9 @@ public class Integration : BaseDBTest {
     [Theory]
     [InlineData(0)]
     [InlineData(-1)]
-    public async void CheepRepository_GetCheeps_ValidAuthorZeroAndBelowPageValue(int page) {
+    public async Task CheepRepository_GetCheeps_ValidAuthorZeroAndBelowPageValue(int page) {
         //Arrange
+        CheepRepository cheepRepository = await CheepRepoInit();
         CheepDto expectedFirstCheep = new("Mellie Yost",
                                           "But what was behind the barricade.",
                                           "08/01/23 13:17:33");
@@ -116,10 +143,56 @@ public class Integration : BaseDBTest {
         Assert.Equal(expectedFirstCheep, actualFirstCheep);
         Assert.Equal(expectedLastCheep, actualLastCheep);
     }
+        #endregion
+    #region Add Cheep Method
+    [Theory]
+    [InlineData("")]
+    [InlineData("      ")]
+    [InlineData("Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient m")]
+    public async Task CheepRepository_AddCheep_InvalidMessage(string message)
+    {
+        //Arrange 
+        CheepRepository repository = await CheepRepoInit();
+        string author = "Nathan Sirmon";
+        string email = "Nathan+Sirmon@dtu.dk";
+
+        //Act
+        ValidationResult result = await repository.AddCheep(message, author, email);
+        IEnumerable<CheepDto> cheeps = await repository.GetCheeps(1, author);
+        cheeps = cheeps.Where(c => c.Message == message);
+        
+        //Assert
+        Assert.False(result.IsValid);
+        Assert.Empty(cheeps);
+    }
 
     [Fact]
-    public async void AuthorRepository_GetAuthorByName_RegisteredAuthor() {
+    public async Task CheepRepository_AddCheep_ValidMessage()
+    {
         //Arrange
+        CheepRepository repository = await CheepRepoInit();
+        string message = "Valid Message";
+        string author = "Nathan Sirmon";
+        string email = "Nathan+Sirmon@dtu.dk";
+
+        //Act
+        ValidationResult result = await repository.AddCheep(message, author, email);
+        IEnumerable<CheepDto> cheeps = await repository.GetCheeps(1, author);
+        cheeps = cheeps.Where(c => c.Message == message);
+
+        //Assert
+        Assert.True(result.IsValid);
+        Assert.NotEmpty(cheeps);
+    }
+
+    #endregion
+    #endregion
+    #region Author Repository Tests
+
+    [Fact]
+    public async Task AuthorRepository_GetAuthorByName_RegisteredAuthor() {
+        //Arrange
+        AuthorRepository authorRepository = await AuthorRepoInit();
         AuthorDto expectedAuthor = new("Helge",
                                         "ropf@itu.dk");
 
@@ -131,8 +204,9 @@ public class Integration : BaseDBTest {
     }
 
     [Fact]
-    public async void AuthorRepository_GetAuthorByEmail_RegisteredAuthor() {
+    public async Task AuthorRepository_GetAuthorByEmail_RegisteredAuthor() {
         //Arrange
+        AuthorRepository authorRepository = await AuthorRepoInit();
         AuthorDto expectedAuthor = new("Helge",
                                         "ropf@itu.dk");
 
@@ -154,4 +228,6 @@ public class Integration : BaseDBTest {
 
         //Assert
     }
+
+    #endregion
 }
