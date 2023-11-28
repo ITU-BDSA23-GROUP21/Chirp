@@ -56,7 +56,9 @@ public class NewCheepValidator : AbstractValidator<Cheep> {
         RuleFor(x => x.Id).NotEmpty();
         RuleFor(x => x.AuthorId).NotEmpty();
         RuleFor(x => x.Author).NotEmpty();
-        RuleFor(x => x.Text).Length(1, 160);
+        RuleFor(x => x.Author.Name).NotEmpty();
+        RuleFor(x => x.Author.Email).EmailAddress();
+        RuleFor(x => x.Text).Length(1, 160).NotEmpty();
     }
 }
 
