@@ -13,7 +13,7 @@ public class PublicModel : TimelineModel {
 
     public async Task<IActionResult> OnPostAnonymizeAsync(string name) {
         Console.WriteLine(name);
-        await _authorService.Anonymize("Jacqualine Gilcoine");
+        await _authorService.Anonymize(name);
         return RedirectToPage();
 
     }
