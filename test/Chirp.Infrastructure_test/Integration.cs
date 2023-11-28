@@ -246,6 +246,25 @@ public class Integration : IAsyncLifetime {
         Assert.Empty(cheeps);
     }
 
+    [Fact]
+    public async Task CheepRepository_AddCheep_ValidEmail()
+    {
+        //Arrange
+        CheepRepository repository = await CheepRepoInit();
+        string message = "Valid Message";
+        string authorName = "valid Author";
+        string email = "ValidEmail@gmail.com";
+    
+        //Act
+        ValidationResult result = await repository.AddCheep(message, authorName, email);
+        IEnumerable<CheepDto> cheeps = await repository.GetCheeps(1, authorName);
+        cheeps = cheeps.Where(c => c.Message == message);
+
+        //Assert
+        Assert.True(result.IsValid);
+        Assert.NotEmpty(cheeps);
+    }
+
     #endregion
     #endregion
     #region Author Repository Tests
