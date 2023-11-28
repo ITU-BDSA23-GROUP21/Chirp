@@ -16,7 +16,7 @@ public abstract class TimelineModel : PageModel {
 
     public IEnumerable<CheepDto> Cheeps { get; set; }
     public IEnumerable<AuthorDto> Followings { get; set; }
-    public string FailedValidationString { get; set; }
+    public string? FailedValidationString { get; set; }
 
     public TimelineModel(ICheepService cheepService, IAuthorService authorService) {
         _cheepService = cheepService;
@@ -55,7 +55,7 @@ public abstract class TimelineModel : PageModel {
         }
         else {
             Console.WriteLine("Valid");
-            FailedValidationString += null;
+            FailedValidationString = null;
         }
     }
 
