@@ -172,7 +172,7 @@ public class Integration : IAsyncLifetime {
         //Arrange
         CheepRepository repository = await CheepRepoInit();
         string message = "Valid Message";
-        string author = "Nathan Sirmon";
+        string author = "John Cena";
         string email = "Nathan+Sirmon@dtu.dk";
 
         //Act
@@ -183,6 +183,47 @@ public class Integration : IAsyncLifetime {
         //Assert
         Assert.True(result.IsValid);
         Assert.NotEmpty(cheeps);
+    }
+
+    [Theory]
+    [InlineData("")]
+    [InlineData("     ")]
+    public async Task CheepRepository_AddCheep_InvalidAuthorName(string authorName)
+    {
+        //Arrange
+        CheepRepository repository = await CheepRepoInit();
+        string message = "Valid Message";
+        string email = "validemail@gmail.com";
+
+        //Act
+        ValidationResult result = await repository.AddCheep(message, authorName, email);
+        IEnumerable<CheepDto> cheeps = await repository.GetCheeps(1, authorName);
+        cheeps = cheeps.Where(c => c.Message == message);
+
+        //Assert
+        Assert.False(result.IsValid);
+        Assert.Empty(cheeps);
+    }
+
+    [Theory]
+    [InlineData("")]
+    [InlineData("            ")]
+    [InlineData("InvalidEmail.com")]
+    public async Task CheepRepository_AddCheep_InvalidEmail(string email)
+    {
+        //Arrange
+        CheepRepository repository = await CheepRepoInit();
+        string message = "Valid Message";
+        string author = "New Author";
+
+        //Act
+        ValidationResult result = await repository.AddCheep(message, author, email);
+        IEnumerable<CheepDto> cheeps = await repository.GetCheeps(1, author);
+        cheeps = cheeps.Where(c => c.Message == message);
+
+        //Assert
+        Assert.False(result.IsValid);
+        Assert.Empty(cheeps);
     }
 
     #endregion
@@ -215,18 +256,6 @@ public class Integration : IAsyncLifetime {
 
         //Assert
         Assert.Equal(expectedAuthor, actualAuthor);
-    }
-
-    //TODO: Finish test when method is done
-    [Fact]
-    public async void AuthorRepository_CreateAuthor() {
-        //Arrange
-
-
-        //Act
-
-
-        //Assert
     }
 
     #endregion
