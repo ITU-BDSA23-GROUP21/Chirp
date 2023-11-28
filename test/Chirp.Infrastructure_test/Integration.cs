@@ -205,6 +205,26 @@ public class Integration : IAsyncLifetime {
         Assert.Empty(cheeps);
     }
 
+    [Fact]
+    public async Task CheepRepository_AddCheep_ValidNonExistingAuthor()
+    {
+        //Arrange
+        CheepRepository repository = await CheepRepoInit();
+        string message = "Valid Message";
+        string authorName = "Valid Author";
+        string email = "Validemail@gmail.com";
+
+        //Act
+        ValidationResult result = await repository.AddCheep(message, authorName, email);
+        IEnumerable<CheepDto> cheeps = await repository.GetCheeps(1, authorName);
+        CheepDto cheep = cheeps.Single();
+
+        //Assert
+        Assert.True(result.IsValid);
+        Assert.Equal(authorName, cheep.Author);
+        Assert.Equal(message, cheep.Message);
+    }
+
     [Theory]
     [InlineData("")]
     [InlineData("            ")]
