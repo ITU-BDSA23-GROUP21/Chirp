@@ -1,5 +1,4 @@
 using Chirp.Core;
-using Chirp.Infrastructure;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -64,12 +63,14 @@ public abstract class TimelineModel : PageModel {
     }
 
     public async Task<IActionResult> OnPostUnFollowAsync(string author) {
-        await _authorService.UnFollow(User.Identity.Name, author);
-        return RedirectToPage(new { author = User.Identity.Name });
+        var userName = (User.Identity?.Name) ?? throw new Exception("Error attempting to follow when user is not logged in");
+        await _authorService.UnFollow(userName, author);
+        return RedirectToPage(new { author = userName });
     }
 
     public async Task<IActionResult> OnPostFollowAsync(string author) {
-        await _authorService.Follow(User.Identity.Name, author);
+        var userName = (User.Identity?.Name) ?? throw new Exception("Error attempting to follow when user is not logged in");
+        await _authorService.Follow(userName, author);
         return RedirectToPage();
     }
 }

@@ -8,7 +8,7 @@ public interface ICheepService {
     public Task<List<CheepDto>> GetCheepsFromAuthor(string? author, int page = 1);
     public Task<ValidationResult> AddCheep(string message, string authorName, string email);
 
-    public Task<List<CheepDto>> GetCheepsFromAuthors(IEnumerable<AuthorDto> authors,string authorName, int page = 1);
+    public Task<List<CheepDto>> GetCheepsFromAuthors(IEnumerable<AuthorDto> authors, string? authorName, int page = 1);
 }
 
 public class CheepService : ICheepService {
@@ -29,7 +29,11 @@ public class CheepService : ICheepService {
         return _cheepRepository.GetCheeps(page, author);
     }
 
-    public async Task<List<CheepDto>> GetCheepsFromAuthors(IEnumerable<AuthorDto> authors,string authorName, int page){
+    public async Task<List<CheepDto>> GetCheepsFromAuthors(IEnumerable<AuthorDto> authors, string? authorName, int page){
+        if (authorName == null) {
+            throw new ArgumentNullException(nameof(authorName));
+        }
+
         List<CheepDto> cheepDtos = new List<CheepDto>();        
 
         foreach (var author in authors){
