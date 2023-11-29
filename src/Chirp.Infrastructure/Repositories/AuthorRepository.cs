@@ -117,16 +117,16 @@ public class AuthorRepository : IAuthorRepository {
     public async Task AboutMe(string name, string email) {
         var author = await GetAuthorByName(name);
         var followerLinks = await GetFollowingsLinks(name, email);
-        
+
     }
 
-    private async Task<IEnumerable<string>> GetFollowingsLinks(string name, string email) {
+    public async Task<IEnumerable<string>> GetFollowingsLinks(string name, string email) {
         var followings = await GetFollowings(name, email);
 
         IEnumerable<string> followerLinks = new List<string>();
 
         foreach (var user in followings) {
-           followerLinks.Append($"https://bdsagroup21chirprazor.azurewebsites.net/{user.Name}");
+            followerLinks = followerLinks.Append($"https://bdsagroup21chirprazor.azurewebsites.net/{user.Name}");
         }
 
         return followerLinks;

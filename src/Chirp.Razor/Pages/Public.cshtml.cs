@@ -11,11 +11,5 @@ public class PublicModel : TimelineModel {
         return _cheepService.GetCheeps(Pageno);
     }
 
-    public async Task<IActionResult> OnPostAnonymizeAsync(string name) {
-        Console.WriteLine(name);
-        await _authorService.Anonymize(name);
-        return RedirectToPage();
-
-    }
 }
 

@@ -2,6 +2,7 @@ using Chirp.Core;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Identity.Web;
 
 namespace Chirp.Razor.Pages;
 
@@ -15,6 +16,7 @@ public abstract class TimelineModel : PageModel {
 
     public IEnumerable<CheepDto> Cheeps { get; set; }
     public IEnumerable<AuthorDto> Followings { get; set; }
+    public IEnumerable<string> FollowingLinks { get; set; }
     public string? FailedValidationString { get; set; }
 
     public TimelineModel(ICheepService cheepService, IAuthorService authorService) {
@@ -22,11 +24,18 @@ public abstract class TimelineModel : PageModel {
         _authorService = authorService;
         Cheeps = new List<CheepDto>(0);
         Followings = new List<AuthorDto>(0);
+        FollowingLinks = new List<string>(0);
     }
 
     protected abstract Task<List<CheepDto>> GetCheeps();
 
     public async Task<ActionResult> OnGet() {
+        if (User.Identity.Name != null) {
+            await foreach (string link in GetFollowingsLinks()) {
+                Console.WriteLine(link);
+                FollowingLinks = FollowingLinks.Append(link);
+            }
+        }
         Cheeps = await GetCheeps();
         var email = User.Claims.Where(c => c.Type == "emails").FirstOrDefault()?.Value;
         Followings = await _authorService.GetFollowings(User?.Identity?.Name, email);
@@ -72,5 +81,15 @@ public abstract class TimelineModel : PageModel {
         var userName = (User.Identity?.Name) ?? throw new Exception("Error attempting to follow when user is not logged in");
         await _authorService.Follow(userName, author);
         return RedirectToPage();
+    }
+
+    public async IAsyncEnumerable<string> GetFollowingsLinks() {
+
+        Task<AuthorDto> author = _authorService.GetAuthorByName(User.Identity.Name);
+
+        var results = await _authorService.GetFollowingsLinks(author.Result.Name, author.Result.Email);
+        foreach (string result in results) {
+            yield return result;
+        }
     }
 }
