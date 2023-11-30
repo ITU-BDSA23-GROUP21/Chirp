@@ -1,5 +1,7 @@
 @page "/{author}/Information"
 @model Chirp.Razor.Pages.UserTimelineModel
+@using System.Security.Principal
+@using Microsoft.Identity.Web
 @{
     ViewData["Title"] = "Chirp!";
     Layout = "Shared/_Layout";
@@ -17,7 +19,7 @@
             </a>
         }
     </ul>
-    <form method="post">
-        <button type="submit" asp-page-handler="Anonymize" asp-route-name="@User.Identity.Name">Forget ME!</button>
+    <form method="post" asp-page-handler="Anonymize">
+        <a type="submit" asp-area="MicrosoftIdentity" asp-controller="Account" asp-action="SignOut">Forget ME!</a>
     </form>
 </div>

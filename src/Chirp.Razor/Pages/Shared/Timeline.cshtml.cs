@@ -29,6 +29,7 @@ public abstract class TimelineModel : PageModel {
 
     protected abstract Task<List<CheepDto>> GetCheeps();
 
+
     public async Task<ActionResult> OnGet() {
         if (User.Identity.Name != null) {
             await foreach (string link in GetFollowingsLinks()) {
@@ -41,6 +42,7 @@ public abstract class TimelineModel : PageModel {
         Followings = await _authorService.GetFollowings(User?.Identity?.Name, email);
         return Page();
     }
+
 
     //fluent validation may not be the right return type since its been casted ealier.
     public async Task<IActionResult> OnPostAsync() {
@@ -91,5 +93,10 @@ public abstract class TimelineModel : PageModel {
         foreach (string result in results) {
             yield return result;
         }
+    }
+
+    public async void OnPostAnonymizeAsync() {
+        await _authorService.Anonymize(User.Identity.Name);
+        Console.WriteLine("run -----------------------------------------");
     }
 }
