@@ -3,6 +3,11 @@ using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Identity.Web;
+using Microsoft.AspNetCore.Authentication.OAuth.Claims;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+
 
 namespace Chirp.Razor.Pages;
 
@@ -31,15 +36,15 @@ public abstract class TimelineModel : PageModel {
 
 
     public async Task<ActionResult> OnGet() {
+        Cheeps = await GetCheeps();
+        var email = User.Claims.Where(c => c.Type == "emails").FirstOrDefault()?.Value;
+        Followings = await _authorService.GetFollowings(User?.Identity?.Name, email);
         if (User.Identity.Name != null) {
-            await foreach (string link in GetFollowingsLinks()) {
+            await foreach (string link in GetFollowingsLinks(User.Identity.Name)) {
                 Console.WriteLine(link);
                 FollowingLinks = FollowingLinks.Append(link);
             }
         }
-        Cheeps = await GetCheeps();
-        var email = User.Claims.Where(c => c.Type == "emails").FirstOrDefault()?.Value;
-        Followings = await _authorService.GetFollowings(User?.Identity?.Name, email);
         return Page();
     }
 
@@ -85,18 +90,20 @@ public abstract class TimelineModel : PageModel {
         return RedirectToPage();
     }
 
-    public async IAsyncEnumerable<string> GetFollowingsLinks() {
+    public async IAsyncEnumerable<string> GetFollowingsLinks(string userName) {
 
-        Task<AuthorDto> author = _authorService.GetAuthorByName(User.Identity.Name);
+        AuthorDto author = await _authorService.GetAuthorByName(userName);
+        if (author == null) yield break;
 
-        var results = await _authorService.GetFollowingsLinks(author.Result.Name, author.Result.Email);
+        var results = await _authorService.GetFollowingsLinks(author.Name, author.Email);
         foreach (string result in results) {
             yield return result;
         }
     }
 
-    public async void OnPostAnonymizeAsync() {
+    public async Task<IActionResult> OnPostAnonymizeAsync() {
         await _authorService.Anonymize(User.Identity.Name);
-        Console.WriteLine("run -----------------------------------------");
+        return Redirect("http://localhost:5273/MicrosoftIdentity/Account/SignOut");
+
     }
 }

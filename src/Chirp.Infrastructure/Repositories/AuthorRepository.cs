@@ -12,10 +12,14 @@ public class AuthorRepository : IAuthorRepository {
     public AuthorRepository(ChirpContext dbContext) => _dbContext = dbContext;
 
     public Task<AuthorDto> GetAuthorByName(string name) {
-        return _dbContext.Authors
+        var author = _dbContext.Authors
             .Where(author => author.Name == name)
             .Select(author => new AuthorDto(author.Name, author.Email))
             .FirstAsync();
+
+        if (author == null) return null;
+        return author;
+
     }
     public Task<AuthorDto> GetAuthorByEmail(string email) {
         return _dbContext.Authors
@@ -111,6 +115,8 @@ public class AuthorRepository : IAuthorRepository {
         Guid guid = author.Id;
         author.Name = guid.ToString("D");
         author.Email = guid.ToString("D");
+
+
         _dbContext.SaveChanges();
     }
 

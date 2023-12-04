@@ -11,15 +11,23 @@
 
 <div class="cheepbox">
     <h3>Following</h3>
-    <ul>
-        @foreach (string link in Model.FollowingLinks)
-        {
-            <a href="@link">
-                <li>@link.Split('/').Last()</li>
-            </a>
-        }
-    </ul>
-    <form method="post" asp-page-handler="Anonymize">
-        <a type="submit" asp-area="MicrosoftIdentity" asp-controller="Account" asp-action="SignOut">Forget ME!</a>
+    @if (Model.FollowingLinks.Any())
+    {
+        <ul>
+
+            @foreach (string link in Model.FollowingLinks)
+            {
+                <a href="@link">
+                    <li>@link.Split('/').Last()</li>
+                </a>
+            }
+        </ul>
+    }
+    else
+    {
+        <p>You are not following anyone</p>
+    }
+    <form method="post">
+        <button type="submit" asp-page-handler="Anonymize">Forget ME!</button>
     </form>
 </div>
