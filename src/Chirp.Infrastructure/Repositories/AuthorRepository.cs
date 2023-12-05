@@ -1,17 +1,22 @@
+using Azure.Identity;
 using Chirp.Core;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Graph;
 using System.Collections;
 using System.Xml.Linq;
 
 namespace Chirp.Infrastructure;
 
-public class AuthorRepository : IAuthorRepository {
+public class AuthorRepository : IAuthorRepository
+{
 
     private readonly ChirpContext _dbContext;
+    private GraphServiceClient _GraphServiceClient;
 
     public AuthorRepository(ChirpContext dbContext) => _dbContext = dbContext;
 
-    public Task<AuthorDto> GetAuthorByName(string name) {
+    public Task<AuthorDto> GetAuthorByName(string name)
+    {
         var author = _dbContext.Authors
             .Where(author => author.Name == name)
             .Select(author => new AuthorDto(author.Name, author.Email))
@@ -21,14 +26,17 @@ public class AuthorRepository : IAuthorRepository {
         return author;
 
     }
-    public Task<AuthorDto> GetAuthorByEmail(string email) {
+    public Task<AuthorDto> GetAuthorByEmail(string email)
+    {
         return _dbContext.Authors
             .Where(author => author.Email == email)
             .Select(author => new AuthorDto(author.Name, author.Email))
             .FirstAsync();
     }
-    public async Task CreateAuthor(AuthorDto author) {
-        await _dbContext.Authors.AddAsync(new Author() {
+    public async Task CreateAuthor(AuthorDto author)
+    {
+        await _dbContext.Authors.AddAsync(new Author()
+        {
             Id = Guid.NewGuid(),
             Email = author.Email,
             Name = author.Name,
@@ -40,14 +48,17 @@ public class AuthorRepository : IAuthorRepository {
         _dbContext.SaveChanges();
     }
 
-    public async Task<IEnumerable<AuthorDto>> GetFollowings(string name, string email) {
+    public async Task<IEnumerable<AuthorDto>> GetFollowings(string name, string email)
+    {
         var author = await _dbContext.Authors
             .Where(author => author.Name == name)
             .Include(author => author.Following)
             .FirstOrDefaultAsync();
 
-        if (author == null) {
-            author = new Author() {
+        if (author == null)
+        {
+            author = new Author()
+            {
                 Id = Guid.NewGuid(),
                 Name = name,
                 Email = email,
@@ -60,14 +71,16 @@ public class AuthorRepository : IAuthorRepository {
             _dbContext.SaveChanges();
         }
 
-        if (author.Following == null) {
+        if (author.Following == null)
+        {
             return Enumerable.Empty<AuthorDto>();
         }
 
         return author.Following.Select(author => new AuthorDto(author.Name, author.Email));
     }
 
-    public async Task Follow(string followerName, string followingName) {
+    public async Task Follow(string followerName, string followingName)
+    {
         var followingAuthor = await _dbContext.Authors
             .Where(author => author.Name == followingName)
             .Include(author => author.Followers)
@@ -78,7 +91,8 @@ public class AuthorRepository : IAuthorRepository {
             .Include(author => author.Followers)
             .FirstAsync();
 
-        if (followingAuthor == null || followerAuthor == null) {
+        if (followingAuthor == null || followerAuthor == null)
+        {
             throw new ArgumentException("Follower or following does not exist");
         }
 
@@ -88,7 +102,8 @@ public class AuthorRepository : IAuthorRepository {
         _dbContext.SaveChanges();
     }
 
-    public async Task UnFollow(string followerName, string followingName) {
+    public async Task UnFollow(string followerName, string followingName)
+    {
         var followingAuthor = await _dbContext.Authors
             .Where(author => author.Name == followingName)
             .Include(author => author.Followers)
@@ -99,7 +114,8 @@ public class AuthorRepository : IAuthorRepository {
             .Include(author => author.Followers)
             .FirstAsync();
 
-        if (followingAuthor == null || followerAuthor == null) {
+        if (followingAuthor == null || followerAuthor == null)
+        {
             throw new ArgumentException("Follower or following does not exist");
         }
 
@@ -107,7 +123,8 @@ public class AuthorRepository : IAuthorRepository {
         _dbContext.SaveChanges();
     }
 
-    public async Task Anonymize(string name) {
+    public async Task Anonymize(string name)
+    {
         var author = await _dbContext.Authors
         .Where(author => author.Name == name)
         .FirstAsync();
@@ -116,22 +133,24 @@ public class AuthorRepository : IAuthorRepository {
         author.Name = guid.ToString("D");
         author.Email = guid.ToString("D");
 
-
         _dbContext.SaveChanges();
     }
 
-    public async Task AboutMe(string name, string email) {
+    public async Task AboutMe(string name, string email)
+    {
         var author = await GetAuthorByName(name);
         var followerLinks = await GetFollowingsLinks(name, email);
 
     }
 
-    public async Task<IEnumerable<string>> GetFollowingsLinks(string name, string email) {
+    public async Task<IEnumerable<string>> GetFollowingsLinks(string name, string email)
+    {
         var followings = await GetFollowings(name, email);
 
         IEnumerable<string> followerLinks = new List<string>();
 
-        foreach (var user in followings) {
+        foreach (var user in followings)
+        {
             followerLinks = followerLinks.Append($"https://bdsagroup21chirprazor.azurewebsites.net/{user.Name}");
         }
 
