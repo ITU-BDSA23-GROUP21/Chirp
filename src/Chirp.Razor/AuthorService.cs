@@ -12,8 +12,6 @@ public interface IAuthorService {
 
     public Task Anonymize(string name);
 
-    public Task<IEnumerable<string>> GetFollowingsLinks(string name, string email);
-
     public Task<AuthorDto> GetAuthorByName(string name);
 }
 
@@ -38,8 +36,6 @@ public class AuthorService : IAuthorService {
     }
 
     public async Task Anonymize(string name) => await _authorRepository.Anonymize(name);
-
-    public async Task<IEnumerable<string>> GetFollowingsLinks(string name, string email) => await _authorRepository.GetFollowingsLinks(name, email);
 
     public Task<AuthorDto> GetAuthorByName(string name) => _authorRepository.GetAuthorByName(name);
 }
