@@ -40,9 +40,8 @@ public abstract class TimelineModel : PageModel {
             var email = User.Claims.Where(c => c.Type == "emails").Single().Value;
             ValidationResult task = await _cheepService.AddCheep(message, User.Identity.Name, email);
             HandleClientValidation(task);
-            Cheeps = await GetCheeps();
         }
-        return Page();
+        return RedirectToPage();
     }
 
     public void HandleClientValidation(ValidationResult results) {
