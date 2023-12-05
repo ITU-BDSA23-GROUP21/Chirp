@@ -10,7 +10,5 @@ public interface IAuthorRepository {
 
     Task<IEnumerable<AuthorDto>> GetFollowings(string name, string email);
 
-    Task<IEnumerable<string>> GetFollowingsLinks(string name, string email);
-
     Task Anonymize(string name);
 }
