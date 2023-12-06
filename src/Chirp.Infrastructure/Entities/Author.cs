@@ -6,5 +6,5 @@ public class Author {
     public required IEnumerable<Cheep> Cheeps { get; set; }
     public required ICollection<Author> Followers { get; set; }
     public required ICollection<Author> Following { get; set; }
-    public ICollection<Likes> Likes {get; set; }
+    public ICollection<Like> Likes {get; set; }
 }

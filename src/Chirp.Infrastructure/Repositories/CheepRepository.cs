@@ -60,11 +60,22 @@ public class CheepRepository : ICheepRepository {
     }
 
     public async Task LikeCheep(string userEmail, string cheepId, bool like) {
-        throw new NotImplementedException();
+        var author = await _dbContext.Authors.Where(author => author.Email == userEmail).FirstAsync();
+        var cheep = await _dbContext.Cheeps.FirstAsync(cheep => cheep.Id == Guid.Parse(cheepId));
+
+        cheep.Likes.Add(new Like() {Liked = like, Author = author, Cheep = cheep, AuthorId = author.Id, CheepId = cheep.Id});
+
+        _dbContext.SaveChanges();
     }
 
     public async Task RemoveLike(string userEmail, string cheepId) {
-        throw new NotImplementedException();
+        var cheep = await _dbContext.Cheeps.FirstAsync(cheep => cheep.Id == Guid.Parse(cheepId));
+        var author = await _dbContext.Authors.Where(author => author.Email == userEmail).FirstAsync();
+        var like = cheep.Likes.First(l => l.AuthorId == author.Id);
+
+        cheep.Likes.Remove(like);
+
+        _dbContext.SaveChanges();
     }
 }
 
