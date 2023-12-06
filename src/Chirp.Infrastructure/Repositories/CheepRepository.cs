@@ -21,11 +21,14 @@ public class CheepRepository : ICheepRepository {
             .Include(cheep => cheep.Likes)
             .ThenInclude(like => like.Author)
             .Select(cheep => new CheepDto(
+                cheep.Id.ToString(),
                 cheep.Author.Name,
                 cheep.Text,
                 cheep.TimeStamp.ToString("MM/dd/yy H:mm:ss"),
-                cheep.Likes.Count,
-                userEmail != null && cheep.Likes.Any(like => like.Author.Email == userEmail)
+                cheep.Likes.Where(l => l.Liked).Count() - cheep.Likes.Where(l => !l.Liked).Count(),
+                userEmail == null || !cheep.Likes.Any(like => like.Author.Email == userEmail)
+                    ? null
+                    : cheep.Likes.First(like => like.Author.Email == userEmail).Liked
             ))
             .ToListAsync();
     }
@@ -54,6 +57,14 @@ public class CheepRepository : ICheepRepository {
         }
         return results;
 
+    }
+
+    public async Task LikeCheep(string userEmail, string cheepId, bool like) {
+        throw new NotImplementedException();
+    }
+
+    public async Task RemoveLike(string userEmail, string cheepId) {
+        throw new NotImplementedException();
     }
 }
 
