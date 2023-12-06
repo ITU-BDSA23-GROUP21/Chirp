@@ -63,6 +63,7 @@ public class CheepRepository : ICheepRepository {
         var author = await _dbContext.Authors.Where(author => author.Email == userEmail).FirstAsync();
         var cheep = await _dbContext.Cheeps.FirstAsync(cheep => cheep.Id == Guid.Parse(cheepId));
 
+        cheep.Likes ??= new List<Like>();
         cheep.Likes.Add(new Like() {Liked = like, Author = author, Cheep = cheep, AuthorId = author.Id, CheepId = cheep.Id});
 
         _dbContext.SaveChanges();

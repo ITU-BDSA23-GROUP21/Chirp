@@ -5,6 +5,7 @@ public class ChirpContext : DbContext {
 
     public DbSet<Author> Authors { get; set; }
     public DbSet<Cheep> Cheeps { get; set; }
+    public DbSet<Like> Likes { get; set; }
 
     public ChirpContext(DbContextOptions options) : base(options) {
     }
