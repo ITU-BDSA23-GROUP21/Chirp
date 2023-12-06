@@ -79,4 +79,25 @@ public abstract class TimelineModel : PageModel {
         await _authorService.Anonymize(User.Identity.Name);
         return Redirect("http://localhost:5273/MicrosoftIdentity/Account/SignOut");
     }
+    
+    public async Task<IActionResult> OnPostLikeAsync(string cheepId, bool? prev) {
+        await UpdateLike(cheepId, prev, false);
+        return RedirectToPage();
+    }
+
+    public async Task<IActionResult> OnPostDislikeAsync(string cheepId, bool? prev) {
+        await UpdateLike(cheepId, prev, true);
+        return RedirectToPage();
+    }
+
+    private async Task<IActionResult> UpdateLike(string cheepId, bool? previousValue, bool newValue) {
+        if (previousValue == null || previousValue != newValue) {
+            // We previously did not interact with cheep, or we are changing our opinion
+            await _cheepService.LikeCheep(Email, cheepId, newValue);
+        } else {
+            // We clicked the same interaction as previously, so we need to remove it
+            await _cheepService.RemoveLike(Email, cheepId);
+        }
+        return RedirectToPage();
+    }
 }

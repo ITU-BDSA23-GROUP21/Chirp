@@ -7,8 +7,9 @@ public interface ICheepService {
     public Task<List<CheepDto>> GetCheeps(int page = 1, string? userEmail = null);
     public Task<List<CheepDto>> GetCheepsFromAuthor(string? author, int page = 1, string? userEmail = null);
     public Task<ValidationResult> AddCheep(string message, string authorName, string email);
-
     public Task<List<CheepDto>> GetCheepsFromAuthors(IEnumerable<AuthorDto> authors, string? authorName, int page = 1, string? userEmail = null);
+    public Task LikeCheep(string userEmail, string cheepId, bool like);
+    public Task RemoveLike(string userEmail, string cheepId);
 }
 
 public class CheepService : ICheepService {
@@ -54,5 +55,12 @@ public class CheepService : ICheepService {
         return await _cheepRepository.AddCheep(message, authorName, email);
     }
 
+    public async Task LikeCheep(string userEmail, string cheepId, bool like) {
+        await _cheepRepository.LikeCheep(userEmail, cheepId, like);
+    }
+
+    public async Task RemoveLike(string userEmail, string cheepId) {
+        await _cheepRepository.RemoveLike(userEmail, cheepId);
+    }
 
 }
