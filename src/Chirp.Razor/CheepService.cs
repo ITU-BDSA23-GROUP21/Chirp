@@ -7,7 +7,7 @@ public interface ICheepService {
     public Task<List<CheepDto>> GetCheeps(int page = 1, string? userEmail = null);
     public Task<List<CheepDto>> GetCheepsFromAuthor(string? author, int page = 1, string? userEmail = null);
     public Task<ValidationResult> AddCheep(string message, string authorName, string email);
-    public Task<List<CheepDto>> GetCheepsFromAuthors(IEnumerable<AuthorDto> authors, string? authorName, int page = 1, string? userEmail = null);
+    public Task<List<CheepDto>> GetCheepsFromAuthors(IEnumerable<string?> authors, int page = 1, string? userEmail = null);
     public Task LikeCheep(string userEmail, string cheepId, bool like);
     public Task RemoveLike(string userEmail, string cheepId);
 }
@@ -30,24 +30,23 @@ public class CheepService : ICheepService {
         return _cheepRepository.GetCheeps(page, author, userEmail);
     }
 
-    public async Task<List<CheepDto>> GetCheepsFromAuthors(IEnumerable<AuthorDto> authors, string? authorName, int page, string? userEmail = null){
-        if (authorName == null) {
-            throw new ArgumentNullException(nameof(authorName));
+    public async Task<List<CheepDto>> GetCheepsFromAuthors(IEnumerable<string?> authors, int page, string? userEmail = null) {
+        if (!authors.Any()) {
+            // Should we just get all cheeps instead or throwing an exception?
+            throw new ArgumentException("No authors supplied", nameof(authors));
         }
 
-        List<CheepDto> cheepDtos = new List<CheepDto>();        
+        List<CheepDto> cheepDtos = new List<CheepDto>();
 
-        foreach (var author in authors){
-            List<CheepDto> cheeps = await _cheepRepository.GetCheeps(page, author.Name);
-            foreach (var cheep in cheeps){
+        foreach (var author in authors) {
+            // Should we refactor repo to handle list of authors, so we dont have to open new connection for each author?
+            List<CheepDto> cheeps = await _cheepRepository.GetCheeps(page, author, userEmail);
+            foreach (var cheep in cheeps) {
                 cheepDtos.Add(cheep);
             }
         }
-        foreach (var cheep in  await _cheepRepository.GetCheeps(page, authorName)){
-                cheepDtos.Add(cheep);
-            }
         List<CheepDto> returnList = cheepDtos.OrderByDescending(o => o.Timestamp).ToList();
-        
+
         return returnList;
     }
 

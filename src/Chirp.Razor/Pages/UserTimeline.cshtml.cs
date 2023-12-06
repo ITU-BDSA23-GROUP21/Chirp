@@ -11,8 +11,9 @@ public class UserTimelineModel : TimelineModel {
         var author = RouteData?.Values?["author"]?.ToString();
 
         if (User.Identity != null && User.Identity.Name == author) {
-            IEnumerable<AuthorDto> followings = await _authorService.GetFollowings(User.Identity.Name, User.Claims.Where(c => c.Type == "emails").Single().Value);
-            return await _cheepService.GetCheepsFromAuthors(followings, author, Pageno, Email);
+            IEnumerable<AuthorDto> followings = await _authorService.GetFollowings(User.Identity.Name, Email);
+            var authorNames = followings.Select(f => f.Name).Append(author);
+            return await _cheepService.GetCheepsFromAuthors(authorNames, Pageno, Email);
         }
         else {
             return await _cheepService.GetCheepsFromAuthor(author, Pageno, Email);
