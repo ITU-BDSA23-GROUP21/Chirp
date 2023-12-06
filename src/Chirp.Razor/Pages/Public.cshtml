@@ -54,24 +54,30 @@
                         </p>
                         <form method="post" style="position: absolute; bottom: 0px;">
                             @{
-                            var likedColor = "grey";
-                            var dislikedColor = "grey";
-                            if(cheep.LikedByUser == true)
-                                likedColor = "red";
-                            else if(cheep.LikedByUser == false)
-                                dislikedColor = "red";
+                                var likedColor = "grey";
+                                var dislikedColor = "grey";
+                                if (cheep.LikedByUser == true)
+                                    likedColor = "blue";
+                                else if (cheep.LikedByUser == false)
+                                    dislikedColor = "blue";
                             }
                             <button type="submit" asp-page-handler="Like" asp-route-cheepid="@cheep.Id"
-                                asp-route-prev="@cheep.LikedByUser" style="border: none; color: @(likedColor); cursor: pointer;">Like
+                                asp-route-prev="@cheep.LikedByUser"
+                                style="border: none; color: @(likedColor); cursor: pointer;">Like
                             </button>
                             @cheep.LikeCount
                             <button type="submit" asp-page-handler="Dislike" asp-route-cheepid="@cheep.Id"
-                                asp-route-prev="@cheep.LikedByUser" style="border: none; color: @(dislikedColor); cursor: pointer;">Dislike
+                                asp-route-prev="@cheep.LikedByUser"
+                                style="border: none; color: @(dislikedColor); cursor: pointer;">Dislike
                             </button>
                         </form>
                     </li>
                 }
             </ul>
+        }
+        else
+        {
+            <em>There are no cheeps so far.</em>
         }
     }
     else if (Model.Cheeps.Any())
@@ -79,13 +85,16 @@
         <ul id="messagelist" class="cheeps">
             @foreach (var cheep in Model.Cheeps)
             {
-                <li>
+                <li style="position: relative; padding-bottom: 16px;">
                     <p>
                         <strong>
                             <a href="/@cheep.Author">@cheep.Author</a>
                         </strong>
                         @cheep.Message
                         <small>&mdash; @cheep.Timestamp</small>
+                    </p>
+                    <p style="position: absolute; bottom: 0px;">
+                        @cheep.LikeCount
                     </p>
                 </li>
             }
