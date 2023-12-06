@@ -15,7 +15,7 @@ public class ChirpContext : DbContext {
         modelBuilder.Entity<Likes>().HasKey(l => new { l.CheepId, l.AuthorId });
 
         // Override default delete behaviour, since it will cause multiple cascade paths
-        // NB: This means we manually have to delete likes with null AuthorId after deleting an Author
+        // NB: This means we manually have to delete likes beforehand if we delete an Author
         modelBuilder.Entity<Likes>()
             .HasOne(l => l.Author)
             .WithMany(a => a.Likes)
