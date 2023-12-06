@@ -4,6 +4,16 @@ body {
   font-size: 14px;
 }
 
+.box {
+  position: relative;
+}
+
+.Likes {
+  position: absolute;
+  bottom: 5px;
+  right: 0;
+}
+
 a {
   color: #26776F;
 }
