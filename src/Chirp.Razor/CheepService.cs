@@ -4,11 +4,11 @@ using FluentValidation.Results;
 namespace Chirp.Razor;
 
 public interface ICheepService {
-    public Task<List<CheepDto>> GetCheeps(int page = 1);
-    public Task<List<CheepDto>> GetCheepsFromAuthor(string? author, int page = 1);
+    public Task<List<CheepDto>> GetCheeps(int page = 1, string? userEmail = null);
+    public Task<List<CheepDto>> GetCheepsFromAuthor(string? author, int page = 1, string? userEmail = null);
     public Task<ValidationResult> AddCheep(string message, string authorName, string email);
 
-    public Task<List<CheepDto>> GetCheepsFromAuthors(IEnumerable<AuthorDto> authors, string? authorName, int page = 1);
+    public Task<List<CheepDto>> GetCheepsFromAuthors(IEnumerable<AuthorDto> authors, string? authorName, int page = 1, string? userEmail = null);
 }
 
 public class CheepService : ICheepService {
@@ -16,20 +16,20 @@ public class CheepService : ICheepService {
 
     public CheepService(ICheepRepository cheepRepository) => _cheepRepository = cheepRepository;
 
-    public Task<List<CheepDto>> GetCheeps(int page) {
+    public Task<List<CheepDto>> GetCheeps(int page, string? userEmail = null) {
         if (page <= 0) page = 1;
-        return _cheepRepository.GetCheeps(page);
+        return _cheepRepository.GetCheeps(page, null, userEmail);
     }
 
-    public Task<List<CheepDto>> GetCheepsFromAuthor(string? author, int page) {
+    public Task<List<CheepDto>> GetCheepsFromAuthor(string? author, int page, string? userEmail = null) {
         // filter by the provided author name
         if (author == null) {
             throw new ArgumentNullException(nameof(author));
         }
-        return _cheepRepository.GetCheeps(page, author);
+        return _cheepRepository.GetCheeps(page, author, userEmail);
     }
 
-    public async Task<List<CheepDto>> GetCheepsFromAuthors(IEnumerable<AuthorDto> authors, string? authorName, int page){
+    public async Task<List<CheepDto>> GetCheepsFromAuthors(IEnumerable<AuthorDto> authors, string? authorName, int page, string? userEmail = null){
         if (authorName == null) {
             throw new ArgumentNullException(nameof(authorName));
         }

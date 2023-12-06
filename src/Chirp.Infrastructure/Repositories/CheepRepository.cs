@@ -11,14 +11,22 @@ public class CheepRepository : ICheepRepository {
     public CheepRepository(ChirpContext dbContext) =>
         _dbContext = dbContext;
 
-    public Task<List<CheepDto>> GetCheeps(int page, string? author = null) {
+    public Task<List<CheepDto>> GetCheeps(int page, string? author = null, string? userEmail = null) {
         if (page <= 0) page = 1;
         return _dbContext.Cheeps
             .Where(cheep => cheep.Author.Name == author || author == null)
             .OrderByDescending(cheep => cheep.TimeStamp)
             .Skip(32 * (page - 1))
             .Take(32)
-            .Select(cheep => new CheepDto(cheep.Author.Name, cheep.Text, cheep.TimeStamp.ToString("MM/dd/yy H:mm:ss")))
+            .Include(cheep => cheep.Likes)
+            .ThenInclude(like => like.Author)
+            .Select(cheep => new CheepDto(
+                cheep.Author.Name,
+                cheep.Text,
+                cheep.TimeStamp.ToString("MM/dd/yy H:mm:ss"),
+                cheep.Likes.Count,
+                userEmail != null && cheep.Likes.Any(like => like.Author.Email == userEmail)
+            ))
             .ToListAsync();
     }
 
