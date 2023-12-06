@@ -14,7 +14,7 @@ public class Program {
 
         var builder = WebApplication.CreateBuilder(args);
         var connectionString = string.Empty;
-        var usePostgres = RuntimeInformation.IsOSPlatform(OSPlatform.OSX);
+        var usePostgres = true; //RuntimeInformation.IsOSPlatform(OSPlatform.OSX);
         if (builder.Environment.IsDevelopment()) {
             connectionString = builder.Configuration["ConnectionString"];
         }

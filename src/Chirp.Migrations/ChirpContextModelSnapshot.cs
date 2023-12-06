@@ -81,6 +81,24 @@ namespace Chirp.Infrastructure.Migrations
                     b.ToTable("Cheeps");
                 });
 
+            modelBuilder.Entity("Chirp.Infrastructure.Likes", b =>
+                {
+                    b.Property<Guid>("CheepId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("AuthorId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("Liked")
+                        .HasColumnType("bit");
+
+                    b.HasKey("CheepId", "AuthorId");
+
+                    b.HasIndex("AuthorId");
+
+                    b.ToTable("Likes");
+                });
+
             modelBuilder.Entity("AuthorAuthor", b =>
                 {
                     b.HasOne("Chirp.Infrastructure.Author", null)
@@ -107,9 +125,35 @@ namespace Chirp.Infrastructure.Migrations
                     b.Navigation("Author");
                 });
 
+            modelBuilder.Entity("Chirp.Infrastructure.Likes", b =>
+                {
+                    b.HasOne("Chirp.Infrastructure.Author", "Author")
+                        .WithMany("Likes")
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Chirp.Infrastructure.Cheep", "Cheep")
+                        .WithMany("Likes")
+                        .HasForeignKey("CheepId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Author");
+
+                    b.Navigation("Cheep");
+                });
+
             modelBuilder.Entity("Chirp.Infrastructure.Author", b =>
                 {
                     b.Navigation("Cheeps");
+
+                    b.Navigation("Likes");
+                });
+
+            modelBuilder.Entity("Chirp.Infrastructure.Cheep", b =>
+                {
+                    b.Navigation("Likes");
                 });
 #pragma warning restore 612, 618
         }
