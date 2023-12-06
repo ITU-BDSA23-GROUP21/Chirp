@@ -59,18 +59,23 @@ public class CheepRepository : ICheepRepository {
 
     }
 
-    public async Task LikeCheep(string userEmail, string cheepId, bool like) {
+    public async Task LikeCheep(string userEmail, string cheepId, bool value) {
         var author = await _dbContext.Authors.Where(author => author.Email == userEmail).FirstAsync();
-        var cheep = await _dbContext.Cheeps.FirstAsync(cheep => cheep.Id == Guid.Parse(cheepId));
+        var cheep = await _dbContext.Cheeps.Where(cheep => cheep.Id == Guid.Parse(cheepId)).Include(cheep => cheep.Likes).FirstAsync();
+        var like = cheep.Likes.Where(like => like.AuthorId == author.Id).FirstOrDefault();
 
         cheep.Likes ??= new List<Like>();
-        cheep.Likes.Add(new Like() {Liked = like, Author = author, Cheep = cheep, AuthorId = author.Id, CheepId = cheep.Id});
+        if (like == null) {
+            cheep.Likes.Add(new Like() {Liked = value, Author = author, Cheep = cheep, AuthorId = author.Id, CheepId = cheep.Id});
+        } else {
+            like.Liked = value;
+        }
 
         _dbContext.SaveChanges();
     }
 
     public async Task RemoveLike(string userEmail, string cheepId) {
-        var cheep = await _dbContext.Cheeps.FirstAsync(cheep => cheep.Id == Guid.Parse(cheepId));
+        var cheep = await _dbContext.Cheeps.Where(cheep => cheep.Id == Guid.Parse(cheepId)).Include(cheep => cheep.Likes).FirstAsync();
         var author = await _dbContext.Authors.Where(author => author.Email == userEmail).FirstAsync();
         var like = cheep.Likes.First(l => l.AuthorId == author.Id);
 

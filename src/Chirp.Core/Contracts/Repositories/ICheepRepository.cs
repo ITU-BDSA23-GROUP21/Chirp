@@ -7,7 +7,7 @@ public interface ICheepRepository {
 
     Task<ValidationResult> AddCheep(string message, string authorName, string email);
 
-    Task LikeCheep(string userEmail, string cheepId, bool like);
+    Task LikeCheep(string userEmail, string cheepId, bool value);
 
     Task RemoveLike(string userEmail, string cheepId);
 }
