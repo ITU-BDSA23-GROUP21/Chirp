@@ -121,16 +121,4 @@ public class AuthorRepository : IAuthorRepository {
 
         _dbContext.SaveChanges();
     }
-
-    public async Task<IEnumerable<string>> GetFollowingsLinks(string name, string email) {
-        var followings = await GetFollowings(name, email);
-
-        IEnumerable<string> followerLinks = new List<string>();
-
-        foreach (var user in followings) {
-            followerLinks = followerLinks.Append($"https://bdsagroup21chirprazor.azurewebsites.net/{user.Name}");
-        }
-
-        return followerLinks;
-    }
 }
