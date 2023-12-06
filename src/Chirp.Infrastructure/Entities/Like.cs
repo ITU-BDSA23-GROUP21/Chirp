@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Chirp.Infrastructure;
 
-public class Likes{
+public class Like {
     public Guid CheepId {get; set; }
     public Guid AuthorId {get; set; }
 
