@@ -18,11 +18,10 @@ public class ChirpContext : DbContext {
         // NB: This means we manually have to delete likes with null AuthorId after deleting an Author
         modelBuilder.Entity<Likes>()
             .HasOne(l => l.Author)
-            .WithMany()
+            .WithMany(a => a.Likes)
             .HasForeignKey(l => l.AuthorId)
             .OnDelete(DeleteBehavior.Restrict)
             .IsRequired();
-        // modelBuilder.Entity<Likes>().Property(l => l.AuthorId).
     }
 
 }

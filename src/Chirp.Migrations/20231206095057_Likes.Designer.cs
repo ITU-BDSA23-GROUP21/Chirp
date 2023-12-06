@@ -3,32 +3,35 @@ using System;
 using Chirp.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Chirp.PostgresMigrations.Migrations
+namespace Chirp.Infrastructure.Migrations
 {
     [DbContext(typeof(ChirpContext))]
-    partial class ChirpContextModelSnapshot : ModelSnapshot
+    [Migration("20231206095057_Likes")]
+    partial class Likes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.14")
-                .HasAnnotation("Relational:MaxIdentifierLength", 63);
+                .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
-            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
             modelBuilder.Entity("AuthorAuthor", b =>
                 {
                     b.Property<Guid>("FollowersId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("FollowingId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("FollowersId", "FollowingId");
 
@@ -41,16 +44,16 @@ namespace Chirp.PostgresMigrations.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(60)
-                        .HasColumnType("character varying(60)");
+                        .HasColumnType("nvarchar(60)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -61,18 +64,18 @@ namespace Chirp.PostgresMigrations.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("AuthorId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Text")
                         .IsRequired()
                         .HasMaxLength(160)
-                        .HasColumnType("character varying(160)");
+                        .HasColumnType("nvarchar(160)");
 
                     b.Property<DateTime>("TimeStamp")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -84,13 +87,13 @@ namespace Chirp.PostgresMigrations.Migrations
             modelBuilder.Entity("Chirp.Infrastructure.Likes", b =>
                 {
                     b.Property<Guid>("CheepId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("AuthorId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("Liked")
-                        .HasColumnType("boolean");
+                        .HasColumnType("bit");
 
                     b.HasKey("CheepId", "AuthorId");
 
@@ -110,7 +113,7 @@ namespace Chirp.PostgresMigrations.Migrations
                     b.HasOne("Chirp.Infrastructure.Author", null)
                         .WithMany()
                         .HasForeignKey("FollowingId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
                 });
 
