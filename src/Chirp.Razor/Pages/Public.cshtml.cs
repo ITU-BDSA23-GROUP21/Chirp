@@ -8,7 +8,7 @@ public class PublicModel : TimelineModel {
 
     }
     protected override Task<List<CheepDto>> GetCheeps() {
-        return _cheepService.GetCheeps(Pageno);
+        return _cheepService.GetCheeps(Pageno, Email);
     }
 
 }

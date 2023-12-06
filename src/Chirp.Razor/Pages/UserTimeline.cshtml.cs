@@ -12,10 +12,10 @@ public class UserTimelineModel : TimelineModel {
 
         if (User.Identity != null && User.Identity.Name == author) {
             IEnumerable<AuthorDto> followings = await _authorService.GetFollowings(User.Identity.Name, User.Claims.Where(c => c.Type == "emails").Single().Value);
-            return await _cheepService.GetCheepsFromAuthors(followings, author, Pageno);
+            return await _cheepService.GetCheepsFromAuthors(followings, author, Pageno, Email);
         }
         else {
-            return await _cheepService.GetCheepsFromAuthor(author, Pageno);
+            return await _cheepService.GetCheepsFromAuthor(author, Pageno, Email);
         }
 
     }
