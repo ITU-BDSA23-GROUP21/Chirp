@@ -22,7 +22,6 @@ public class CheepRepository : ICheepRepository {
             .ToListAsync();
     }
 
-
     public async Task<ValidationResult> AddCheep(string message, string authorName, string email) {
         var author = await _dbContext.Authors.Where(author => author.Name == authorName).FirstOrDefaultAsync();
 
