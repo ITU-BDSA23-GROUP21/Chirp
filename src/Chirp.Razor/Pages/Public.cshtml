@@ -52,15 +52,23 @@
                             @cheep.Message
                             <small>&mdash; @cheep.Timestamp</small>
                         </p>
-                            <form method="post" style="position: absolute; bottom: 0px;">
-                                <button type="submit" asp-page-handler="Like" asp-route-cheepid="@cheep.Id"
-                                    asp-route-prev="@cheep.LikedByUser" style="border: none; color: grey; cursor: pointer;">Like
-                                </button>
-                                @cheep.LikeCount
-                                <button type="submit" asp-page-handler="Dislike" asp-route-cheepid="@cheep.Id"
-                                    asp-route-prev="@cheep.LikedByUser" style="border: none; color: grey; cursor: pointer;">Dislike
-                                </button>
-                            </form>
+                        <form method="post" style="position: absolute; bottom: 0px;">
+                            @{
+                            var likedColor = "grey";
+                            var dislikedColor = "grey";
+                            if(cheep.LikedByUser == true)
+                                likedColor = "red";
+                            else if(cheep.LikedByUser == false)
+                                dislikedColor = "red";
+                            }
+                            <button type="submit" asp-page-handler="Like" asp-route-cheepid="@cheep.Id"
+                                asp-route-prev="@cheep.LikedByUser" style="border: none; color: @(likedColor); cursor: pointer;">Like
+                            </button>
+                            @cheep.LikeCount
+                            <button type="submit" asp-page-handler="Dislike" asp-route-cheepid="@cheep.Id"
+                                asp-route-prev="@cheep.LikedByUser" style="border: none; color: @(dislikedColor); cursor: pointer;">Dislike
+                            </button>
+                        </form>
                     </li>
                 }
             </ul>
