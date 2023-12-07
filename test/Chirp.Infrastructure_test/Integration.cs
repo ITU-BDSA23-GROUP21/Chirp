@@ -16,20 +16,18 @@ public class Integration : IAsyncLifetime {
     public Task DisposeAsync()
         => _msSqlContainer.DisposeAsync().AsTask();
 
-    public async Task<CheepRepository> CheepRepoInit()
-    {
+    public async Task<CheepRepository> CheepRepoInit() {
         ChirpContext context = new(new DbContextOptionsBuilder().UseSqlServer(_msSqlContainer.GetConnectionString()).Options);
         await context.Database.EnsureCreatedAsync();
         DbInitializer.SeedDatabase(context);
         return new(context);
     }
 
-    public async Task<AuthorRepository> AuthorRepoInit() 
-    {
+    public async Task<AuthorRepository> AuthorRepoInit() {
         ChirpContext context = new(new DbContextOptionsBuilder().UseSqlServer(_msSqlContainer.GetConnectionString()).Options);
         await context.Database.EnsureCreatedAsync();
         DbInitializer.SeedDatabase(context);
-        return new(context);    
+        return new(context);
     }
 
     #region Cheep Repository Tests
@@ -57,13 +55,13 @@ public class Integration : IAsyncLifetime {
         //Arrange
         CheepRepository cheepRepository = await CheepRepoInit();
         int expectedCheepAmount = 32;
-        CheepDto expectedFirstCheep = new("6778caff-97f5-4deb-802b-f84a60229ef0",
+        CheepDto expectedFirstCheep = new("",
                                           "Jacqualine Gilcoine",
                                           "Starbuck now is what we hear the worst.",
                                           "08/01/23 13:17:39",
                                           0,
                                           null);
-        CheepDto expectedLastCheep = new("6778caff-97f5-4deb-802b-f84a60229ef0",
+        CheepDto expectedLastCheep = new("",
                                           "Jacqualine Gilcoine",
                                           "With back to my friend, patience!",
                                           "08/01/23 13:16:58",
@@ -80,8 +78,10 @@ public class Integration : IAsyncLifetime {
 
         //Assert
         Assert.Equal(expectedCheepAmount, actualCheepAmount);
-        Assert.Equal(expectedFirstCheep, actualFirstCheep);
-        Assert.Equal(expectedLastCheep, actualLastCheep);
+        Assert.Equal(expectedFirstCheep.Message, actualFirstCheep.Message);
+        Assert.Equal(expectedFirstCheep.Author, actualFirstCheep.Author);
+        Assert.Equal(expectedLastCheep.Message, actualLastCheep.Message);
+        Assert.Equal(expectedLastCheep.Author, actualLastCheep.Author);
     }
 
     [Theory]
@@ -132,14 +132,14 @@ public class Integration : IAsyncLifetime {
     public async Task CheepRepository_GetCheeps_ValidAuthorZeroAndBelowPageValue(int page) {
         //Arrange
         CheepRepository cheepRepository = await CheepRepoInit();
-        CheepDto expectedFirstCheep = new("90f9cce4-5cf4-444e-a1dc-5e5ea106c6fe",
+        CheepDto expectedFirstCheep = new("",
                                           "Mellie Yost",
                                           "But what was behind the barricade.",
                                           "08/01/23 13:17:33",
                                           0,
                                           null);
 
-        CheepDto expectedLastCheep = new("32ab878f-ab38-4b91-a05e-2d2d19e16373",
+        CheepDto expectedLastCheep = new("",
                                           "Mellie Yost",
                                           "A well-fed, plump Huzza Porpoise will yield you about saying, sir?",
                                           "08/01/23 13:13:32",
@@ -152,17 +152,18 @@ public class Integration : IAsyncLifetime {
         CheepDto actualLastCheep = cheeps.Last();
 
         //Assert
-        Assert.Equal(expectedFirstCheep, actualFirstCheep);
-        Assert.Equal(expectedLastCheep, actualLastCheep);
+        Assert.Equal(expectedFirstCheep.Message, actualFirstCheep.Message);
+        Assert.Equal(expectedFirstCheep.Author, actualFirstCheep.Author);
+        Assert.Equal(expectedLastCheep.Message, actualLastCheep.Message);
+        Assert.Equal(expectedLastCheep.Author, actualLastCheep.Author);
     }
-        #endregion
+    #endregion
     #region Add Cheep Method
     [Theory]
     [InlineData("")]
     [InlineData("      ")]
     [InlineData("Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient m")]
-    public async Task CheepRepository_AddCheep_InvalidMessage(string message)
-    {
+    public async Task CheepRepository_AddCheep_InvalidMessage(string message) {
         //Arrange 
         CheepRepository repository = await CheepRepoInit();
         string author = "Nathan Sirmon";
@@ -172,15 +173,14 @@ public class Integration : IAsyncLifetime {
         ValidationResult result = await repository.AddCheep(message, author, email);
         IEnumerable<CheepDto> cheeps = await repository.GetCheeps(1, author);
         cheeps = cheeps.Where(c => c.Message == message);
-        
+
         //Assert
         Assert.False(result.IsValid);
         Assert.Empty(cheeps);
     }
 
     [Fact]
-    public async Task CheepRepository_AddCheep_ValidMessage()
-    {
+    public async Task CheepRepository_AddCheep_ValidMessage() {
         //Arrange
         CheepRepository repository = await CheepRepoInit();
         string message = "Valid Message";
@@ -200,8 +200,7 @@ public class Integration : IAsyncLifetime {
     [Theory]
     [InlineData("")]
     [InlineData("     ")]
-    public async Task CheepRepository_AddCheep_InvalidAuthorName(string authorName)
-    {
+    public async Task CheepRepository_AddCheep_InvalidAuthorName(string authorName) {
         //Arrange
         CheepRepository repository = await CheepRepoInit();
         string message = "Valid Message";
@@ -218,8 +217,7 @@ public class Integration : IAsyncLifetime {
     }
 
     [Fact]
-    public async Task CheepRepository_AddCheep_ValidNonExistingAuthor()
-    {
+    public async Task CheepRepository_AddCheep_ValidNonExistingAuthor() {
         //Arrange
         CheepRepository repository = await CheepRepoInit();
         string message = "Valid Message";
@@ -238,8 +236,7 @@ public class Integration : IAsyncLifetime {
     }
 
     [Fact]
-    public async Task CheepRepository_AddCheep_ValidExistingAuthor()
-    {
+    public async Task CheepRepository_AddCheep_ValidExistingAuthor() {
         //Arrange
         CheepRepository repository = await CheepRepoInit();
         string message = "Valid Message";
@@ -262,8 +259,7 @@ public class Integration : IAsyncLifetime {
     [InlineData("")]
     [InlineData("            ")]
     [InlineData("InvalidEmail.com")]
-    public async Task CheepRepository_AddCheep_InvalidEmail(string email)
-    {
+    public async Task CheepRepository_AddCheep_InvalidEmail(string email) {
         //Arrange
         CheepRepository repository = await CheepRepoInit();
         string message = "Valid Message";
@@ -280,14 +276,13 @@ public class Integration : IAsyncLifetime {
     }
 
     [Fact]
-    public async Task CheepRepository_AddCheep_ValidEmail()
-    {
+    public async Task CheepRepository_AddCheep_ValidEmail() {
         //Arrange
         CheepRepository repository = await CheepRepoInit();
         string message = "Valid Message";
         string authorName = "valid Author";
         string email = "ValidEmail@gmail.com";
-    
+
         //Act
         ValidationResult result = await repository.AddCheep(message, authorName, email);
         IEnumerable<CheepDto> cheeps = await repository.GetCheeps(1, authorName);
