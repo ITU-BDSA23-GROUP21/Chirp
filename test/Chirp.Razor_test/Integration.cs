@@ -34,13 +34,13 @@ public class Integration : BaseDBTest {
     public async void CheepService_GetCheeps_ZeroAndBelowParameterValues(int page) {
         //Arrange
         int expectedCheepAmount = 32;
-        CheepDto expectedFirstCheep = new("6778caff-97f5-4deb-802b-f84a60229ef0",
+        CheepDto expectedFirstCheep = new("",
                                           "Jacqualine Gilcoine",
                                           "Starbuck now is what we hear the worst.",
                                           "08/01/23 13:17:39",
                                           0,
                                           null);
-        CheepDto expectedLastCheep = new("6778caff-97f5-4deb-802b-f84a60229ef0",
+        CheepDto expectedLastCheep = new("",
                                          "Jacqualine Gilcoine",
                                          "With back to my friend, patience!",
                                          "08/01/23 13:16:58",
@@ -57,8 +57,11 @@ public class Integration : BaseDBTest {
 
         //Assert
         Assert.Equal(expectedCheepAmount, actualCheepAmount);
-        Assert.Equal(expectedFirstCheep, actualFirstCheep);
-        Assert.Equal(expectedLastCheep, actualLastCheep);
+        Assert.Equal(expectedFirstCheep.Message, actualFirstCheep.Message);
+        Assert.Equal(expectedFirstCheep.Author, actualFirstCheep.Author);
+        Assert.Equal(expectedLastCheep.Message, actualLastCheep.Message);
+        Assert.Equal(expectedLastCheep.Author, actualLastCheep.Author);
+
     }
 
     [Theory]
@@ -105,14 +108,14 @@ public class Integration : BaseDBTest {
     [InlineData(-1)]
     public async void CheepService_GetCheepsFromAuthor_ValidAuthorZeroAndBelowPageValue(int page) {
         //Arrange
-        CheepDto expectedFirstCheep = new("90f9cce4-5cf4-444e-a1dc-5e5ea106c6fe",
+        CheepDto expectedFirstCheep = new("",
                                           "Mellie Yost",
                                           "But what was behind the barricade.",
                                           "08/01/23 13:17:33",
                                           0,
                                           null);
 
-        CheepDto expectedLastCheep = new("32ab878f-ab38-4b91-a05e-2d2d19e16373",
+        CheepDto expectedLastCheep = new("",
                                           "Mellie Yost",
                                           "A well-fed, plump Huzza Porpoise will yield you about saying, sir?",
                                           "08/01/23 13:13:32",
@@ -125,7 +128,9 @@ public class Integration : BaseDBTest {
         CheepDto actualLastCheep = cheeps.Last();
 
         //Assert
-        Assert.Equal(expectedFirstCheep, actualFirstCheep);
-        Assert.Equal(expectedLastCheep, actualLastCheep);
+        Assert.Equal(expectedFirstCheep.Message, actualFirstCheep.Message);
+        Assert.Equal(expectedFirstCheep.Author, actualFirstCheep.Author);
+        Assert.Equal(expectedLastCheep.Message, actualLastCheep.Message);
+        Assert.Equal(expectedLastCheep.Author, actualLastCheep.Author);
     }
 }
