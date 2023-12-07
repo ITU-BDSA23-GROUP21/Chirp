@@ -104,4 +104,10 @@
     {
         <em>There are no cheeps so far.</em>
     }
+    @* Uses normal 'a' tag instead of razor tags, since it did not play well with our pageno query param
+       Maybe because model field and query have different names, or because "page" is reserved? *@
+    <div>
+        <a href="@($"/?page={Model.Pageno - 1}")" class="@(Model.Pageno < 1 ? "disabled" : "")">Previous</a>
+        <a href="@($"/?page={(Model.Pageno == 0 ? 2 : Model.Pageno + 1)}")" class="@(Model.Cheeps.Count() < 32 ? "disabled": "")">Next</a>
+    </div>
 </div>

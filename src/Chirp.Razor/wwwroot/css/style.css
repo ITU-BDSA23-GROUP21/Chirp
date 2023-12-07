@@ -4,6 +4,11 @@ body {
   font-size: 14px;
 }
 
+.disabled {
+  pointer-events: none;
+  color: gray;
+}
+
 .box {
   position: relative;
 }
