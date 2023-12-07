@@ -26,7 +26,7 @@ public class CheepRepository : ICheepRepository {
     public Task<List<CheepDto>> GetCheeps(int page, IEnumerable<string> authors, string? userEmail = null) {
         if (page <= 0) page = 1;
         return _dbContext.Cheeps
-            .Where(cheep => authors.Contains(cheep.Author.Name) || authors == null)
+            .Where(cheep => !authors.Any() || authors.Contains(cheep.Author.Name))
             .OrderByDescending(cheep => cheep.TimeStamp)
             .Skip(32 * (page - 1))
             .Take(32)
@@ -78,8 +78,9 @@ public class CheepRepository : ICheepRepository {
 
         cheep.Likes ??= new List<Like>();
         if (like == null) {
-            cheep.Likes.Add(new Like() {Liked = value, Author = author, Cheep = cheep, AuthorId = author.Id, CheepId = cheep.Id});
-        } else {
+            cheep.Likes.Add(new Like() { Liked = value, Author = author, Cheep = cheep, AuthorId = author.Id, CheepId = cheep.Id });
+        }
+        else {
             like.Liked = value;
         }
 
