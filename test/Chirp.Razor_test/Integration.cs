@@ -71,7 +71,7 @@ public class Integration : BaseDBTest {
         //Arrange
         string expectedValue = author;
         //Act
-        IEnumerable<CheepDto> cheeps = await cheepService.GetCheepsFromAuthor(author, 1);
+        IEnumerable<CheepDto> cheeps = await cheepService.GetCheepsFromAuthors(new List<string>() { author }, 1);
 
         //Assert
         Assert.All<CheepDto>(cheeps, (cheep) => { cheep.Author.Equals(expectedValue); });
@@ -83,7 +83,7 @@ public class Integration : BaseDBTest {
         int expectedValue = 0;
 
         //Act
-        IEnumerable<CheepDto> cheeps = await cheepService.GetCheepsFromAuthor("NonExistingAuther", 1);
+        IEnumerable<CheepDto> cheeps = await cheepService.GetCheepsFromAuthors(new List<string>() { "NonExistingAuther" }, 1);
         int actualValue = cheeps.Count();
 
         //Assert
@@ -96,7 +96,7 @@ public class Integration : BaseDBTest {
         int expectedValue = 32;
 
         //Act
-        IEnumerable<CheepDto> cheeps = await cheepService.GetCheepsFromAuthor("Jacqualine Gilcoine", 1);
+        IEnumerable<CheepDto> cheeps = await cheepService.GetCheepsFromAuthors(new List<string>() { "Jacqualine Gilcoine" }, 1);
         int actualValue = cheeps.Count();
 
         //Assert
@@ -123,7 +123,7 @@ public class Integration : BaseDBTest {
                                           null);
 
         //Act
-        IEnumerable<CheepDto> cheeps = await cheepService.GetCheepsFromAuthor("Mellie Yost", page);
+        IEnumerable<CheepDto> cheeps = await cheepService.GetCheepsFromAuthors(new List<string>() { "Mellie Yost" }, page);
         CheepDto actualFirstCheep = cheeps.First();
         CheepDto actualLastCheep = cheeps.Last();
 
