@@ -1,5 +1,7 @@
 using Chirp.Core;
 using FluentValidation.Results;
+using Microsoft.Graph.Models;
+using System.Collections;
 
 namespace Chirp.Razor;
 
@@ -7,7 +9,7 @@ public interface ICheepService {
     public Task<List<CheepDto>> GetCheeps(int page = 1, string? userEmail = null);
     public Task<List<CheepDto>> GetCheepsFromAuthor(string? author, int page = 1, string? userEmail = null);
     public Task<ValidationResult> AddCheep(string message, string authorName, string email);
-    public Task<List<CheepDto>> GetCheepsFromAuthors(IEnumerable<string?> authors, int page = 1, string? userEmail = null);
+    public Task<List<CheepDto>> GetCheepsFromAuthors(IEnumerable<string> authors, int page = 1, string? userEmail = null);
     public Task LikeCheep(string userEmail, string cheepId, bool like);
     public Task RemoveLike(string userEmail, string cheepId);
 }
@@ -19,7 +21,7 @@ public class CheepService : ICheepService {
 
     public Task<List<CheepDto>> GetCheeps(int page, string? userEmail = null) {
         if (page <= 0) page = 1;
-        return _cheepRepository.GetCheeps(page, null, userEmail);
+        return _cheepRepository.GetCheeps(page, Enumerable.Empty<string>(), userEmail);
     }
 
     public Task<List<CheepDto>> GetCheepsFromAuthor(string? author, int page, string? userEmail = null) {
@@ -27,27 +29,17 @@ public class CheepService : ICheepService {
         if (author == null) {
             throw new ArgumentNullException(nameof(author));
         }
-        return _cheepRepository.GetCheeps(page, author, userEmail);
+
+        return _cheepRepository.GetCheeps(page, new List<string> { author }, userEmail);
     }
 
-    public async Task<List<CheepDto>> GetCheepsFromAuthors(IEnumerable<string?> authors, int page, string? userEmail = null) {
+    public async Task<List<CheepDto>> GetCheepsFromAuthors(IEnumerable<string> authors, int page, string? userEmail = null) {
         if (!authors.Any()) {
-            // Should we just get all cheeps instead or throwing an exception?
+            // Should we just get all cheeps instead of throwing an exception?
             throw new ArgumentException("No authors supplied", nameof(authors));
         }
 
-        List<CheepDto> cheepDtos = new List<CheepDto>();
-
-        foreach (var author in authors) {
-            // Should we refactor repo to handle list of authors, so we dont have to open new connection for each author?
-            List<CheepDto> cheeps = await _cheepRepository.GetCheeps(page, author, userEmail);
-            foreach (var cheep in cheeps) {
-                cheepDtos.Add(cheep);
-            }
-        }
-        List<CheepDto> returnList = cheepDtos.OrderByDescending(o => o.Timestamp).ToList();
-
-        return returnList;
+        return await _cheepRepository.GetCheeps(page, authors, userEmail);
     }
 
     public async Task<ValidationResult> AddCheep(string message, string authorName, string email) {

@@ -11,10 +11,22 @@ public class CheepRepository : ICheepRepository {
     public CheepRepository(ChirpContext dbContext) =>
         _dbContext = dbContext;
 
-    public Task<List<CheepDto>> GetCheeps(int page, string? author = null, string? userEmail = null) {
+    public Task<List<CheepDto>> GetCheeps(int page) {
+        var authors = Enumerable.Empty<string>();
+        return GetCheeps(page, authors);
+    }
+
+    public Task<List<CheepDto>> GetCheeps(int page, string? author, string? userEmail = null) {
+        List<string> authors = new();
+        if (author != null) {
+            authors.Add(author);
+        }
+        return GetCheeps(page, authors, userEmail);
+    }
+    public Task<List<CheepDto>> GetCheeps(int page, IEnumerable<string> authors, string? userEmail = null) {
         if (page <= 0) page = 1;
         return _dbContext.Cheeps
-            .Where(cheep => cheep.Author.Name == author || author == null)
+            .Where(cheep => !authors.Any() || authors.Contains(cheep.Author.Name))
             .OrderByDescending(cheep => cheep.TimeStamp)
             .Skip(32 * (page - 1))
             .Take(32)
@@ -66,8 +78,9 @@ public class CheepRepository : ICheepRepository {
 
         cheep.Likes ??= new List<Like>();
         if (like == null) {
-            cheep.Likes.Add(new Like() {Liked = value, Author = author, Cheep = cheep, AuthorId = author.Id, CheepId = cheep.Id});
-        } else {
+            cheep.Likes.Add(new Like() { Liked = value, Author = author, Cheep = cheep, AuthorId = author.Id, CheepId = cheep.Id });
+        }
+        else {
             like.Liked = value;
         }
 
