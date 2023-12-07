@@ -129,4 +129,8 @@
     {
         <em>There are no cheeps so far.</em>
     }
+    <div>
+        <a href="@($"/{routeName}?page={Model.Pageno - 1}")" class="@(Model.Pageno < 1 ? "disabled" : "")">Previous</a>
+        <a href="@($"/{routeName}?page={(Model.Pageno == 0 ? 2 : Model.Pageno + 1)}")" class="@(Model.Cheeps.Count() < 32 ? "disabled": "")">Next</a>
+    </div>
 </div>
