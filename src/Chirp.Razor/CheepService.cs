@@ -1,5 +1,7 @@
 using Chirp.Core;
 using FluentValidation.Results;
+using Microsoft.Graph.Models;
+using System.Collections;
 
 namespace Chirp.Razor;
 
@@ -27,7 +29,8 @@ public class CheepService : ICheepService {
         if (author == null) {
             throw new ArgumentNullException(nameof(author));
         }
-        return _cheepRepository.GetCheeps(page, author, userEmail);
+        
+        return _cheepRepository.GetCheeps(page, new List<string?> {author}, userEmail);
     }
 
     public async Task<List<CheepDto>> GetCheepsFromAuthors(IEnumerable<string?> authors, int page, string? userEmail = null) {
@@ -38,16 +41,14 @@ public class CheepService : ICheepService {
 
         List<CheepDto> cheepDtos = new List<CheepDto>();
 
-        foreach (var author in authors) {
             // Should we refactor repo to handle list of authors, so we dont have to open new connection for each author?
-            List<CheepDto> cheeps = await _cheepRepository.GetCheeps(page, author, userEmail);
-            foreach (var cheep in cheeps) {
-                cheepDtos.Add(cheep);
-            }
-        }
-        List<CheepDto> returnList = cheepDtos.OrderByDescending(o => o.Timestamp).ToList();
+            List<CheepDto> cheeps = await _cheepRepository.GetCheeps(page, authors, userEmail);
+            // foreach (var cheep in cheeps) {
+            //     cheepDtos.Add(cheep);
+            // }
+        //List<CheepDto> returnList = cheepDtos.ToList();
 
-        return returnList;
+        return cheeps;
     }
 
     public async Task<ValidationResult> AddCheep(string message, string authorName, string email) {
