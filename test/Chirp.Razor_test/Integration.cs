@@ -34,12 +34,18 @@ public class Integration : BaseDBTest {
     public async void CheepService_GetCheeps_ZeroAndBelowParameterValues(int page) {
         //Arrange
         int expectedCheepAmount = 32;
-        CheepDto expectedFirstCheep = new("Jacqualine Gilcoine",
+        CheepDto expectedFirstCheep = new("6778caff-97f5-4deb-802b-f84a60229ef0",
+                                          "Jacqualine Gilcoine",
                                           "Starbuck now is what we hear the worst.",
-                                          "08/01/23 13:17:39");
-        CheepDto expectedLastCheep = new("Jacqualine Gilcoine",
-                                          "With back to my friend, patience!",
-                                          "08/01/23 13:16:58");
+                                          "08/01/23 13:17:39",
+                                          0,
+                                          null);
+        CheepDto expectedLastCheep = new("6778caff-97f5-4deb-802b-f84a60229ef0",
+                                         "Jacqualine Gilcoine",
+                                         "With back to my friend, patience!",
+                                         "08/01/23 13:16:58",
+                                         0,
+                                         null);
 
         // ExecuteCommand("Your command here");
         //Act
@@ -99,13 +105,19 @@ public class Integration : BaseDBTest {
     [InlineData(-1)]
     public async void CheepService_GetCheepsFromAuthor_ValidAuthorZeroAndBelowPageValue(int page) {
         //Arrange
-        CheepDto expectedFirstCheep = new("Mellie Yost",
+        CheepDto expectedFirstCheep = new("90f9cce4-5cf4-444e-a1dc-5e5ea106c6fe",
+                                          "Mellie Yost",
                                           "But what was behind the barricade.",
-                                          "08/01/23 13:17:33");
+                                          "08/01/23 13:17:33",
+                                          0,
+                                          null);
 
-        CheepDto expectedLastCheep = new("Mellie Yost",
+        CheepDto expectedLastCheep = new("32ab878f-ab38-4b91-a05e-2d2d19e16373",
+                                          "Mellie Yost",
                                           "A well-fed, plump Huzza Porpoise will yield you about saying, sir?",
-                                          "08/01/23 13:13:32");
+                                          "08/01/23 13:13:32",
+                                          0,
+                                          null);
 
         //Act
         IEnumerable<CheepDto> cheeps = await cheepService.GetCheepsFromAuthor("Mellie Yost", page);
