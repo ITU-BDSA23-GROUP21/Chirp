@@ -9,7 +9,7 @@ public interface ICheepService {
     public Task<List<CheepDto>> GetCheeps(int page = 1, string? userEmail = null);
     public Task<List<CheepDto>> GetCheepsFromAuthor(string? author, int page = 1, string? userEmail = null);
     public Task<ValidationResult> AddCheep(string message, string authorName, string email);
-    public Task<List<CheepDto>> GetCheepsFromAuthors(IEnumerable<string?> authors, int page = 1, string? userEmail = null);
+    public Task<List<CheepDto>> GetCheepsFromAuthors(IEnumerable<string> authors, int page = 1, string? userEmail = null);
     public Task LikeCheep(string userEmail, string cheepId, bool like);
     public Task RemoveLike(string userEmail, string cheepId);
 }
@@ -21,7 +21,7 @@ public class CheepService : ICheepService {
 
     public Task<List<CheepDto>> GetCheeps(int page, string? userEmail = null) {
         if (page <= 0) page = 1;
-        return _cheepRepository.GetCheeps(page, null, userEmail);
+        return _cheepRepository.GetCheeps(page, Enumerable.Empty<string>(), userEmail);
     }
 
     public Task<List<CheepDto>> GetCheepsFromAuthor(string? author, int page, string? userEmail = null) {
@@ -30,10 +30,10 @@ public class CheepService : ICheepService {
             throw new ArgumentNullException(nameof(author));
         }
 
-        return _cheepRepository.GetCheeps(page, new List<string?> { author }, userEmail);
+        return _cheepRepository.GetCheeps(page, new List<string> { author }, userEmail);
     }
 
-    public async Task<List<CheepDto>> GetCheepsFromAuthors(IEnumerable<string?> authors, int page, string? userEmail = null) {
+    public async Task<List<CheepDto>> GetCheepsFromAuthors(IEnumerable<string> authors, int page, string? userEmail = null) {
         if (!authors.Any()) {
             // Should we just get all cheeps instead of throwing an exception?
             throw new ArgumentException("No authors supplied", nameof(authors));
