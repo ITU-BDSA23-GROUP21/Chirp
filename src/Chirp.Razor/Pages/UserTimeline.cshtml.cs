@@ -16,7 +16,7 @@ public class UserTimelineModel : TimelineModel {
             return await _cheepService.GetCheepsFromAuthors(authorNames, Pageno, Email);
         }
         else {
-            return await _cheepService.GetCheepsFromAuthor(author, Pageno, Email);
+            return await _cheepService.GetCheepsFromAuthors(new List<string>() {author} , Pageno, Email);
         }
 
     }

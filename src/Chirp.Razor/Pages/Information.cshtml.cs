@@ -7,6 +7,6 @@ public class InformationModel : TimelineModel {
     }
 
     protected override Task<List<CheepDto>> GetCheeps() {
-        return _cheepService.GetCheepsFromAuthor(User.Identity.Name, Pageno, Email);
+        return _cheepService.GetCheepsFromAuthors(new List<string>() {User.Identity.Name}, Pageno, Email);
     }
 }
