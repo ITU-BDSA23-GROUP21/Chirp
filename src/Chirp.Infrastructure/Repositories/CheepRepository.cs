@@ -11,7 +11,19 @@ public class CheepRepository : ICheepRepository {
     public CheepRepository(ChirpContext dbContext) =>
         _dbContext = dbContext;
 
-    public Task<List<CheepDto>> GetCheeps(int page, IEnumerable<string?> authors, string? userEmail = null) {
+    public Task<List<CheepDto>> GetCheeps(int page) {
+        var authors = Enumerable.Empty<string>();
+        return GetCheeps(page, authors);
+    }
+
+    public Task<List<CheepDto>> GetCheeps(int page, string? author, string? userEmail = null) {
+        List<string> authors = new();
+        if (author != null) {
+            authors.Add(author);
+        }
+        return GetCheeps(page, authors, userEmail);
+    }
+    public Task<List<CheepDto>> GetCheeps(int page, IEnumerable<string> authors, string? userEmail = null) {
         if (page <= 0) page = 1;
         return _dbContext.Cheeps
             .Where(cheep => authors.Contains(cheep.Author.Name) || authors == null)
