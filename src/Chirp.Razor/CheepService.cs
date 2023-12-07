@@ -29,26 +29,17 @@ public class CheepService : ICheepService {
         if (author == null) {
             throw new ArgumentNullException(nameof(author));
         }
-        
-        return _cheepRepository.GetCheeps(page, new List<string?> {author}, userEmail);
+
+        return _cheepRepository.GetCheeps(page, new List<string?> { author }, userEmail);
     }
 
     public async Task<List<CheepDto>> GetCheepsFromAuthors(IEnumerable<string?> authors, int page, string? userEmail = null) {
         if (!authors.Any()) {
-            // Should we just get all cheeps instead or throwing an exception?
+            // Should we just get all cheeps instead of throwing an exception?
             throw new ArgumentException("No authors supplied", nameof(authors));
         }
 
-        List<CheepDto> cheepDtos = new List<CheepDto>();
-
-            // Should we refactor repo to handle list of authors, so we dont have to open new connection for each author?
-            List<CheepDto> cheeps = await _cheepRepository.GetCheeps(page, authors, userEmail);
-            // foreach (var cheep in cheeps) {
-            //     cheepDtos.Add(cheep);
-            // }
-        //List<CheepDto> returnList = cheepDtos.ToList();
-
-        return cheeps;
+        return await _cheepRepository.GetCheeps(page, authors, userEmail);
     }
 
     public async Task<ValidationResult> AddCheep(string message, string authorName, string email) {
