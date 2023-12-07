@@ -105,7 +105,7 @@ public class Integration : IAsyncLifetime {
         int expectedValue = 0;
 
         //Act
-        IEnumerable<CheepDto> cheeps = await cheepRepository.GetCheeps(1, "NonExistingAuther");
+        IEnumerable<CheepDto> cheeps = await cheepRepository.GetCheeps(1, "NonExistingAuthor");
         int actualValue = cheeps.Count();
 
         //Assert
@@ -291,6 +291,22 @@ public class Integration : IAsyncLifetime {
         //Assert
         Assert.True(result.IsValid);
         Assert.NotEmpty(cheeps);
+    }
+
+    #endregion
+    #region Like/Dislike Cheep Methods
+    [Fact]
+    public async Task CheepRepository_LikeCheep() {
+        //Arrange
+        CheepRepository repository = await CheepRepoInit();
+        var cheeps = await repository.GetCheeps(1);
+        var cheep = cheeps.First();
+        
+
+        //Act
+
+
+        //Assert
     }
 
     #endregion
