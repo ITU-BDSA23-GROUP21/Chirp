@@ -15,8 +15,11 @@ public class Program {
         var builder = WebApplication.CreateBuilder(args);
         var connectionString = string.Empty;
         var usePostgres = RuntimeInformation.IsOSPlatform(OSPlatform.OSX);
+        bool uitest = false;
         if (builder.Environment.IsDevelopment()) {
-            connectionString = builder.Configuration["ConnectionString"];
+            uitest = string.Equals(Environment.GetEnvironmentVariable("UITEST"), "1");
+            if(!uitest)
+                connectionString = builder.Configuration["ConnectionString"];
         }
         else {
             connectionString = Environment.GetEnvironmentVariable("SQLAZURECONNSTR_AZURE_SQL_CONNECTIONSTRING");
@@ -27,10 +30,20 @@ public class Program {
         builder.Services.AddScoped<IAuthorService, AuthorService>();
         builder.Services.AddScoped<ICheepRepository, CheepRepository>();
         builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
-        builder.Services.AddDbContext<ChirpContext>(options => _ = usePostgres switch {
-            false => options.UseSqlServer(connectionString, x => x.MigrationsAssembly("Chirp.Migrations")),
-            true => options.UseNpgsql(builder.Configuration["PostgresConnectionString"], x => x.MigrationsAssembly("Chirp.PostgresMigrations"))
-        });
+        if(uitest)
+        {
+            string path = Path.Combine(Path.GetTempPath(), "LocalChirpTestDatabase.db");
+            if(File.Exists(path))
+                File.Delete(path);
+            builder.Services.AddDbContext<ChirpContext>(options => options.UseSqlite($"Data Source={path}"));
+        }
+        else
+        {
+            builder.Services.AddDbContext<ChirpContext>(options => _ = usePostgres switch {
+                false => options.UseSqlServer(connectionString, x => x.MigrationsAssembly("Chirp.Migrations")),
+                true => options.UseNpgsql(builder.Configuration["PostgresConnectionString"], x => x.MigrationsAssembly("Chirp.PostgresMigrations"))
+            });
+        }
         builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
         .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAdB2C"));
         builder.Services.AddRazorPages()
@@ -43,7 +56,10 @@ public class Program {
             var context = scope.ServiceProvider.GetRequiredService<ChirpContext>();
             // Migrating this way might be unsafe in azure environment.
             // See https://learn.microsoft.com/en-us/ef/core/managing-schemas/migrations/applying?tabs=dotnet-core-cli
-            context.Database.Migrate();
+            if(uitest)
+                context.Database.EnsureCreated();
+            else
+                context.Database.Migrate();
             DbInitializer.SeedDatabase(context);
         }
 
