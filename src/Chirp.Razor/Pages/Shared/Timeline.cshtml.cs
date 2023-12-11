@@ -77,8 +77,11 @@ public abstract class TimelineModel : PageModel {
     }
 
     public async Task<IActionResult> OnPostAnonymizeAsync() {
+        Console.WriteLine(" ----------------run ---------------");
+        if (User.Identity.Name == null) return RedirectToPage();
         await _authorService.Anonymize(User.Identity.Name);
-        return Redirect("http://localhost:5273/MicrosoftIdentity/Account/SignOut");
+        string domainName = HttpContext.Request.Host.Value;
+        return Redirect("http://" + domainName + "/MicrosoftIdentity/Account/SignOut");
     }
     
     public async Task<IActionResult> OnPostLikeAsync(string cheepId, bool? prev) {
