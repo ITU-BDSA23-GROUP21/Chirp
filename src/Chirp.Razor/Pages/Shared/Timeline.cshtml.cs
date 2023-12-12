@@ -74,13 +74,6 @@ public abstract class TimelineModel : PageModel {
         await _authorService.Follow(userName, author);
         return RedirectToPage();
     }
-
-    public async Task<IActionResult> OnPostAnonymizeAsync() {
-        if (User.Identity?.Name == null) return RedirectToPage();
-        await _authorService.Anonymize(User.Identity.Name);
-        string domainName = HttpContext.Request.Host.Value;
-        return Redirect("http://" + domainName + "/MicrosoftIdentity/Account/SignOut");
-    }
     
     public async Task<IActionResult> OnPostLikeAsync(string cheepId, bool? prev) {
         await UpdateLike(cheepId, prev, true);
