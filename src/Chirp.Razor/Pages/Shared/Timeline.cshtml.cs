@@ -16,8 +16,8 @@ public abstract class TimelineModel : PageModel {
     public IEnumerable<CheepDto> Cheeps { get; set; }
     public IEnumerable<AuthorDto> Followings { get; set; }
     public string? FailedValidationString { get; set; }
-    public string? Email { 
-        get { return User.Claims.Where(c => c.Type == "emails").FirstOrDefault()?.Value;  }
+    public string? Email {
+        get { return User.Claims.Where(c => c.Type == "emails").FirstOrDefault()?.Value; }
     }
 
     public TimelineModel(ICheepService cheepService, IAuthorService authorService) {
@@ -31,8 +31,7 @@ public abstract class TimelineModel : PageModel {
 
 
     public async Task<ActionResult> OnGet() {
-        Cheeps = await GetCheeps();
-        Followings = await _authorService.GetFollowings(User?.Identity?.Name, Email);
+        await LoadPage();
         return Page();
     }
 
@@ -43,7 +42,7 @@ public abstract class TimelineModel : PageModel {
             ValidationResult task = await _cheepService.AddCheep(message, User.Identity.Name, Email);
             HandleClientValidation(task);
         }
-        Cheeps = await GetCheeps();
+        await LoadPage();
         return Page();
     }
 
@@ -75,7 +74,7 @@ public abstract class TimelineModel : PageModel {
         await _authorService.Follow(userName, author);
         return RedirectToPage();
     }
-    
+
     public async Task<IActionResult> OnPostLikeAsync(string cheepId, bool? prev) {
         await UpdateLike(cheepId, prev, true);
         return RedirectToPage();
@@ -90,10 +89,16 @@ public abstract class TimelineModel : PageModel {
         if (previousValue == null || previousValue != newValue) {
             // We previously did not interact with cheep, or we are changing our opinion
             await _cheepService.LikeCheep(Email, cheepId, newValue);
-        } else {
+        }
+        else {
             // We clicked the same interaction as previously, so we need to remove it
             await _cheepService.RemoveLike(Email, cheepId);
         }
         return RedirectToPage();
+    }
+
+    private async Task LoadPage() {
+        Cheeps = await GetCheeps();
+        Followings = await _authorService.GetFollowings(User?.Identity?.Name, Email);
     }
 }
