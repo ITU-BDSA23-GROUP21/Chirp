@@ -7,4 +7,8 @@ public class Author {
     public required ICollection<Author> Followers { get; set; }
     public required ICollection<Author> Following { get; set; }
     public ICollection<Like> Likes {get; set; }
+
+    public Author() {
+        Likes = new List<Like>();
+    }
 }

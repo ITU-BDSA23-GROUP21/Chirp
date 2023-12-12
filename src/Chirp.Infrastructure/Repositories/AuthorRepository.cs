@@ -1,17 +1,11 @@
-using Azure.Identity;
 using Chirp.Core;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Graph;
-using System.Collections;
-using System.Xml.Linq;
 
 namespace Chirp.Infrastructure;
 
 public class AuthorRepository : IAuthorRepository {
 
     private readonly ChirpContext _dbContext;
-    private GraphServiceClient _GraphServiceClient;
-
     public AuthorRepository(ChirpContext dbContext) => _dbContext = dbContext;
 
     public Task<AuthorDto> GetAuthorByName(string name) {
@@ -20,7 +14,6 @@ public class AuthorRepository : IAuthorRepository {
             .Select(author => new AuthorDto(author.Name, author.Email))
             .FirstAsync();
 
-        if (author == null) return null;
         return author;
 
     }

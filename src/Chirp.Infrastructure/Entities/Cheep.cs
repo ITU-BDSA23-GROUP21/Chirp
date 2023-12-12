@@ -5,7 +5,11 @@ public class Cheep {
     public Guid AuthorId { get; set; }
     public required string Text { get; set; }
     public DateTime TimeStamp { get; set; }
-    public required Author Author {get; set;}
-    public ICollection<Like> Likes { get; set;}
+    public required Author Author { get; set; }
+    public ICollection<Like> Likes { get; set; }
+
+    public Cheep() {
+        Likes = new List<Like>();
+    }
 }
 
