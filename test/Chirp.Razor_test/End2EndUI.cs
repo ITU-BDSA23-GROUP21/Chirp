@@ -4,10 +4,11 @@ using Testcontainers.MsSql;
 using Microsoft.Playwright;
 using Microsoft.Playwright.NUnit;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 namespace Chirp.Razor_test;
 
-public class End2EndUI : PageTest
+public partial class End2EndUI : PageTest
 {
     public async Task LoginToGithub(IPage page)
     {
@@ -111,20 +112,26 @@ public class End2EndUI : PageTest
         await page.GetByText("logout [dummyaccountfortesting]").IsVisibleAsync();
         //Cheep
         await page.GetByRole(AriaRole.Heading, new(){ Name = "What's on your mind dummyaccountfortesting?"}).IsVisibleAsync();
-        await page.GetByRole(AriaRole.Textbox, new(){ Name = "NewMessage"}).FillAsync("Testing the ability to cheep");
-        await page.GetByText("Share", new(){ Exact = true }).ClearAsync();
+        await page.GetByRole(AriaRole.Textbox).FillAsync("Testing the ability to cheep");
+        await page.GetByText("Share", new(){ Exact = true }).ClickAsync();
         var cheep = page.GetByRole(AriaRole.Listitem).First;
-        await Expect(cheep).ToHaveTextAsync("Testing the ability to cheep");
+        await Expect(cheep).ToHaveTextAsync(CheepRegex());
         //Follow
         await page.GetByRole(AriaRole.Listitem).Nth(1).GetByRole(AriaRole.Button, new(){ Name = "[Follow]" }).ClickAsync();
         await page.GetByRole(AriaRole.Link, new(){ Name = "my timeline "}).ClickAsync();
+        await Expect(page.GetByRole(AriaRole.Heading, new(){ Level = 2 }).First).ToHaveTextAsync("dummyaccountfortesting's Timeline");
         var mycheep = page.GetByRole(AriaRole.Listitem).First;
-        await Expect(mycheep).ToHaveTextAsync("Testing the ability to cheep");
-        var cheepAuthor = page.GetByRole(AriaRole.Listitem).Nth(1).GetByRole(AriaRole.Link).First;
-        await Expect(cheepAuthor).ToHaveTextAsync("Jacqualine Gilcoine");
-        
-
-
+        await Expect(mycheep).ToHaveTextAsync(CheepRegex());
+        var followingCheep1 = page.GetByRole(AriaRole.Listitem).Nth(1);
+        await Expect(followingCheep1.GetByRole(AriaRole.Link).First).ToHaveTextAsync("Jacqualine Gilcoine");
+        //Like/Dislike
+        await Expect(followingCheep1).ToHaveTextAsync(ZeroCountRegex());
+        await followingCheep1.GetByRole(AriaRole.Button, new(){ Name = "Like", Exact = true }).ClickAsync();
+        await Expect(followingCheep1).ToHaveTextAsync(OneCountRegex());
+        var followingCheep2 = page.GetByRole(AriaRole.Listitem).Nth(2);
+        await Expect(followingCheep2).ToHaveTextAsync(ZeroCountRegex());
+        await followingCheep2.GetByRole(AriaRole.Button, new(){ Name = "Dislike", Exact = true }).ClickAsync();
+        await Expect(followingCheep2).ToHaveTextAsync(MinusOneCountRegex());
 
         //Stops tracing and saves to file
         await context.Tracing.StopAsync(new()
@@ -162,4 +169,13 @@ public class End2EndUI : PageTest
             Path = "test2.zip"
         });
     }
+
+    [GeneratedRegex("[\\s\\S]*Testing the ability to cheep[\\s\\S]*")]
+    private static partial Regex CheepRegex();
+    [GeneratedRegex("Like[\\s]*0[\\s]*Dislike")]
+    private static partial Regex ZeroCountRegex();
+    [GeneratedRegex("Like[\\s]*1[\\s]*Dislike")]
+    private static partial Regex OneCountRegex();
+    [GeneratedRegex("Like[\\s]*-1[\\s]*Dislike")]
+    private static partial Regex MinusOneCountRegex();
 }
