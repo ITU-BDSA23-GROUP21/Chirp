@@ -1,9 +1,6 @@
-using Microsoft.Data.SqlClient;
 using NUnit.Framework;
-using Testcontainers.MsSql;
 using Microsoft.Playwright;
 using Microsoft.Playwright.NUnit;
-using System.Diagnostics;
 using System.Text.RegularExpressions;
 
 namespace Chirp.Razor_test;
