@@ -37,7 +37,6 @@ public abstract class TimelineModel : PageModel {
     }
 
 
-    //fluent validation may not be the right return type since its been casted ealier.
     public async Task<IActionResult> OnPostAsync() {
         string? message = Request.Form["NewMessage"];
         if (message != null && User.Identity?.Name != null) {
@@ -77,8 +76,7 @@ public abstract class TimelineModel : PageModel {
     }
 
     public async Task<IActionResult> OnPostAnonymizeAsync() {
-        Console.WriteLine(" ----------------run ---------------");
-        if (User.Identity.Name == null) return RedirectToPage();
+        if (User.Identity?.Name == null) return RedirectToPage();
         await _authorService.Anonymize(User.Identity.Name);
         string domainName = HttpContext.Request.Host.Value;
         return Redirect("http://" + domainName + "/MicrosoftIdentity/Account/SignOut");
