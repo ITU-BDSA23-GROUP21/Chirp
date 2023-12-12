@@ -294,19 +294,26 @@ public class Integration : IAsyncLifetime {
     }
 
     #endregion
-    #region Like/Dislike Cheep Methods
-    [Fact]
-    public async Task CheepRepository_LikeCheep() {
+    #region Like Cheep Method
+    [Theory]
+    [InlineData("")]
+    [InlineData("                 ")]
+    [InlineData("invalidemail.com")]
+    public async Task CheepRepository_LikeCheep_InvalidUserEmail(string email)
+    {
         //Arrange
         CheepRepository repository = await CheepRepoInit();
-        var cheeps = await repository.GetCheeps(1);
-        var cheep = cheeps.First();
-        
+        IEnumerable<CheepDto> cheepsbefore = await repository.GetCheeps(1);
+        string cheepId = cheepsbefore.First().Id;
+        bool value = true;
 
         //Act
-
+        await repository.LikeCheep(email, cheepId, value);
+        IEnumerable<CheepDto> cheepsafter = await repository.GetCheeps(1);
+        CheepDto cheepafter = cheepsafter.Where(c => c.Id == cheepId).Single();
 
         //Assert
+        Assert.Equal(0, cheepafter.LikeCount);
     }
 
     #endregion
