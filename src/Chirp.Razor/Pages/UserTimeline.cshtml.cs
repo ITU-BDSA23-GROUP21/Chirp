@@ -8,7 +8,7 @@ public class UserTimelineModel : TimelineModel {
     protected override async Task<List<CheepDto>> GetCheeps() {
         // We access route data directly here, as saving it as a property in OnGet, did not make it available in OnPost
         // Is this the right way to access route data?
-        var author = RouteData?.Values?["author"]?.ToString();
+        var author = RouteData?.Values?["author"]?.ToString() ?? "";
 
         if (User.Identity != null && User.Identity.Name == author) {
             IEnumerable<AuthorDto> followings = await _authorService.GetFollowings(User.Identity.Name, Email);

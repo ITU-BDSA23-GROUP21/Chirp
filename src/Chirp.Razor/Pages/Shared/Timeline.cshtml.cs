@@ -39,7 +39,7 @@ public abstract class TimelineModel : PageModel {
 
     public async Task<IActionResult> OnPostAsync() {
         string? message = Request.Form["NewMessage"];
-        if (message != null && User.Identity?.Name != null) {
+        if (message != null && User.Identity?.Name != null && Email != null) {
             ValidationResult task = await _cheepService.AddCheep(message, User.Identity.Name, Email);
             HandleClientValidation(task);
         }
@@ -86,6 +86,7 @@ public abstract class TimelineModel : PageModel {
     }
 
     private async Task<IActionResult> UpdateLike(string cheepId, bool? previousValue, bool newValue) {
+        if (Email == null) return Page();
         if (previousValue == null || previousValue != newValue) {
             // We previously did not interact with cheep, or we are changing our opinion
             await _cheepService.LikeCheep(Email, cheepId, newValue);

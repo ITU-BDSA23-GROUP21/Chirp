@@ -8,7 +8,9 @@ public class InformationModel : TimelineModel {
     }
 
     protected override Task<List<CheepDto>> GetCheeps() {
-        return _cheepService.GetCheepsFromAuthors(new List<string>() {User.Identity.Name}, Pageno, Email);
+        var authorName = User.Identity?.Name;
+        if (authorName == null) return Task.FromResult( new List<CheepDto>());
+        return _cheepService.GetCheepsFromAuthors(new List<string>() { authorName }, Pageno, Email);
     }
 
     public async Task<IActionResult> OnPostAnonymizeAsync() {
