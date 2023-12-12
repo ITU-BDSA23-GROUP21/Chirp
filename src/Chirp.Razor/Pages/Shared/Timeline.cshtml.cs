@@ -43,7 +43,8 @@ public abstract class TimelineModel : PageModel {
             ValidationResult task = await _cheepService.AddCheep(message, User.Identity.Name, Email);
             HandleClientValidation(task);
         }
-        return RedirectToPage();
+        Cheeps = await GetCheeps();
+        return Page();
     }
 
     public void HandleClientValidation(ValidationResult results) {
