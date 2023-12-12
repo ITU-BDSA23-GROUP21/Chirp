@@ -37,7 +37,6 @@ public abstract class TimelineModel : PageModel {
     }
 
 
-    //fluent validation may not be the right return type since its been casted ealier.
     public async Task<IActionResult> OnPostAsync() {
         string? message = Request.Form["NewMessage"];
         if (message != null && User.Identity?.Name != null) {
@@ -74,11 +73,6 @@ public abstract class TimelineModel : PageModel {
         var userName = (User.Identity?.Name) ?? throw new Exception("Error attempting to follow when user is not logged in");
         await _authorService.Follow(userName, author);
         return RedirectToPage();
-    }
-
-    public async Task<IActionResult> OnPostAnonymizeAsync() {
-        await _authorService.Anonymize(User.Identity.Name);
-        return Redirect("http://localhost:5273/MicrosoftIdentity/Account/SignOut");
     }
     
     public async Task<IActionResult> OnPostLikeAsync(string cheepId, bool? prev) {

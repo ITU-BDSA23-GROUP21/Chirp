@@ -16,8 +16,6 @@
         <p>Name: @User.Identity.Name</p>
         <p>Email: @Model.Email</p>
         <br><br>
-        <form method="post">
-        </form>
         <h3>Following</h3>
         @if (Model.Followings.Any())
         {
@@ -31,9 +29,9 @@
         {
             <p>You are not following anyone</p>
         }
-        <br>
-        <button style="background-color: red" type="submit" asp-page-handler="Anonymize">Delete account</button>
-        <br>
+        <form method="post">
+            <button type="submit" asp-page-handler="Anonymize" style="color: red">Delete account</button>
+        </form>
     </div>
 
     <h2>My Cheeps: </h2>
