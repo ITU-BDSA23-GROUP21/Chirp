@@ -7,7 +7,7 @@ namespace Chirp.Razor_test;
 
 public partial class End2EndUI : PageTest
 {
-    public async Task LoginToGithub(IPage page)
+    private async Task LoginToGithub(IPage page)
     {
         await page.GotoAsync("https://github.com/login");
         await page.GetByLabel("Username or email address").FillAsync("dummyaccountfortesting");
@@ -38,7 +38,8 @@ public partial class End2EndUI : PageTest
 
         //The playwright test
         await page.GotoAsync(ipaddress);
-        await page.GetByRole(AriaRole.Heading, new(){ Name = "Public Timeline" }).IsVisibleAsync();
+        var visibilityCheck = await page.GetByRole(AriaRole.Heading, new(){ Name = "Public Timeline" }).IsVisibleAsync();
+        Assert.That(visibilityCheck, Is.True);
         await Expect(page.GetByRole(AriaRole.Listitem)).ToHaveCountAsync(32);
         
         //Stops tracing and saves to file
@@ -71,7 +72,8 @@ public partial class End2EndUI : PageTest
         //The playwright test
         await LoginToGithub(page);
         await page.GotoAsync(ipaddress);
-        await page.GetByRole(AriaRole.Heading, new(){ Name = "Public Timeline" }).IsVisibleAsync();
+        var visibilityCheck = await page.GetByRole(AriaRole.Heading, new(){ Name = "Public Timeline" }).IsVisibleAsync();
+        Assert.That(visibilityCheck, Is.True);
         await Expect(page.GetByRole(AriaRole.Listitem)).ToHaveCountAsync(32);
 
         //Stops tracing and saves to file
@@ -106,9 +108,11 @@ public partial class End2EndUI : PageTest
         await LoginToGithub(page);
         await page.GotoAsync(ipaddress);
         await page.GetByRole(AriaRole.Link, new(){ Name = "login" }).ClickAsync();
-        await page.GetByText("logout [dummyaccountfortesting]").IsVisibleAsync();
+        var logoutLink = page.GetByText("logout [dummyaccountfortesting]");
+        await Expect(logoutLink).ToBeVisibleAsync();
         //Cheep
-        await page.GetByRole(AriaRole.Heading, new(){ Name = "What's on your mind dummyaccountfortesting?"}).IsVisibleAsync();
+        var cheepBoxLabel = page.GetByRole(AriaRole.Heading, new(){ Name = "What's on your mind dummyaccountfortesting?"});
+        await Expect(cheepBoxLabel).ToBeVisibleAsync();
         await page.GetByRole(AriaRole.Textbox).FillAsync("Testing the ability to cheep");
         await page.GetByText("Share", new(){ Exact = true }).ClickAsync();
         var cheep = page.GetByRole(AriaRole.Listitem).First;
@@ -133,13 +137,13 @@ public partial class End2EndUI : PageTest
         //Stops tracing and saves to file
         await context.Tracing.StopAsync(new()
         {
-            Path = "test2.zip"
+            Path = "test3.zip"
         });
     }
     [Test]
-    public async Task LoginLookAtUserInformationAndForgetUser()
+    public async Task LoginCheepLookAtUserInformationAndForgetUser()
     {
-                //Setup
+        //Setup
         //Launches testbrowser for tracing to inspect after test
         await using var browser = await Playwright.Chromium.LaunchAsync();
         await using var context = await browser.NewContextAsync();
@@ -158,12 +162,31 @@ public partial class End2EndUI : PageTest
             throw new NullReferenceException("The environment variable 'IPADDRESS' is null or empty and needs to be set.");
 
         //The playwright test
-
+        await LoginToGithub(page);
+        await page.GotoAsync(ipaddress);
+        await page.GetByRole(AriaRole.Link, new(){ Name = "login" }).ClickAsync();
+        var cheepbox = page.GetByRole(AriaRole.Textbox).First;
+        await Expect(cheepbox).ToBeVisibleAsync();
+        await cheepbox.FillAsync("Test Cheep");
+        await page.GetByText("Share", new(){ Exact = true }).ClickAsync();
+        var myInfoLink = page.GetByRole(AriaRole.Link, new(){ Name = "My Information" });
+        await Expect(myInfoLink).ToBeVisibleAsync();
+        await myInfoLink.ClickAsync();
+        var nameInfo = page.GetByText("Name: ");
+        await Expect(nameInfo).ToContainTextAsync("dummyaccountfortesting");
+        var emailInfo = page.GetByText("Email: ");
+        await Expect(emailInfo).ToContainTextAsync("dummyemailfortesting000@gmail.com");
+        await page.GetByRole(AriaRole.Button, new(){ Name = "Delete account"}).ClickAsync();
+        var signedOutHeader = page.GetByRole(AriaRole.Heading, new(){ Name = "Signed out" });
+        await Expect(signedOutHeader).ToBeVisibleAsync();
+        await page.GetByRole(AriaRole.Link, new(){ Name = "public timeline" }).ClickAsync();
+        var cheep = page.GetByRole(AriaRole.Listitem).First;
+        await Expect(cheep).Not.ToContainTextAsync("dummyaccountfortesting");
 
         //Stops tracing and saves to file
         await context.Tracing.StopAsync(new()
         {
-            Path = "test2.zip"
+            Path = "test4.zip"
         });
     }
 
