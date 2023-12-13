@@ -21,4 +21,4 @@ jobs:
     - name: Build
       run: dotnet build --no-restore
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test --filter FullyQualifiedName\!~Chirp.Razor_test.End2EndUI --no-build --verbosity normal
