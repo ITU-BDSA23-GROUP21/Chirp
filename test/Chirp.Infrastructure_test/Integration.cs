@@ -3,12 +3,16 @@ using Chirp.Infrastructure;
 using FluentValidation.Results;
 using Microsoft.EntityFrameworkCore;
 using Testcontainers.MsSql;
+using Testcontainers.PostgreSql;
 
 namespace Chirp.Infrastructure_test;
 
 public class Integration : IAsyncLifetime {
     private readonly MsSqlContainer _msSqlContainer
         = new MsSqlBuilder().Build();
+
+    private readonly PostgreSqlContainer _postgreSqlContainer
+        = new PostgreSqlBuilder().Build();
 
     public Task InitializeAsync()
         => _msSqlContainer.StartAsync();
@@ -346,6 +350,42 @@ public class Integration : IAsyncLifetime {
 
         //Assert
         Assert.Equal(expectedAuthor, actualAuthor);
+    }
+
+    //Is this too complex for an integration test?
+    [Fact]
+    public async Task AuthorRepository_Follow_ValidUsers() {
+        //Arrange
+        AuthorRepository authorRepository = await AuthorRepoInit();
+        AuthorDto expectedFollower = await authorRepository.GetAuthorByName("Rasmus");
+
+        //Act
+        await authorRepository.Follow("Helge", "Rasmus");
+        IEnumerable<AuthorDto> followings = await authorRepository.GetFollowings("Helge", "ropf@itu.dk");
+        AuthorDto actualFollower = followings.First();
+
+        //Assert
+        Assert.Equal(expectedFollower, actualFollower);
+    }
+
+    [Fact]
+    public async Task AuthorRepository_Unfollow_ValidUsers() {
+        //Arrange
+        AuthorRepository authorRepository = await AuthorRepoInit();
+        AuthorDto expectedTempFollower = await authorRepository.GetAuthorByName("Rasmus");
+
+        //Act
+        await authorRepository.Follow("Helge", "Rasmus");
+        //Temp followings are used to ensure that the user was actually followed
+        IEnumerable<AuthorDto> tempFollowings = await authorRepository.GetFollowings("Helge", "ropf@itu.dk");
+        AuthorDto actualTempFollower = tempFollowings.First();
+
+        await authorRepository.UnFollow("Helge", "Rasmus");
+        IEnumerable<AuthorDto> actualFollowings = await authorRepository.GetFollowings("Helge", "ropf@itu.dk");
+
+        //Assert
+        Assert.Equal(expectedTempFollower, actualTempFollower);
+        Assert.Empty(actualFollowings);
     }
 
     #endregion
