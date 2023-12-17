@@ -1,5 +1,6 @@
 using Chirp.Core;
 using Chirp.Infrastructure;
+using DotNet.Testcontainers.Containers;
 using FluentValidation.Results;
 using Microsoft.EntityFrameworkCore;
 using Testcontainers.MsSql;
@@ -7,28 +8,28 @@ using Testcontainers.PostgreSql;
 
 namespace Chirp.Infrastructure_test;
 
-public class Integration : IAsyncLifetime {
-    private readonly MsSqlContainer _msSqlContainer
-        = new MsSqlBuilder().Build();
-
-    private readonly PostgreSqlContainer _postgreSqlContainer
-        = new PostgreSqlBuilder().Build();
+public class Integration<T> : IAsyncLifetime {
+    private readonly DockerContainer _container
+        = Environment.GetEnvironmentVariable("SERVER") == "POSTGRES" ? new PostgreSqlBuilder().Build() : new MsSqlBuilder().Build();
 
     public Task InitializeAsync()
-        => _msSqlContainer.StartAsync();
+        => _container.StartAsync();
 
     public Task DisposeAsync()
-        => _msSqlContainer.DisposeAsync().AsTask();
+        => _container.DisposeAsync().AsTask();
 
     public async Task<CheepRepository> CheepRepoInit() {
-        ChirpContext context = new(new DbContextOptionsBuilder().UseSqlServer(_msSqlContainer.GetConnectionString()).Options);
+        // Casting as a quick fix for type issues. Should always be safe, as _container is readonly and only instantiated as a database container
+        var container = _container as IDatabaseContainer;
+        ChirpContext context = new(new DbContextOptionsBuilder().UseSqlServer(container?.GetConnectionString()).Options);
         await context.Database.EnsureCreatedAsync();
         DbInitializer.SeedDatabase(context);
         return new(context);
     }
 
     public async Task<AuthorRepository> AuthorRepoInit() {
-        ChirpContext context = new(new DbContextOptionsBuilder().UseSqlServer(_msSqlContainer.GetConnectionString()).Options);
+        var container = _container as IDatabaseContainer;
+        ChirpContext context = new(new DbContextOptionsBuilder().UseSqlServer(container?.GetConnectionString()).Options);
         await context.Database.EnsureCreatedAsync();
         DbInitializer.SeedDatabase(context);
         return new(context);
@@ -303,8 +304,7 @@ public class Integration : IAsyncLifetime {
     [InlineData("")]
     [InlineData("                 ")]
     [InlineData("invalidemail.com")]
-    public async Task CheepRepository_LikeCheep_InvalidUserEmail(string email)
-    {
+    public async Task CheepRepository_LikeCheep_InvalidUserEmail(string email) {
         //Arrange
         CheepRepository repository = await CheepRepoInit();
         IEnumerable<CheepDto> cheepsbefore = await repository.GetCheeps(1);
