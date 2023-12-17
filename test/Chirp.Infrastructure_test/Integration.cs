@@ -8,7 +8,7 @@ using Testcontainers.PostgreSql;
 
 namespace Chirp.Infrastructure_test;
 
-public class Integration<T> : IAsyncLifetime {
+public class Integration : IAsyncLifetime {
     private readonly DockerContainer _container
         = Environment.GetEnvironmentVariable("SERVER") == "POSTGRES" ? new PostgreSqlBuilder().Build() : new MsSqlBuilder().Build();
 
@@ -18,10 +18,15 @@ public class Integration<T> : IAsyncLifetime {
     public Task DisposeAsync()
         => _container.DisposeAsync().AsTask();
 
+    public static ChirpContext GetContext(IDatabaseContainer? container)
+        => Environment.GetEnvironmentVariable("SERVER") == "POSTGRES" ?
+            new(new DbContextOptionsBuilder().UseNpgsql(container?.GetConnectionString()).Options) :
+            new(new DbContextOptionsBuilder().UseSqlServer(container?.GetConnectionString()).Options);
+
     public async Task<CheepRepository> CheepRepoInit() {
         // Casting as a quick fix for type issues. Should always be safe, as _container is readonly and only instantiated as a database container
         var container = _container as IDatabaseContainer;
-        ChirpContext context = new(new DbContextOptionsBuilder().UseSqlServer(container?.GetConnectionString()).Options);
+        ChirpContext context = GetContext(container);
         await context.Database.EnsureCreatedAsync();
         DbInitializer.SeedDatabase(context);
         return new(context);
@@ -29,7 +34,7 @@ public class Integration<T> : IAsyncLifetime {
 
     public async Task<AuthorRepository> AuthorRepoInit() {
         var container = _container as IDatabaseContainer;
-        ChirpContext context = new(new DbContextOptionsBuilder().UseSqlServer(container?.GetConnectionString()).Options);
+        ChirpContext context = GetContext(container);
         await context.Database.EnsureCreatedAsync();
         DbInitializer.SeedDatabase(context);
         return new(context);
