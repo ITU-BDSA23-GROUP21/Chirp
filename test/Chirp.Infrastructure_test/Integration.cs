@@ -314,15 +314,9 @@ public class Integration : IAsyncLifetime {
         CheepRepository repository = await CheepRepoInit();
         IEnumerable<CheepDto> cheepsbefore = await repository.GetCheeps(1);
         string cheepId = cheepsbefore.First().Id;
-        bool value = true;
 
         //Act
-        await repository.LikeCheep(email, cheepId, value);
-        IEnumerable<CheepDto> cheepsafter = await repository.GetCheeps(1);
-        CheepDto cheepafter = cheepsafter.Where(c => c.Id == cheepId).Single();
-
-        //Assert
-        Assert.Equal(0, cheepafter.LikeCount);
+        await Assert.ThrowsAsync<InvalidOperationException>(async () => await repository.LikeCheep(email, cheepId, true));
     }
 
     #endregion
