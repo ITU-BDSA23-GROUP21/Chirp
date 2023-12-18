@@ -13,7 +13,7 @@ public class Cheep {
     /// <value> Property <c>AuthorId</c> represents the id of the author who created this cheep</value>
     public Guid AuthorId { get; set; }
 
-    /// <value> Property <c>Text</c> is the context of the cheep.</value>
+    /// <value> Property <c>Text</c> is the content of the cheep.</value>
     public required string Text { get; set; }
 
     /// <value> Property <c>TimeStamp</c> describes the time at which the cheep was created using the datetype 

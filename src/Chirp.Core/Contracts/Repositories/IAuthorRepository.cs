@@ -1,6 +1,6 @@
 namespace Chirp.Core;
 /// <summary>
-/// Defines methods used on and by an author
+/// Defines methods used to operate on the author entity
 /// </summary>
 public interface IAuthorRepository {
 

@@ -19,13 +19,19 @@ public interface ICheepRepository {
     Task<ValidationResult> AddCheep(string message, string authorName);
 
     /// <summary>
-    /// 
+    /// Adds a like entity to the database
     /// </summary>
     /// <param name="userEmail">Email of the current user</param>
-    /// <param name="cheepId">Id of the cheep thats liked or disliked</param>
-    /// <param name="value"></param>
+    /// <param name="cheepId">Id of the cheep thats being liked or disliked</param>
+    /// <param name="value">False if the cheep is disliked, true if the cheep is liked</param>
     /// <returns>A task that represents the asynchronous operation</returns>
     Task LikeCheep(string userEmail, string cheepId, bool value);
 
+    /// <summary>
+    /// Removes a like entity from the database
+    /// </summary>
+    /// <param name="userEmail">Email of the current user</param>
+    /// <param name="cheepId">Id of the cheep that has its like or dislike removed</param>
+    /// <returns>A task that represents the asynchronous operation</returns>
     Task RemoveLike(string userEmail, string cheepId);
 }
