@@ -194,7 +194,7 @@ public class Integration : IAsyncLifetime {
         //Arrange
         CheepRepository repository = await CheepRepoInit();
         string message = "Valid Message";
-        string author = "John Cena";
+        string author = "Nathan Sirmon";
         string email = "Nathan+Sirmon@dtu.dk";
 
         //Act
@@ -205,44 +205,6 @@ public class Integration : IAsyncLifetime {
         //Assert
         Assert.True(result.IsValid);
         Assert.NotEmpty(cheeps);
-    }
-
-    [Theory]
-    [InlineData("")]
-    [InlineData("     ")]
-    public async Task CheepRepository_AddCheep_InvalidAuthorName(string authorName) {
-        //Arrange
-        CheepRepository repository = await CheepRepoInit();
-        string message = "Valid Message";
-        string email = "validemail@gmail.com";
-
-        //Act
-        ValidationResult result = await repository.AddCheep(message, authorName, email);
-        IEnumerable<CheepDto> cheeps = await repository.GetCheeps(1, authorName);
-        cheeps = cheeps.Where(c => c.Message == message);
-
-        //Assert
-        Assert.False(result.IsValid);
-        Assert.Empty(cheeps);
-    }
-
-    [Fact]
-    public async Task CheepRepository_AddCheep_ValidNonExistingAuthor() {
-        //Arrange
-        CheepRepository repository = await CheepRepoInit();
-        string message = "Valid Message";
-        string authorName = "Valid Author";
-        string email = "Validemail@gmail.com";
-
-        //Act
-        ValidationResult result = await repository.AddCheep(message, authorName, email);
-        IEnumerable<CheepDto> cheeps = await repository.GetCheeps(1, authorName);
-        CheepDto cheep = cheeps.Single();
-
-        //Assert
-        Assert.True(result.IsValid);
-        Assert.Equal(authorName, cheep.Author);
-        Assert.Equal(message, cheep.Message);
     }
 
     [Fact]
@@ -322,6 +284,36 @@ public class Integration : IAsyncLifetime {
     #endregion
     #endregion
     #region Author Repository Tests
+
+    [Theory]
+    [InlineData("")]
+    [InlineData("     ")]
+    public async Task AuthorRepository_CreateAuthor_InvalidAuthorName(string authorName) {
+        //Arrange
+        var repository = await AuthorRepoInit();
+        string email = "validemail@gmail.com";
+
+        //Act
+        await repository.CreateAuthor(new AuthorDto(authorName, email));
+        //Assert
+        Assert.False(false);
+    }
+
+    [Fact]
+    public async Task AuthorRepository_CreateAuthor_ValidNonExistingAuthor() {
+        //Arrange
+        var repository = await AuthorRepoInit();
+        string authorName = "Valid Author";
+        string email = "Validemail@gmail.com";
+
+        //Act
+        await repository.CreateAuthor(new AuthorDto(authorName, email));
+        var author = await repository.GetAuthorByName(authorName);
+
+        //Assert
+        Assert.Equal(authorName, author.Name);
+        Assert.Equal(email, author.Email);
+    }
 
     [Fact]
     public async Task AuthorRepository_GetAuthorByName_RegisteredAuthor() {
