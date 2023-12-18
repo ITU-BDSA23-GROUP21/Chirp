@@ -41,7 +41,41 @@ public class Integration : IAsyncLifetime {
     }
 
     #region Cheep Repository Tests
-    #region Get Cheeps Method
+    #region Get Cheeps Without Author Method
+    [Fact]
+    public async Task CheepRepository_GetCheepsNoAuthor_PositivePageNr()
+    {
+        // Arrange
+        CheepRepository repository = await CheepRepoInit();
+        int pagenr = 1;
+        int expectedCheepCount = 32;
+        string expectedFirstCheep = "Starbuck now is what we hear the worst.";
+        string expectedLastCheep = "With back to my friend, patience!";
+    
+        // Act
+        IEnumerable<CheepDto> cheeps = await repository.GetCheeps(pagenr);
+        int actualCheepCount = cheeps.Count();
+        string actualFirstCheep = cheeps.First().Message;
+        string actualLastCheep = cheeps.Last().Message;
+
+        // Assert
+        Assert.Equal(expectedCheepCount, actualCheepCount);
+        Assert.Equal(expectedFirstCheep, actualFirstCheep);
+        Assert.Equal(expectedLastCheep, actualLastCheep);
+    }
+    [Theory]
+    [InlineData(-1)]
+    [InlineData(0)]
+    public async Task CheepRepository_GetCheepsNoAuthor_NegativeAndZeroPageNr(int pagenr)
+    {
+        // Arrange
+    
+        // Act
+    
+        // Assert
+    }
+    #endregion
+    #region Get Cheeps One Author Method
     [Theory]
     [InlineData(0)]
     [InlineData(4)]
@@ -168,6 +202,10 @@ public class Integration : IAsyncLifetime {
         Assert.Equal(expectedLastCheep.Author, actualLastCheep.Author);
     }
     #endregion
+    #region Get Cheeps Multiple Authors Method
+
+
+    #endregion
     #region Add Cheep Method
     [Theory]
     [InlineData("")]
@@ -242,6 +280,10 @@ public class Integration : IAsyncLifetime {
         //Act
         await Assert.ThrowsAsync<InvalidOperationException>(async () => await repository.LikeCheep(email, cheepId, true));
     }
+
+    #endregion
+    #region Remove Like Method
+
 
     #endregion
     #endregion
