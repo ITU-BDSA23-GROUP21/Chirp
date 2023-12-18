@@ -1,6 +1,6 @@
 namespace Chirp.Core;
 /// <summary>
-/// Values from an author entity needed by the frontend.
+/// Stores and transfers the necessary data of an author from the database to the frontend.
 /// </summary>
 /// <param name="Name">Name of the author</param>
 /// <param name="Email">Email of the author</param>
