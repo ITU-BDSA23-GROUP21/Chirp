@@ -1,6 +1,6 @@
 namespace Chirp.Infrastructure;
 /// <summary>
-/// Entity that reprecents a cheep.
+/// Entity that represents a cheep.
 /// <para> Cheeps are a message to the system created by a user</para>
 /// </summary>
 public class Cheep {
@@ -10,7 +10,7 @@ public class Cheep {
     /// </value>
     public Guid Id { get; set; }
 
-    /// <value> Property <c>AuthorId</c> reprecents the id of the author who created this cheep</value>
+    /// <value> Property <c>AuthorId</c> represents the id of the author who created this cheep</value>
     public Guid AuthorId { get; set; }
 
     /// <value> Property <c>Text</c> is the context of the cheep.</value>
@@ -27,7 +27,7 @@ public class Cheep {
     public ICollection<Like> Likes { get; set; }
     
     /// <summary>
-    /// This constructor initalizes the <see cref="Likes"/> collection to a new list.
+    /// This constructor initializes the <see cref="Likes"/> collection to a new list.
     /// </summary>
     public Cheep() {
         Likes = new List<Like>();
