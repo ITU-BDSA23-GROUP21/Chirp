@@ -11,12 +11,15 @@ public class ChirpContext : DbContext {
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder) {
+        // Property constraints
         modelBuilder.Entity<Cheep>().Property(c => c.Text).HasMaxLength(160);
         modelBuilder.Entity<Author>().Property(a => a.Email).HasMaxLength(60);
+
+        // Relationships
         modelBuilder.Entity<Like>().HasKey(l => new { l.CheepId, l.AuthorId });
 
-        // Override default delete behaviour, since it will cause multiple cascade paths
-        // NB: This means we manually have to delete likes beforehand if we delete an Author
+        // Override default delete behaviour, since it caused an error due to multiple cascade paths
+        // This means we manually have to delete likes beforehand if we delete an Author
         modelBuilder.Entity<Like>()
             .HasOne(l => l.Author)
             .WithMany(a => a.Likes)

@@ -36,27 +36,14 @@ public class AuthorRepository : IAuthorRepository {
         _dbContext.SaveChanges();
     }
 
+
     public async Task<IEnumerable<AuthorDto>> GetFollowings(string name, string email) {
         var author = await _dbContext.Authors
             .Where(author => author.Name == name)
             .Include(author => author.Following)
             .FirstOrDefaultAsync();
 
-        if (author == null) {
-            author = new Author() {
-                Id = Guid.NewGuid(),
-                Name = name,
-                Email = email,
-                Cheeps = new List<Cheep>(),
-                Followers = new List<Author>(),
-                Following = new List<Author>()
-            };
-
-            await _dbContext.Authors.AddAsync(author);
-            _dbContext.SaveChanges();
-        }
-
-        if (author.Following == null) {
+        if (author?.Following == null) {
             return Enumerable.Empty<AuthorDto>();
         }
 
@@ -73,10 +60,6 @@ public class AuthorRepository : IAuthorRepository {
             .Where(author => author.Name == followerName)
             .Include(author => author.Followers)
             .FirstAsync();
-
-        if (followingAuthor == null || followerAuthor == null) {
-            throw new ArgumentException("Follower or following does not exist");
-        }
 
         followingAuthor.Followers ??= new List<Author>();
 
@@ -95,18 +78,14 @@ public class AuthorRepository : IAuthorRepository {
             .Include(author => author.Followers)
             .FirstAsync();
 
-        if (followingAuthor == null || followerAuthor == null) {
-            throw new ArgumentException("Follower or following does not exist");
-        }
-
         followingAuthor.Followers.Remove(followerAuthor);
         _dbContext.SaveChanges();
     }
 
     public async Task Anonymize(string name) {
         var author = await _dbContext.Authors
-        .Where(author => author.Name == name)
-        .FirstAsync();
+            .Where(author => author.Name == name)
+            .FirstAsync();
 
         Guid guid = author.Id;
         author.Name = guid.ToString("D");

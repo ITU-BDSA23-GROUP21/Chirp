@@ -15,10 +15,10 @@ public class Program {
         var builder = WebApplication.CreateBuilder(args);
         var connectionString = string.Empty;
         var usePostgres = RuntimeInformation.IsOSPlatform(OSPlatform.OSX);
-        bool uitest = false;
+        bool uiTest = false;
         if (builder.Environment.IsDevelopment()) {
-            uitest = string.Equals(Environment.GetEnvironmentVariable("UITEST"), "1");
-            if(!uitest)
+            uiTest = string.Equals(Environment.GetEnvironmentVariable("UITEST"), "1");
+            if(!uiTest)
                 connectionString = builder.Configuration["ConnectionString"];
         }
         else {
@@ -30,7 +30,7 @@ public class Program {
         builder.Services.AddScoped<IAuthorService, AuthorService>();
         builder.Services.AddScoped<ICheepRepository, CheepRepository>();
         builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
-        if(uitest)
+        if(uiTest)
         {
             string path = Path.Combine(Path.GetTempPath(), "LocalChirpTestDatabase.db");
             if(File.Exists(path))
@@ -56,7 +56,7 @@ public class Program {
             var context = scope.ServiceProvider.GetRequiredService<ChirpContext>();
             // Migrating this way might be unsafe in azure environment.
             // See https://learn.microsoft.com/en-us/ef/core/managing-schemas/migrations/applying?tabs=dotnet-core-cli
-            if(uitest)
+            if(uiTest)
                 context.Database.EnsureCreated();
             else
                 context.Database.Migrate();

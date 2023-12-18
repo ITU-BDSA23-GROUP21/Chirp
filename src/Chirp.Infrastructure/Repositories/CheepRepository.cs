@@ -60,7 +60,15 @@ public class CheepRepository : ICheepRepository {
 
             await _dbContext.Authors.AddAsync(author);
         }
-        var cheep = new Cheep() { Id = Guid.NewGuid(), AuthorId = author.Id, Author = author, Text = message, TimeStamp = DateTime.UtcNow.AddHours(1) }; // Using local datetime will give the wrong time since the servers local time is not equal to ours.
+        var cheep = new Cheep() { 
+            Id = Guid.NewGuid(),
+            AuthorId = author.Id,
+            Author = author,
+            Text = message,
+            TimeStamp = DateTime.UtcNow.AddHours(1)
+            // Using local datetime will give the wrong time since the servers local time is not equal to ours.
+            // This is a temporary workaround, that will not work if the servers or users change timezone
+        };
         ValidationResult results = newCheepValidator.Validate(cheep);
         if (results.IsValid) {
             await _dbContext.Cheeps.AddAsync(cheep);
