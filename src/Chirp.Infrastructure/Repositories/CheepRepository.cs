@@ -6,7 +6,7 @@ namespace Chirp.Infrastructure;
 
 public class CheepRepository : ICheepRepository {
     private readonly ChirpContext _dbContext;
-    private NewCheepValidator newCheepValidator = new();
+    private readonly NewCheepValidator newCheepValidator = new();
 
     public CheepRepository(ChirpContext dbContext) =>
         _dbContext = dbContext;
@@ -46,20 +46,8 @@ public class CheepRepository : ICheepRepository {
     }
 
     public async Task<ValidationResult> AddCheep(string message, string authorName, string email) {
-        var author = await _dbContext.Authors.Where(author => author.Name == authorName).FirstOrDefaultAsync();
+        var author = await _dbContext.Authors.Where(author => author.Name == authorName).FirstAsync();
 
-        if (author == null) {
-            author = new Author() {
-                Id = Guid.NewGuid(),
-                Name = authorName,
-                Email = email,
-                Cheeps = new List<Cheep>(),
-                Followers = new List<Author>(),
-                Following = new List<Author>()
-            };
-
-            await _dbContext.Authors.AddAsync(author);
-        }
         var cheep = new Cheep() { 
             Id = Guid.NewGuid(),
             AuthorId = author.Id,
