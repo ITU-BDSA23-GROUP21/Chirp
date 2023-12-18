@@ -260,7 +260,7 @@ public class Integration : IAsyncLifetime {
         await repository.CreateAuthor(new AuthorDto(author, email));
 
         //Assert
-        Assert.False(false);
+        await Assert.ThrowsAsync<InvalidOperationException>(async () => await repository.GetAuthorByName(author));
     }
 
     [Fact]
@@ -290,7 +290,7 @@ public class Integration : IAsyncLifetime {
         //Act
         await repository.CreateAuthor(new AuthorDto(authorName, email));
         //Assert
-        Assert.False(false);
+        await Assert.ThrowsAsync<InvalidOperationException>(async () => await repository.GetAuthorByEmail(email));
     }
 
     [Fact]
