@@ -46,10 +46,14 @@ public class Program {
                 true => options.UseNpgsql(builder.Configuration["PostgresConnectionString"], x => x.MigrationsAssembly("Chirp.PostgresMigrations"))
             });
         }
-        builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
-        .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAdB2C"));
-        builder.Services.AddRazorPages()
-        .AddMicrosoftIdentityUI();
+        builder.Services
+            .AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
+            .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAdB2C"));
+        builder.Services
+            .AddRazorPages()
+            .AddMicrosoftIdentityUI();
+
+        // On receiving login validation, create a DB entry for the user if it does not exist yet.
         builder.Services.Configure<OpenIdConnectOptions>(OpenIdConnectDefaults.AuthenticationScheme, options =>
             options.Events.OnTokenValidated = async context => {
                 var identity = (ClaimsIdentity?)context?.Principal?.Identity;
