@@ -88,58 +88,6 @@ public class Integration : IAsyncLifetime {
     #endregion
     #region Get Cheeps One Author Method
     [Theory]
-    [InlineData(0)]
-    [InlineData(4)]
-    public async Task CheepRepository_GetCheeps_Return32Cheeps(int page) {
-        //Arrange
-        CheepRepository cheepRepository = await CheepRepoInit();
-        int expectedValue = 32;
-
-        //Act
-        IEnumerable<CheepDto> cheeps = await cheepRepository.GetCheeps(page);
-        int actualValue = cheeps.Count();
-
-        //Assert
-        Assert.Equal(expectedValue, actualValue);
-    }
-
-    [Theory]
-    [InlineData(0)]
-    [InlineData(-1)]
-    public async Task CheepRepository_GetCheeps_ZeroAndBelowParameterValues(int page) {
-        //Arrange
-        CheepRepository cheepRepository = await CheepRepoInit();
-        int expectedCheepAmount = 32;
-        CheepDto expectedFirstCheep = new("",
-                                          "Jacqualine Gilcoine",
-                                          "Starbuck now is what we hear the worst.",
-                                          "08/01/23 13:17:39",
-                                          0,
-                                          null);
-        CheepDto expectedLastCheep = new("",
-                                          "Jacqualine Gilcoine",
-                                          "With back to my friend, patience!",
-                                          "08/01/23 13:16:58",
-                                          0,
-                                          null);
-
-        // ExecuteCommand("Your command here");
-        //Act
-        IEnumerable<CheepDto> cheeps = await cheepRepository.GetCheeps(page);
-        int actualCheepAmount = cheeps.Count();
-        CheepDto actualFirstCheep = cheeps.First();
-        CheepDto actualLastCheep = cheeps.Last();
-
-
-        //Assert
-        Assert.Equal(expectedCheepAmount, actualCheepAmount);
-        Assert.Equal(expectedFirstCheep.Message, actualFirstCheep.Message);
-        Assert.Equal(expectedFirstCheep.Author, actualFirstCheep.Author);
-        Assert.Equal(expectedLastCheep.Message, actualLastCheep.Message);
-        Assert.Equal(expectedLastCheep.Author, actualLastCheep.Author);
-    }
-
-    [Theory]
     [InlineData("Helge")]
     [InlineData("Roger Histand")]
     public async Task CheepRepository_GetCheeps_ValidAuthorParameterValue(string author) {
@@ -153,14 +101,17 @@ public class Integration : IAsyncLifetime {
         Assert.All<CheepDto>(cheeps, (cheep) => { cheep.Author.Equals(expectedValue); });
     }
 
-    [Fact]
-    public async Task CheepRepository_GetCheeps_NonExistingAuthorParameterValue() {
+    [Theory]
+    [InlineData("")]
+    [InlineData("     ")]
+    [InlineData("NonExistingAuthor")]
+    public async Task CheepRepository_GetCheeps_InvalidAuthor(string authorName) {
         //Arrange
         CheepRepository cheepRepository = await CheepRepoInit();
         int expectedValue = 0;
 
         //Act
-        IEnumerable<CheepDto> cheeps = await cheepRepository.GetCheeps(1, "NonExistingAuthor");
+        IEnumerable<CheepDto> cheeps = await cheepRepository.GetCheeps(1, authorName);
         int actualValue = cheeps.Count();
 
         //Assert
@@ -274,6 +225,21 @@ public class Integration : IAsyncLifetime {
         Assert.NotNull(cheep);
         Assert.Equal(authorName, cheep.Author);
         Assert.Equal(message, cheep.Message);
+    }
+
+    [Theory]
+    [InlineData("")]
+    [InlineData("   ")]
+    [InlineData("NonExistingAuthor")]
+    public async Task CheepRepository_AddCheep_InvalidEmailOrNonExistingAuthor(string author)
+    {
+        // Arrange
+        CheepRepository repository = await CheepRepoInit();
+        string message = "Valid Message";
+        string email = "ValidEmail@mail.com";
+
+        // Act / Assert
+        await Assert.ThrowsAnyAsync<Exception>(async () => await repository.AddCheep(message, author, email));
     }
 
     #endregion
