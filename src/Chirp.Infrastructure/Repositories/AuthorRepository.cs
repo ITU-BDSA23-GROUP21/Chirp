@@ -24,18 +24,21 @@ public class AuthorRepository : IAuthorRepository {
             .FirstAsync();
     }
     public async Task CreateAuthor(AuthorDto author) {
-        await _dbContext.Authors.AddAsync(new Author() {
-            Id = Guid.NewGuid(),
-            Email = author.Email,
-            Name = author.Name,
-            Cheeps = new List<Cheep>(),
-            Followers = new List<Author>(),
-            Following = new List<Author>()
-        }
+        var authorExists = await _dbContext.Authors.AnyAsync(a => a.Email == author.Email);
+
+        if (!authorExists) {
+            await _dbContext.Authors.AddAsync(new Author() {
+                Id = Guid.NewGuid(),
+                Email = author.Email,
+                Name = author.Name,
+                Cheeps = new List<Cheep>(),
+                Followers = new List<Author>(),
+                Following = new List<Author>()
+            }
         );
         _dbContext.SaveChanges();
+        }
     }
-
 
     public async Task<IEnumerable<AuthorDto>> GetFollowings(string name, string email) {
         var author = await _dbContext.Authors

@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
 using System.Runtime.InteropServices;
+using System.Security.Authentication;
+using System.Security.Claims;
 
 namespace Chirp.Razor;
 
@@ -48,6 +50,20 @@ public class Program {
         .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAdB2C"));
         builder.Services.AddRazorPages()
         .AddMicrosoftIdentityUI();
+        builder.Services.Configure<OpenIdConnectOptions>(OpenIdConnectDefaults.AuthenticationScheme, options =>
+            options.Events.OnTokenValidated = async context => {
+                var identity = (ClaimsIdentity?)context?.Principal?.Identity;
+                var name = identity?.Name;
+                var email = identity?.Claims?.Where(c => c.Type == "emails").FirstOrDefault()?.Value;
+
+                if (name == null || email == null || context == null) {
+                    throw new AuthenticationException("Login failed");
+                }
+
+                var authorRepo = context.HttpContext.RequestServices.GetRequiredService<IAuthorRepository>();
+                await authorRepo.CreateAuthor(new AuthorDto(name, email));
+            }
+        );
 
         var app = builder.Build();
 
