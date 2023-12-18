@@ -1,7 +1,7 @@
 namespace Chirp.Infrastructure;
 /// <summary>
 /// Entity that represents a user in the system.
-/// <para> Authors can write, like and dislike cheeps, aswell as follow and be followed by other authors.</para>
+/// <para> Authors can write, like and dislike cheeps, as well as follow and be followed by other authors.</para>
 /// </summary>
 public class Author {
 
@@ -29,7 +29,7 @@ public class Author {
     public ICollection<Like> Likes {get; set; }
     
     /// <summary>
-    /// This constructor initalizes the <see cref="Likes"/> collection to a new list.
+    /// This constructor initializes the <see cref="Likes"/> collection to a new list.
     /// </summary>
     public Author() {
         Likes = new List<Like>();

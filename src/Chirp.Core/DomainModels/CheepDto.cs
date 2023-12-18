@@ -8,7 +8,7 @@
 /// </summary>
 /// <param name="Id">Id of the cheep.</param>
 /// <param name="Author">Name of the author that this cheep is written by.</param>
-/// <param name="Message">The context of the cheep.</param>
+/// <param name="Message">The content of the cheep.</param>
 /// <param name="Timestamp">The time which the cheep was made.</param>
 /// <param name="LikeCount">Combination of likes and dislikes the cheep has, expressed in a single number.</param>
 /// <param name="LikedByUser">Used to check if the cheep is liked by the authorized user. <para>Is true if liked, false if disliked, and null if neither.</para> </param>
