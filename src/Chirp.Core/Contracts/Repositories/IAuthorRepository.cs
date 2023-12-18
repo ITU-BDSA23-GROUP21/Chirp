@@ -1,5 +1,7 @@
 namespace Chirp.Core;
-
+/// <summary>
+/// 
+/// </summary>
 public interface IAuthorRepository {
     Task<AuthorDto> GetAuthorByName(string name);
     Task<AuthorDto> GetAuthorByEmail(string email);

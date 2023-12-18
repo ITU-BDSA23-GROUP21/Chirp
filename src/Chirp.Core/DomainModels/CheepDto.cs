@@ -12,5 +12,5 @@
 /// <param name="Message">The context of the cheep.</param>
 /// <param name="Timestamp">The time which the cheep was made.</param>
 /// <param name="LikeCount">Combination of likes and dislikes the cheep has, expresed in a single number.</param>
-/// <param name="LikedByUser">Used to check if the cheep is liked by the authorized user. Is true if liked, false if disliked, and null if neither.</param>
+/// <param name="LikedByUser">Used to check if the cheep is liked by the authorized user. <para>Is true if liked, false if disliked, and null if neither.</para> </param>
 public record CheepDto(string Id, string Author, string Message, string Timestamp, int LikeCount, bool? LikedByUser);
