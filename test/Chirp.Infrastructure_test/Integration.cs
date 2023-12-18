@@ -47,10 +47,10 @@ public class Integration : IAsyncLifetime {
     {
         // Arrange
         CheepRepository repository = await CheepRepoInit();
-        int pagenr = 1;
+        int pagenr = 2;
         int expectedCheepCount = 32;
-        string expectedFirstCheep = "Starbuck now is what we hear the worst.";
-        string expectedLastCheep = "With back to my friend, patience!";
+        string expectedFirstCheep = "In the morning of the wind, some few splintered planks, of what present avail to him.";
+        string expectedLastCheep = "He walked slowly back the lid.";
     
         // Act
         IEnumerable<CheepDto> cheeps = await repository.GetCheeps(pagenr);
@@ -69,10 +69,21 @@ public class Integration : IAsyncLifetime {
     public async Task CheepRepository_GetCheepsNoAuthor_NegativeAndZeroPageNr(int pagenr)
     {
         // Arrange
+        CheepRepository repository = await CheepRepoInit();
+        int expectedCheepCount = 32;
+        string expectedFirstCheep = "Starbuck now is what we hear the worst.";
+        string expectedLastCheep = "With back to my friend, patience!";
     
         // Act
+        IEnumerable<CheepDto> cheeps = await repository.GetCheeps(pagenr);
+        int actualCheepCount = cheeps.Count();
+        string actualFirstCheep = cheeps.First().Message;
+        string actualLastCheep = cheeps.Last().Message;
     
         // Assert
+        Assert.Equal(expectedCheepCount, actualCheepCount);
+        Assert.Equal(expectedFirstCheep, actualFirstCheep);
+        Assert.Equal(expectedLastCheep, actualLastCheep);;
     }
     #endregion
     #region Get Cheeps One Author Method
