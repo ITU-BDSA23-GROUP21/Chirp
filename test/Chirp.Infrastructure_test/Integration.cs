@@ -256,11 +256,8 @@ public class Integration : IAsyncLifetime {
         var repository = await AuthorRepoInit();
         string author = "New Author";
 
-        //Act
-        await repository.CreateAuthor(new AuthorDto(author, email));
-
-        //Assert
-        await Assert.ThrowsAsync<InvalidOperationException>(async () => await repository.GetAuthorByName(author));
+        // Act / Assert
+        await Assert.ThrowsAsync<InvalidOperationException>(async () => await repository.CreateAuthor(new AuthorDto(author, email)));
     }
 
     [Fact]
@@ -287,10 +284,8 @@ public class Integration : IAsyncLifetime {
         var repository = await AuthorRepoInit();
         string email = "validemail@gmail.com";
 
-        //Act
-        await repository.CreateAuthor(new AuthorDto(authorName, email));
-        //Assert
-        await Assert.ThrowsAsync<InvalidOperationException>(async () => await repository.GetAuthorByEmail(email));
+        //Act / Assert
+        await Assert.ThrowsAsync<InvalidOperationException>(async () => await repository.CreateAuthor(new AuthorDto(authorName, email)));
     }
 
     [Fact]

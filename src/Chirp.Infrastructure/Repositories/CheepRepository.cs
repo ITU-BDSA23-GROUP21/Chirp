@@ -6,7 +6,7 @@ namespace Chirp.Infrastructure;
 
 public class CheepRepository : ICheepRepository {
     private readonly ChirpContext _dbContext;
-    private readonly NewCheepValidator newCheepValidator = new();
+    private readonly CheepValidator _cheepValidator = new();
 
     public CheepRepository(ChirpContext dbContext) =>
         _dbContext = dbContext;
@@ -60,7 +60,7 @@ public class CheepRepository : ICheepRepository {
             // Using local datetime will give the wrong time since the servers local time is not equal to ours.
             // This is a temporary workaround, that will not work if the servers or users change timezone
         };
-        ValidationResult results = newCheepValidator.Validate(cheep);
+        ValidationResult results = _cheepValidator.Validate(cheep);
         if (results.IsValid) {
             await _dbContext.Cheeps.AddAsync(cheep);
             _dbContext.SaveChanges();
@@ -99,9 +99,8 @@ public class CheepRepository : ICheepRepository {
     }
 }
 
-
-public class NewCheepValidator : AbstractValidator<Cheep> {
-    public NewCheepValidator() {
+public class CheepValidator : AbstractValidator<Cheep> {
+    public CheepValidator() {
         RuleFor(x => x.Id).NotEmpty();
         RuleFor(x => x.AuthorId).NotEmpty();
         RuleFor(x => x.Author).NotEmpty();

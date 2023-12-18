@@ -1,11 +1,12 @@
 using Chirp.Core;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 
 namespace Chirp.Infrastructure;
 
 public class AuthorRepository : IAuthorRepository {
-
     private readonly ChirpContext _dbContext;
+    private readonly AuthorValidator _authorValidator = new();
     public AuthorRepository(ChirpContext dbContext) => _dbContext = dbContext;
 
     public Task<AuthorDto> GetAuthorByName(string name) {
@@ -27,16 +28,23 @@ public class AuthorRepository : IAuthorRepository {
         var authorExists = await _dbContext.Authors.AnyAsync(a => a.Email == author.Email);
 
         if (!authorExists) {
-            await _dbContext.Authors.AddAsync(new Author() {
+            var dbAuthor = new Author() {
                 Id = Guid.NewGuid(),
                 Email = author.Email,
                 Name = author.Name,
                 Cheeps = new List<Cheep>(),
                 Followers = new List<Author>(),
                 Following = new List<Author>()
+            };
+
+            var results = _authorValidator.Validate(dbAuthor);
+
+            if (results.IsValid) {
+                await _dbContext.Authors.AddAsync(dbAuthor);
+                _dbContext.SaveChanges();
+            } else {
+                throw new InvalidOperationException("Invalid name or email for author");
             }
-        );
-        _dbContext.SaveChanges();
         }
     }
 
@@ -95,5 +103,13 @@ public class AuthorRepository : IAuthorRepository {
         author.Email = guid.ToString("D");
 
         _dbContext.SaveChanges();
+    }
+}
+
+public class AuthorValidator : AbstractValidator<Author> {
+    public AuthorValidator() {
+        RuleFor(x => x.Id).NotEmpty();
+        RuleFor(x => x.Name).NotEmpty();
+        RuleFor(x => x.Email).EmailAddress();
     }
 }
