@@ -450,6 +450,18 @@ public class Integration : IAsyncLifetime {
         //Assert
         Assert.Equal(expectedAuthor, actualAuthor);
     }
+    [Theory]
+    [InlineData("")]
+    [InlineData("   ")]
+    [InlineData("NonexistingAuthor@gmail.com")]
+    public async Task AuthorRepository_GetAuthorByEmail_InvalidOrNonExsistingAuthor(string userEmail)
+    {
+        // Arrange
+        AuthorRepository repository = await AuthorRepoInit();
+
+        // Act / Assert
+        await Assert.ThrowsAnyAsync<Exception>(async () => await repository.GetAuthorByEmail(userEmail));
+    }
     #endregion
     #region Follow Method
     //Is this too complex for an integration test?
