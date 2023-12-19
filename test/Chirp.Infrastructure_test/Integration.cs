@@ -563,7 +563,18 @@ public class Integration : IAsyncLifetime {
     }
     #endregion
     #region Anonymize Method
+    [Theory]
+    [InlineData("")]
+    [InlineData("   ")]
+    [InlineData("InvalidAuthor")]
+    public async Task AuthorRepository_Anonymize_InvalidOrNonexistingAuthorName(string authorName)
+    {
+        // Arrange
+        AuthorRepository repository = await AuthorRepoInit();
 
+        //Act / Assert
+        await Assert.ThrowsAnyAsync<Exception>(async () => await repository.Anonymize(authorName));
+    }
     #endregion
     #endregion
 }
