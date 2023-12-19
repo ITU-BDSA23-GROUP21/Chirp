@@ -65,5 +65,8 @@ Prerequisites:
 
 ## License
 This application uses the MIT license. For the full license agreement, see https://github.com/ITU-BDSA23-GROUP21/Chirp/blob/main/LICENSE
+
+<!-- Should we write some considerations of how the packages we use impacts our choice of license?
+     And have we confirmed that MIT license is OK with all the packages we added later on? -->
 ## LLMs, ChatGPT, CoPilot, and others
 No LLMs were used in the development of this application.
