@@ -104,7 +104,7 @@ public class CheepRepository : ICheepRepository {
 
 /// <summary>
 /// This validator is used when adding cheeps
-/// Used to make sure, no cheep that would violate the database criteria of a cheep are added.
+/// Used to make sure, no cheeps that would violate the database criteria of a cheep are added.
 /// If the validation fails the error message is also used to tell the user what was wrong about the cheep
 /// </summary>
 public class CheepValidator : AbstractValidator<Cheep> {
