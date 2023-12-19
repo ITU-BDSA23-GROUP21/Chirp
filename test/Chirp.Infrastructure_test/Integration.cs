@@ -257,6 +257,40 @@ public class Integration : IAsyncLifetime {
         //Act
         await Assert.ThrowsAsync<InvalidOperationException>(async () => await repository.LikeCheep(email, cheepId, true));
     }
+    [Theory]
+    [InlineData("")]
+    [InlineData("    ")]
+    [InlineData("23r23ffgws3bvb5k8954")]
+    public async Task CheepRepository_LikeCheep_InvalidCheepId(string id)
+    {
+        // Arrange 
+        CheepRepository repository = await CheepRepoInit();
+        string email = "Jacqualine.Gilcoine@gmail.com";
+        bool value = true;
+
+        // Act / Assert
+        await Assert.ThrowsAnyAsync<Exception>(async () => await repository.LikeCheep(email, id, value));
+    }
+    [Theory]
+    [InlineData(true)]
+    [InlineData(false)]
+    public async Task CheepRepository_LikeCheep_ValidUserEmailValidCheepId(bool value)
+    {
+        // Arrange
+        CheepRepository repository = await CheepRepoInit();
+        string email = "Octavio.Wagganer@dtu.dk";
+        IEnumerable<CheepDto> arrangecheeps = await repository.GetCheeps(1);
+        string cheepId = arrangecheeps.First().Id;
+        int expectedLikeValue = value ? 1 : -1;
+
+        // Act
+        await repository.LikeCheep(email, cheepId, value);
+        IEnumerable<CheepDto> cheeps = await repository.GetCheeps(1);
+        int actualLikeValue = cheeps.First().LikeCount;
+
+        // Assert
+        Assert.Equal(expectedLikeValue, actualLikeValue);
+    }
 
     #endregion
     #region Remove Like Method
