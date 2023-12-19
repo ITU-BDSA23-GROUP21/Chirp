@@ -4,7 +4,7 @@
 // as the frontend can now request to like a cheep by id, instead of by (author, message, timestamp)
 
 /// <summary>
-/// Stores and transfers the necessary data of a cheep from the database to the frontend.
+/// Stores and transfers the necessary data of a cheep from the database to the frontend and vice versa.
 /// </summary>
 /// <param name="Id">Id of the cheep.</param>
 /// <param name="Author">Name of the author that this cheep is written by.</param>
