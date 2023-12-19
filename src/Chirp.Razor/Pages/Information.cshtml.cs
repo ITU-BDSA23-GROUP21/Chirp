@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Chirp.Razor.Pages;
 
+/// <summary>
+/// Class that gathers information about the authorized user
+/// </summary>
 public class InformationModel : TimelineModel {
     public InformationModel(ICheepService cheepService, IAuthorService authorService) : base(cheepService, authorService) {
     }
