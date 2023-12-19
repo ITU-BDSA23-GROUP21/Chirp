@@ -87,6 +87,10 @@ public class AuthorRepository : IAuthorRepository {
         _dbContext.SaveChanges();
     }
 
+    /// <summary>
+    /// Authors can delete their information from the system
+    /// In this implementation users are anonymized by changing any identifiable information about the author
+    /// </summary>
     public async Task Anonymize(string name) {
         var author = await _dbContext.Authors
             .Where(author => author.Name == name)
@@ -100,6 +104,11 @@ public class AuthorRepository : IAuthorRepository {
     }
 }
 
+/// <summary>
+/// This validator is used when creating an author
+/// Used to make sure, no author that would violate the database criteria of a author are added.
+/// If the validation fails the error message is also used to tell the user what was wrong about the author
+/// </summary>
 public class AuthorValidator : AbstractValidator<Author> {
     public AuthorValidator() {
         RuleFor(x => x.Id).NotEmpty();

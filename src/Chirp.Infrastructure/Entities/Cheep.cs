@@ -1,7 +1,7 @@
 namespace Chirp.Infrastructure;
 /// <summary>
 /// Entity that represents a cheep in the Chirp application
-/// <para> Cheeps are a message to the system created by a user</para>
+/// <para> Cheeps are a message to the system created by an author</para>
 /// </summary>
 public class Cheep {
 
