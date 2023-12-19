@@ -322,6 +322,29 @@ public class Integration : IAsyncLifetime {
         // Act / Assert
         await Assert.ThrowsAnyAsync<Exception>(async () => await repository.RemoveLike(userEmail, cheepId));
     }
+    [Fact]
+    public async Task CheepRepository_RemoveLike_ValidUserEmailValidCheepId()
+    {
+        // Arrange
+        CheepRepository repository = await CheepRepoInit();
+        string userEmail = "Octavio.Wagganer@dtu.dk";
+        IEnumerable<CheepDto> cheeps = await repository.GetCheeps(1);
+        string cheepId = cheeps.First().Id;
+        int expectedBeforeRemoveLikeValue = 1;
+        int expectedAfterRemoveLikeValue = 0;
+    
+        // Act
+        await repository.LikeCheep(userEmail, cheepId, true);
+        cheeps = await repository.GetCheeps(1);
+        int actualBeforeRemoveLikeValue = cheeps.First().LikeCount;
+        await repository.RemoveLike(userEmail, cheepId);
+        cheeps = await repository.GetCheeps(1);
+        int actualAfterRemoveLikeValue = cheeps.First().LikeCount;
+    
+        // Assert
+        Assert.Equal(expectedBeforeRemoveLikeValue, actualBeforeRemoveLikeValue);
+        Assert.Equal(expectedAfterRemoveLikeValue, actualAfterRemoveLikeValue);
+    }
 
     #endregion
     #endregion
