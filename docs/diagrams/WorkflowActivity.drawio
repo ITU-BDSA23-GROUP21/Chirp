@@ -1,0 +1,91 @@
+<mxfile host="Electron" modified="2023-12-19T20:24:57.890Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/22.1.11 Chrome/114.0.5735.289 Electron/25.9.8 Safari/537.36" etag="denw9ao0J2AoDyqGB8iM" version="22.1.11" type="device">
+  <diagram name="Page-1" id="e7e014a7-5840-1c2e-5031-d8a46d1fe8dd">
+    <mxGraphModel dx="1209" dy="712" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="826" background="none" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="2" value="Deployment Workflow" style="swimlane;whiteSpace=wrap" parent="1" vertex="1">
+          <mxGeometry x="164.5" y="129" width="355.5" height="568" as="geometry" />
+        </mxCell>
+        <mxCell id="MHm179DWreYHlqSRU-fq-42" value="Setup dotnet" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fontColor=#000000;fillColor=#ffffc0;strokeColor=#ff0000;" parent="2" vertex="1">
+          <mxGeometry x="45.5" y="151" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="MHm179DWreYHlqSRU-fq-43" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;verticalAlign=bottom;endArrow=open;endSize=8;strokeColor=#ff0000;rounded=0;" parent="2" source="MHm179DWreYHlqSRU-fq-42" target="MHm179DWreYHlqSRU-fq-45" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="105.5" y="271" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="jF7VHnY57FPTMTN_mjNJ-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#FF0000;" parent="2" source="MHm179DWreYHlqSRU-fq-45" target="MHm179DWreYHlqSRU-fq-47" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="MHm179DWreYHlqSRU-fq-45" value="Build Application" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fontColor=#000000;fillColor=#ffffc0;strokeColor=#ff0000;" parent="2" vertex="1">
+          <mxGeometry x="45.5" y="231" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="MHm179DWreYHlqSRU-fq-47" value="Publish Application" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fontColor=#000000;fillColor=#ffffc0;strokeColor=#ff0000;" parent="2" vertex="1">
+          <mxGeometry x="45.5" y="301" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="MHm179DWreYHlqSRU-fq-50" value="Dotnet tasks" style="shape=note2;boundedLbl=1;whiteSpace=wrap;html=1;size=25;verticalAlign=top;align=center;" parent="2" vertex="1">
+          <mxGeometry x="225.5" y="251" width="100" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="MHm179DWreYHlqSRU-fq-52" value="Publish release to GitHub" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fontColor=#000000;fillColor=#ffffc0;strokeColor=#ff0000;" parent="2" vertex="1">
+          <mxGeometry x="45.5" y="381" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="MHm179DWreYHlqSRU-fq-46" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#FF0000;" parent="2" source="MHm179DWreYHlqSRU-fq-47" target="MHm179DWreYHlqSRU-fq-52" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="MHm179DWreYHlqSRU-fq-53" value="Deploy to Azure App Service" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fontColor=#000000;fillColor=#ffffc0;strokeColor=#ff0000;" parent="2" vertex="1">
+          <mxGeometry x="45.5" y="461" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="MHm179DWreYHlqSRU-fq-51" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#FF0000;" parent="2" source="MHm179DWreYHlqSRU-fq-52" target="MHm179DWreYHlqSRU-fq-53" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="MHm179DWreYHlqSRU-fq-63" value="" style="endArrow=none;dashed=1;html=1;rounded=0;" parent="2" source="MHm179DWreYHlqSRU-fq-50" target="MHm179DWreYHlqSRU-fq-45" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="375.5" y="201" as="sourcePoint" />
+            <mxPoint x="425.5" y="151" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="MHm179DWreYHlqSRU-fq-66" value="" style="endArrow=none;dashed=1;html=1;rounded=0;" parent="2" source="MHm179DWreYHlqSRU-fq-50" target="MHm179DWreYHlqSRU-fq-47" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="375.5" y="201" as="sourcePoint" />
+            <mxPoint x="425.5" y="151" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="jF7VHnY57FPTMTN_mjNJ-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#FF0000;" parent="2" source="MHm179DWreYHlqSRU-fq-67" target="MHm179DWreYHlqSRU-fq-42" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="MHm179DWreYHlqSRU-fq-67" value="" style="ellipse;html=1;shape=startState;fillColor=#000000;strokeColor=#ff0000;" parent="2" vertex="1">
+          <mxGeometry x="90.5" y="81" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="3" value="Test Workflow" style="swimlane;whiteSpace=wrap;fillColor=default;" parent="1" vertex="1">
+          <mxGeometry x="700" y="129" width="280" height="570" as="geometry">
+            <mxRectangle x="710" y="127" width="90" height="30" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="MHm179DWreYHlqSRU-fq-69" value="Setup dotnet" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fontColor=#000000;fillColor=#ffffc0;strokeColor=#ff0000;" parent="3" vertex="1">
+          <mxGeometry x="40" y="151" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="MHm179DWreYHlqSRU-fq-70" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;verticalAlign=bottom;endArrow=open;endSize=8;strokeColor=#ff0000;rounded=0;" parent="3" source="MHm179DWreYHlqSRU-fq-69" target="MHm179DWreYHlqSRU-fq-71" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="100" y="271" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="MHm179DWreYHlqSRU-fq-75" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#FF0000;" parent="3" source="MHm179DWreYHlqSRU-fq-71" target="MHm179DWreYHlqSRU-fq-74" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="MHm179DWreYHlqSRU-fq-71" value="Build Application" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fontColor=#000000;fillColor=#ffffc0;strokeColor=#ff0000;" parent="3" vertex="1">
+          <mxGeometry x="40" y="231" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="jF7VHnY57FPTMTN_mjNJ-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#FF0000;" parent="3" source="MHm179DWreYHlqSRU-fq-72" target="MHm179DWreYHlqSRU-fq-69" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="MHm179DWreYHlqSRU-fq-72" value="" style="ellipse;html=1;shape=startState;fillColor=#000000;strokeColor=#ff0000;" parent="3" vertex="1">
+          <mxGeometry x="85" y="82" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="MHm179DWreYHlqSRU-fq-74" value="Test Applicaiton" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fontColor=#000000;fillColor=#ffffc0;strokeColor=#ff0000;" parent="3" vertex="1">
+          <mxGeometry x="40" y="311" width="120" height="40" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
