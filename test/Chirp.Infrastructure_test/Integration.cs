@@ -531,8 +531,11 @@ public class Integration : IAsyncLifetime {
         // Arrange
         AuthorRepository repository = await AuthorRepoInit();
 
-        //Act / Assert
-        await Assert.ThrowsAnyAsync<Exception>(async () => await repository.GetFollowings(authorName));
+        //Act
+        IEnumerable<AuthorDto> authors = await repository.GetFollowings(authorName); 
+        
+        // Assert
+        Assert.Empty(authors);
     }
     #endregion
     #region Anonymize Method
@@ -554,16 +557,16 @@ public class Integration : IAsyncLifetime {
         // Arrange
         AuthorRepository repository = await AuthorRepoInit();
         CheepRepository cheepRepository = await CheepRepoInit();
-        string expectedBeforeAuthor = "Jacqualine.Gilcoine@gmail.com";
+        string expectedBeforeAuthor = "Jacqualine Gilcoine";
         int expectedAfterCheepCount = 0;
 
         // Act
         IEnumerable<CheepDto> cheeps = await cheepRepository.GetCheeps(1);
         string actualBeforeAuthor = cheeps.First().Author;
-        await repository.Anonymize("Jacqualine.Gilcoine@gmail.com");
+        await repository.Anonymize("Jacqualine Gilcoine");
         cheeps = await cheepRepository.GetCheeps(1);
         string actualAfterAuthor = cheeps.First().Author;
-        cheeps = await cheepRepository.GetCheeps(1, "Jacqualine.Gilcoine@gmail.com");
+        cheeps = await cheepRepository.GetCheeps(1, "Jacqualine Gilcoine");
         int actualAfterCheepCount = cheeps.Count();
 
         // Assert
