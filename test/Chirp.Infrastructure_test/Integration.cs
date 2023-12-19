@@ -318,6 +318,9 @@ public class Integration : IAsyncLifetime {
         // Arrange
         CheepRepository repository = await CheepRepoInit();
         string userEmail = "Jacqualine.Gilcoine@gmail.com";
+
+        // Act / Assert
+        await Assert.ThrowsAnyAsync<Exception>(async () => await repository.RemoveLike(userEmail, cheepId));
     }
 
     #endregion
