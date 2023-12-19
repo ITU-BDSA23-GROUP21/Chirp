@@ -1,7 +1,8 @@
 namespace Chirp.Infrastructure;
 /// <summary>
 /// Entity that represents a user of the Chirp application
-/// <para> Authors can write, like and dislike cheeps, as well as follow and be followed by other authors.</para>
+/// <para> Authors can write, like and dislike cheeps, as well as follow and be followed by other authors </para>
+/// <para> All users of the program are made as an author entity when they are authorized for the first time</para>
 /// </summary>
 public class Author {
 
