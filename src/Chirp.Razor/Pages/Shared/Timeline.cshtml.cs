@@ -39,8 +39,8 @@ public abstract class TimelineModel : PageModel {
 
     public async Task<IActionResult> OnPostAsync() {
         string? message = Request.Form["NewMessage"];
-        if (message != null && User.Identity?.Name != null && Email != null) {
-            ValidationResult task = await _cheepService.AddCheep(message, User.Identity.Name, Email);
+        if (message != null && User.Identity?.Name != null) {
+            ValidationResult task = await _cheepService.AddCheep(message, User.Identity.Name);
             HandleClientValidation(task);
         }
         await LoadPage();

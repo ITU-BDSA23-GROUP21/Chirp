@@ -8,7 +8,7 @@ namespace Chirp.Razor;
 public interface ICheepService {
     public Task<List<CheepDto>> GetCheeps(int page = 1, string? userEmail = null);
     public Task<List<CheepDto>> GetCheepsFromAuthors(IEnumerable<string> authors, int page = 1, string? userEmail = null);
-    public Task<ValidationResult> AddCheep(string message, string authorName, string email);
+    public Task<ValidationResult> AddCheep(string message, string authorName);
     public Task LikeCheep(string userEmail, string cheepId, bool like);
     public Task RemoveLike(string userEmail, string cheepId);
 }
@@ -27,8 +27,8 @@ public class CheepService : ICheepService {
         return _cheepRepository.GetCheeps(page, authors, userEmail);
     }
 
-    public async Task<ValidationResult> AddCheep(string message, string authorName, string email) {
-        return await _cheepRepository.AddCheep(message, authorName, email);
+    public async Task<ValidationResult> AddCheep(string message, string authorName) {
+        return await _cheepRepository.AddCheep(message, authorName);
     }
 
     public async Task LikeCheep(string userEmail, string cheepId, bool like) {
