@@ -42,12 +42,6 @@ Prerequisites:
 - Git
 - Docker Desktop
 
-1. Clone the project from the main branch on https://github.com/ITU-BDSA23-GROUP21/Chirp.
-1. Create an MSSQL database. The program is only tested using Docker Desktop, but a local SQL server installation *should* work as well.
-    - Due to hardware issues on some Mac computers, you must create a Postgres database instead if you are running OSX.
-1. In the user secrets for the Chirp.Razor project, add the connection string to the database. They key for the secret must be *ConnectionString*
-1. Run the Chirp.Razor project using the Dotnet CLI 
-
 1. Clone our Chirp project from teh main branch on its github page at https://github.com/ITU-BDSA23-GROUP21/Chirp.  
 2. If you do not have Docker Desktop installed then follow the steps on their [website](https://www.docker.com/products/docker-desktop/) to download and install Docker Dekstop.  
 3. Open the terminal and pull the Docker Image of Microsoft Sql Server with the command  
