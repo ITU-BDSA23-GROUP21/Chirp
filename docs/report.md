@@ -39,6 +39,17 @@ The **deployment workflow** is triggered by pushing a tag to the main branch, th
 
 ## Team work
 
+# Unresolved tasks
+- [217](https://github.com/ITU-BDSA23-GROUP21/Chirp/issues/217): We were not able to get our e2e UI tests running in our GitHub Actions workflow yet. This should be fixed, so they will be integrated into our automatic testing, and we can be certain that all code in the main branch has passed the tests.
+- [208](https://github.com/ITU-BDSA23-GROUP21/Chirp/issues/208): When anonymizing a user after they click "Forget about me", we do not delete the user entry in our Azure AD B2C. Ideally the user should also be deleted there, but it was not considered a high priority to implement at this point.
+- [196](https://github.com/ITU-BDSA23-GROUP21/Chirp/issues/196): Every time the user interacts with the page, the page is reloaded. I.e. when a user follows another user, or likes a cheep, the page is reloaded, and they lose their position on the page. This is not a great user experience, but as the system is still usable, it was considered a higher priority to fully implement the other features.
+
+<!-- - [44](https://github.com/ITU-BDSA23-GROUP21/Chirp/issues/44): Workflow stuff. Should be closed as will not be done?
+- [204](https://github.com/ITU-BDSA23-GROUP21/Chirp/issues/204): Page numbers. Could be added?
+- [114](https://github.com/ITU-BDSA23-GROUP21/Chirp/issues/114): Unit tests. This can't really be left here?
+- [211](https://github.com/ITU-BDSA23-GROUP21/Chirp/issues/211): In code documentation. Should be closed before hand-in. -->
+
+
 ## How to make _Chirp!_ work locally
 Prerequisites:
 - Dotnet
