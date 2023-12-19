@@ -294,7 +294,31 @@ public class Integration : IAsyncLifetime {
 
     #endregion
     #region Remove Like Method
-
+    [Theory]
+    [InlineData("")]
+    [InlineData("   ")]
+    [InlineData("invalidemail")]
+    [InlineData("Nonexisting@email.com")]
+    public async Task CheepRepository_RemoveLike_InvalidUserEmail(string userEmail)
+    {
+        // Arrange
+        CheepRepository repository = await CheepRepoInit();
+        IEnumerable<CheepDto> cheeps = await repository.GetCheeps(1);
+        string cheepId = cheeps.First().Id;
+        
+        // Act / Assert
+        await Assert.ThrowsAnyAsync<Exception>(async () => await repository.RemoveLike(userEmail, cheepId));
+    }
+    [Theory]
+    [InlineData("")]
+    [InlineData("   ")]
+    [InlineData("ikbr3b33k3qdfkq2")]
+    public async Task CheepRepository_RemoveLike_InvalidCheepId(string cheepId)
+    {
+        // Arrange
+        CheepRepository repository = await CheepRepoInit();
+        string userEmail = "Jacqualine.Gilcoine@gmail.com";
+    }
 
     #endregion
     #endregion
