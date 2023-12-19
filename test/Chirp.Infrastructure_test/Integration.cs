@@ -524,6 +524,29 @@ public class Integration : IAsyncLifetime {
         Assert.Equal(expectedTempFollower, actualTempFollower);
         Assert.Empty(actualFollowings);
     }
+    [Theory]
+    [InlineData("", 0)]
+    [InlineData("   ", 0)]
+    [InlineData("NonExistingName", 0)]
+    [InlineData("", 1)]
+    [InlineData("   ", 1)]
+    [InlineData("NonExistingName", 1)]
+    public async Task AuthorRepository_UnFollow_InvalidUsers(string name, int parameter)
+    {
+        // Arrange
+        AuthorRepository repository = await AuthorRepoInit();
+        string validName = "Rasmus";
+
+        //Act / Assert
+        if(parameter == 0)
+        {
+            await Assert.ThrowsAnyAsync<Exception>(async () => await repository.UnFollow(name, validName));
+        }
+        else
+        {
+            await Assert.ThrowsAnyAsync<Exception>(async () => await repository.UnFollow(validName, name));
+        }
+    }
     #endregion
     #region Get Followings Method
 
