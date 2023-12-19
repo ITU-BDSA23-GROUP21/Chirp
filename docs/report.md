@@ -24,7 +24,7 @@ Here comes a description of our domain model.
 
 ## User activities
 
-## Sequence of functionality/calls trough _Chirp!_
+## Sequence of functionality/calls through _Chirp!_
 
 # Process
 
