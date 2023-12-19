@@ -351,7 +351,7 @@ public class Integration : IAsyncLifetime {
     #endregion
     #endregion
     #region Author Repository Tests
-
+    #region Create Author Method
     [Theory]
     [InlineData("")]
     [InlineData("            ")]
@@ -408,7 +408,8 @@ public class Integration : IAsyncLifetime {
         Assert.Equal(authorName, author.Name);
         Assert.Equal(email, author.Email);
     }
-
+    #endregion
+    #region Get Author By Name Method
     [Fact]
     public async Task AuthorRepository_GetAuthorByName_RegisteredAuthor() {
         //Arrange
@@ -422,7 +423,20 @@ public class Integration : IAsyncLifetime {
         //Assert
         Assert.Equal(expectedAuthor, actualAuthor);
     }
+    [Theory]
+    [InlineData("")]
+    [InlineData("   ")]
+    [InlineData("NonexistingAuthor")]
+    public async Task AuthorRepository_GetAuthorByName_InvalidOrNonExsistingAuthor(string authorName)
+    {
+        // Arrange
+        AuthorRepository repository = await AuthorRepoInit();
 
+        // Act / Assert
+        await Assert.ThrowsAnyAsync<Exception>(async () => await repository.GetAuthorByName(authorName));
+    }
+    #endregion
+    #region Get Author By Email Method
     [Fact]
     public async Task AuthorRepository_GetAuthorByEmail_RegisteredAuthor() {
         //Arrange
@@ -436,7 +450,8 @@ public class Integration : IAsyncLifetime {
         //Assert
         Assert.Equal(expectedAuthor, actualAuthor);
     }
-
+    #endregion
+    #region Follow Method
     //Is this too complex for an integration test?
     [Fact]
     public async Task AuthorRepository_Follow_ValidUsers() {
@@ -452,7 +467,8 @@ public class Integration : IAsyncLifetime {
         //Assert
         Assert.Equal(expectedFollower, actualFollower);
     }
-
+    #endregion
+    #region Unfollow Method
     [Fact]
     public async Task AuthorRepository_Unfollow_ValidUsers() {
         //Arrange
@@ -472,6 +488,6 @@ public class Integration : IAsyncLifetime {
         Assert.Equal(expectedTempFollower, actualTempFollower);
         Assert.Empty(actualFollowings);
     }
-
+    #endregion
     #endregion
 }
