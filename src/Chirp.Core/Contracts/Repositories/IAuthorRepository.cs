@@ -10,7 +10,7 @@ public interface IAuthorRepository {
 
     Task UnFollow(string followerName, string followingName);
 
-    Task<IEnumerable<AuthorDto>> GetFollowings(string name, string email);
+    Task<IEnumerable<AuthorDto>> GetFollowings(string name);
 
     Task Anonymize(string name);
 }
