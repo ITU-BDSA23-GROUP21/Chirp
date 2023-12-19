@@ -5,8 +5,20 @@
     Layout = "Shared/_Layout";
 }
 
+@{
+    // This HMTL creates the public timeline of the Chirp application
+    // The public timeline is accessalbe for all users authorized or not
+    // It displays all cheeps distributed over pages containing 32 cheeps each
+    // When users are authorized they can like, dislike and write cheeps from this page
+}
+
+
 <div>
     <h2> Public Timeline </h2>
+
+    @{
+        // Page rendered if the user is authorized.
+    }
 
     @if (User.Identity?.IsAuthenticated == true)
     {
@@ -80,8 +92,9 @@
             <em>There are no cheeps so far.</em>
         }
     }
+    // Page rendered if the user is authorized.
     else if (Model.Cheeps.Any())
-    {
+    {   
         <ul id="messagelist" class="cheeps">
             @foreach (var cheep in Model.Cheeps)
             {

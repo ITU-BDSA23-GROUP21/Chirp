@@ -5,7 +5,9 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Chirp.Razor.Pages;
 
-// Base class that contains code shared between all pages that display a cheep timeline
+/// <summary>
+/// Base class that contains code shared between all pages that display a cheep timeline
+/// </summary>
 public abstract class TimelineModel : PageModel {
 
     protected readonly ICheepService _cheepService;
