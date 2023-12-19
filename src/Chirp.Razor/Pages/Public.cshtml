@@ -41,11 +41,19 @@
             <ul id="messagelist" class="cheeps">
                 @foreach (var cheep in Model.Cheeps)
                 {
+                    @* Check if user is deleted. Check could be moved to repository, as this is unsafe if a user happens to use a guid as their username *@
+                    bool isUserDeleted = Guid.TryParse(@cheep.Author, out _);
                     <li class="box" style="position: relative; padding-bottom: 16px;">
                         <p style="display: inline-block;">
                             <strong>
-                                <a href="/@cheep.Author">@cheep.Author</a>
-                                @if (!cheep.Author.Equals(User.Identity.Name))
+                                @if(isUserDeleted)
+                                {
+                                    <span style="color: grey;">[Deleted User]</span>
+                                }
+                                else {
+                                    <a href="/@cheep.Author">@cheep.Author</a>
+                                }
+                                @if (!cheep.Author.Equals(User.Identity.Name) && !isUserDeleted)
                                 {
                                     <form method="post" style="display: inline-block;">
                                         @if (!Model.IsFollowing(cheep.Author))
@@ -92,7 +100,7 @@
             <em>There are no cheeps so far.</em>
         }
     }
-    // Page rendered if the user is authorized.
+    // Page rendered if the user is not authorized.
     else if (Model.Cheeps.Any())
     {   
         <ul id="messagelist" class="cheeps">
@@ -101,7 +109,13 @@
                 <li style="position: relative; padding-bottom: 16px;">
                     <p>
                         <strong>
-                            <a href="/@cheep.Author">@cheep.Author</a>
+                                @if(Guid.TryParse(@cheep.Author, out _))
+                                {
+                                    <span style="color: grey;">[Deleted User]</span>
+                                }
+                                else {
+                                    <a href="/@cheep.Author">@cheep.Author</a>
+                                }
                         </strong>
                         @cheep.Message
                         <small>&mdash; @cheep.Timestamp</small>
