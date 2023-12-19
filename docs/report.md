@@ -37,11 +37,22 @@ The following diagram shows the three parts of our deployed application.
 ## Team work
 
 ## How to make _Chirp!_ work locally
+Prerequisites:
+- Dotnet
+- Git
+- Docker Desktop
+
+1. Clone the project from the main branch on https://github.com/ITU-BDSA23-GROUP21/Chirp.
+1. Create an MSSQL database. The program is only tested using Docker Desktop, but a local SQL server installation *should* work as well.
+    - Due to hardware issues on some Mac computers, you must create a Postgres database instead if you are running OSX.
+1. In the user secrets for the Chirp.Razor project, add the connection string to the database. They key for the secret must be *ConnectionString*
+1. Run the Chirp.Razor project using the Dotnet CLI 
 
 ## How to run test suite locally
 
 # Ethics
 
 ## License
-
+This application uses the MIT license. For the full license agreement, see https://github.com/ITU-BDSA23-GROUP21/Chirp/blob/main/LICENSE
 ## LLMs, ChatGPT, CoPilot, and others
+No LLMs were used in the development of this application.
