@@ -18,12 +18,6 @@ public class AuthorRepository : IAuthorRepository {
         return author;
 
     }
-    public Task<AuthorDto> GetAuthorByEmail(string email) {
-        return _dbContext.Authors
-            .Where(author => author.Email == email)
-            .Select(author => new AuthorDto(author.Name, author.Email))
-            .FirstAsync();
-    }
     public async Task CreateAuthor(AuthorDto author) {
         var authorExists = await _dbContext.Authors.AnyAsync(a => a.Email == author.Email);
 
