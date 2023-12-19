@@ -473,7 +473,7 @@ public class Integration : IAsyncLifetime {
 
         //Act
         await authorRepository.Follow("Helge", "Rasmus");
-        IEnumerable<AuthorDto> followings = await authorRepository.GetFollowings("Helge", "ropf@itu.dk");
+        IEnumerable<AuthorDto> followings = await authorRepository.GetFollowings("Helge");
         AuthorDto actualFollower = followings.First();
 
         //Assert
@@ -514,11 +514,11 @@ public class Integration : IAsyncLifetime {
         //Act
         await authorRepository.Follow("Helge", "Rasmus");
         //Temp followings are used to ensure that the user was actually followed
-        IEnumerable<AuthorDto> tempFollowings = await authorRepository.GetFollowings("Helge", "ropf@itu.dk");
+        IEnumerable<AuthorDto> tempFollowings = await authorRepository.GetFollowings("Helge");
         AuthorDto actualTempFollower = tempFollowings.First();
 
         await authorRepository.UnFollow("Helge", "Rasmus");
-        IEnumerable<AuthorDto> actualFollowings = await authorRepository.GetFollowings("Helge", "ropf@itu.dk");
+        IEnumerable<AuthorDto> actualFollowings = await authorRepository.GetFollowings("Helge");
 
         //Assert
         Assert.Equal(expectedTempFollower, actualTempFollower);
@@ -549,7 +549,18 @@ public class Integration : IAsyncLifetime {
     }
     #endregion
     #region Get Followings Method
+    [Theory]
+    [InlineData("")]
+    [InlineData("   ")]
+    [InlineData("InavlidAuthorName")]
+    public async Task AuthorRepository_GetFollowings_InvalidAuthorNames(string authorName)
+    {
+        // Arrange
+        AuthorRepository repository = await AuthorRepoInit();
 
+        //Act / Assert
+        await Assert.ThrowsAnyAsync<Exception>(async () => await repository.GetFollowings(authorName));
+    }
     #endregion
     #region Anonymize Method
 
