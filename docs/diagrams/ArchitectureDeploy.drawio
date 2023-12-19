@@ -1,0 +1,46 @@
+<mxfile host="Electron" modified="2023-12-19T14:56:12.615Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/22.1.11 Chrome/114.0.5735.289 Electron/25.9.8 Safari/537.36" etag="8ow9v-IuFSslEK3jbKRG" version="22.1.11" type="device">
+  <diagram id="C5RBs43oDa-KdzZeNtuy" name="Page-1">
+    <mxGraphModel dx="1221" dy="725" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="WIyWlLk6GJQsqaUBKTNV-0" />
+        <mxCell id="WIyWlLk6GJQsqaUBKTNV-1" parent="WIyWlLk6GJQsqaUBKTNV-0" />
+        <mxCell id="Uergf838ktvR-88O5ynF-2" value="&lt;b&gt;Client&lt;/b&gt;" style="html=1;dropTarget=0;whiteSpace=wrap;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="30" y="250" width="180" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="Uergf838ktvR-88O5ynF-3" value="" style="shape=module;jettyWidth=8;jettyHeight=4;" vertex="1" parent="Uergf838ktvR-88O5ynF-2">
+          <mxGeometry x="1" width="20" height="20" relative="1" as="geometry">
+            <mxPoint x="-27" y="7" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Uergf838ktvR-88O5ynF-16" value="Use" style="endArrow=open;endSize=12;dashed=1;html=1;rounded=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="Uergf838ktvR-88O5ynF-2" target="Uergf838ktvR-88O5ynF-18">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="500" y="240.00270270270272" as="sourcePoint" />
+            <mxPoint x="470" y="215" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Uergf838ktvR-88O5ynF-17" value="HTTP Calls" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="Uergf838ktvR-88O5ynF-16">
+          <mxGeometry x="0.4133" y="2" relative="1" as="geometry">
+            <mxPoint x="-41" y="-23" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Uergf838ktvR-88O5ynF-18" value="«webserver»&lt;br&gt;&lt;b&gt;Server&lt;/b&gt;" style="html=1;dropTarget=0;whiteSpace=wrap;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="370" y="250" width="180" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="Uergf838ktvR-88O5ynF-19" value="" style="shape=module;jettyWidth=8;jettyHeight=4;" vertex="1" parent="Uergf838ktvR-88O5ynF-18">
+          <mxGeometry x="1" width="20" height="20" relative="1" as="geometry">
+            <mxPoint x="-27" y="7" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Uergf838ktvR-88O5ynF-22" value="Use" style="endArrow=open;endSize=12;dashed=1;html=1;rounded=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="Uergf838ktvR-88O5ynF-18" target="Uergf838ktvR-88O5ynF-26">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="390" y="510" as="sourcePoint" />
+            <mxPoint x="460" y="470" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Uergf838ktvR-88O5ynF-26" value="MSSQL Database" style="html=1;whiteSpace=wrap;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="405" y="450" width="110" height="50" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
