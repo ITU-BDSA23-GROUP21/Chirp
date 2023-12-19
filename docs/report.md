@@ -48,14 +48,14 @@ Prerequisites:
 1. In the user secrets for the Chirp.Razor project, add the connection string to the database. They key for the secret must be *ConnectionString*
 1. Run the Chirp.Razor project using the Dotnet CLI 
 
-Clone our Chirp project from its github page at https://github.com/ITU-BDSA23-GROUP21/Chirp.  
-If you do not have Docker Desktop installed then follow the steps on their [website](https://www.docker.com/products/docker-desktop/) to download and install Docker Dekstop.  
-Open the terminal and pull the Docker Image of Microsoft Sql Server with the command `docker pull mcr.microsoft.com/mssql/server:2022-latest`.  
-Start up a container based on the image pulled from before with the command `docker run -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=YourPassword123" -p 1433:1433 --name sql1 --hostname sql1 -d mcr.microsoft.com/mssql/server:2022-latest`.  
-In the terminal navigate to the where you have cloned the project to and navigate to the folder `Chirp/src/Chirp.Razor`.  
-Initiate user secrets for the project with `dotnet user-secrets init`.  
-Store the connection string to the database container in a user secret called `ConnectionString` with this command: `dotnet user-secrets set "ConnectionString" "Server=localhost;Database=TestDB;User Id=SA;Password=YourPassword123;TrustServerCertificate=True;"`.  
-Now run the application with the command `dotnet run`
+1. Clone our Chirp project from its github page at https://github.com/ITU-BDSA23-GROUP21/Chirp.  
+2. If you do not have Docker Desktop installed then follow the steps on their [website](https://www.docker.com/products/docker-desktop/) to download and install Docker Dekstop.  
+3. Open the terminal and pull the Docker Image of Microsoft Sql Server with the command `docker pull mcr.microsoft.com/mssql/server:2022-latest`.  
+4. Start up a container based on the image pulled from before with the command `docker run -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=YourPassword123" -p 1433:1433 --name sql1 --hostname sql1 -d mcr.microsoft.com/mssql/server:2022-latest`.  
+5. In the terminal navigate to the where you have cloned the project to and navigate to the folder `Chirp/src/Chirp.Razor`.  
+6. Initiate user secrets for the project with `dotnet user-secrets init`.  
+7. Store the connection string to the database container in a user secret called `ConnectionString` with this command: `dotnet user-secrets set "ConnectionString" "Server=localhost;Database=TestDB;User Id=SA;Password=YourPassword123;TrustServerCertificate=True;"`.  
+8. Now run the application with the command `dotnet run`
 
 ## How to run test suite locally
 
