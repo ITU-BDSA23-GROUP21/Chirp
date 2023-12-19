@@ -48,6 +48,8 @@ Prerequisites:
 1. In the user secrets for the Chirp.Razor project, add the connection string to the database. They key for the secret must be *ConnectionString*
 1. Run the Chirp.Razor project using the Dotnet CLI 
 
+Clone our Chirp project from its github page
+
 ## How to run test suite locally
 
 # Ethics
