@@ -3,11 +3,7 @@ using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 
 namespace Chirp.Infrastructure;
-/// <summary>
-/// This class implements the methods from the interfaces. And it dependents on <c>ChirpContext</c>
-/// <para> It uses the dependency to access the database 
-/// to get, add and alter cheeps</para>
-/// </summary>
+
 public class AuthorRepository : IAuthorRepository {
     private readonly ChirpContext _dbContext;
     private readonly AuthorValidator _authorValidator = new();
@@ -93,7 +89,7 @@ public class AuthorRepository : IAuthorRepository {
 
     /// <summary>
     /// Authors can delete their information from the system
-    /// In this implementation users are anonymized by removing any identifiable information about the author
+    /// In this implementation users are anonymized by changing any identifiable information about the author
     /// </summary>
     public async Task Anonymize(string name) {
         var author = await _dbContext.Authors
@@ -110,7 +106,7 @@ public class AuthorRepository : IAuthorRepository {
 
 /// <summary>
 /// This validator is used when creating an author
-/// Used to make sure, no author that would violate the database criteria is added.
+/// Used to make sure, no author that would violate the database criteria of a author are added.
 /// If the validation fails the error message is also used to tell the user what was wrong about the author
 /// </summary>
 public class AuthorValidator : AbstractValidator<Author> {
