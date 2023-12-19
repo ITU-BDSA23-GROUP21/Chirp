@@ -4,6 +4,11 @@ using FluentValidation.Results;
 using Microsoft.EntityFrameworkCore;
 namespace Chirp.Infrastructure;
 
+/// <summary>
+/// This class implements the methods from the interfaces.
+/// <para>It uses a reference to the <c>ChirpContext</c> to access the database 
+/// </para>
+/// </summary>
 public class CheepRepository : ICheepRepository {
     private readonly ChirpContext _dbContext;
     private readonly CheepValidator _cheepValidator = new();
