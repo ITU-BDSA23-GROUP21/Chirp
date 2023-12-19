@@ -436,33 +436,6 @@ public class Integration : IAsyncLifetime {
         await Assert.ThrowsAnyAsync<Exception>(async () => await repository.GetAuthorByName(authorName));
     }
     #endregion
-    #region Get Author By Email Method
-    [Fact]
-    public async Task AuthorRepository_GetAuthorByEmail_RegisteredAuthor() {
-        //Arrange
-        AuthorRepository authorRepository = await AuthorRepoInit();
-        AuthorDto expectedAuthor = new("Helge",
-                                        "ropf@itu.dk");
-
-        //Act
-        AuthorDto actualAuthor = await authorRepository.GetAuthorByEmail("ropf@itu.dk");
-
-        //Assert
-        Assert.Equal(expectedAuthor, actualAuthor);
-    }
-    [Theory]
-    [InlineData("")]
-    [InlineData("   ")]
-    [InlineData("NonexistingAuthor@gmail.com")]
-    public async Task AuthorRepository_GetAuthorByEmail_InvalidOrNonExsistingAuthor(string userEmail)
-    {
-        // Arrange
-        AuthorRepository repository = await AuthorRepoInit();
-
-        // Act / Assert
-        await Assert.ThrowsAnyAsync<Exception>(async () => await repository.GetAuthorByEmail(userEmail));
-    }
-    #endregion
     #region Follow Method
     //Is this too complex for an integration test?
     [Fact]
@@ -574,6 +547,29 @@ public class Integration : IAsyncLifetime {
 
         //Act / Assert
         await Assert.ThrowsAnyAsync<Exception>(async () => await repository.Anonymize(authorName));
+    }
+    [Fact]
+    public async Task AuthorRepository_Anonymize_ValidAuthorName()
+    {
+        // Arrange
+        AuthorRepository repository = await AuthorRepoInit();
+        CheepRepository cheepRepository = await CheepRepoInit();
+        string expectedBeforeAuthor = "Jacqualine.Gilcoine@gmail.com";
+        int expectedAfterCheepCount = 0;
+
+        // Act
+        IEnumerable<CheepDto> cheeps = await cheepRepository.GetCheeps(1);
+        string actualBeforeAuthor = cheeps.First().Author;
+        await repository.Anonymize("Jacqualine.Gilcoine@gmail.com");
+        cheeps = await cheepRepository.GetCheeps(1);
+        string actualAfterAuthor = cheeps.First().Author;
+        cheeps = await cheepRepository.GetCheeps(1, "Jacqualine.Gilcoine@gmail.com");
+        int actualAfterCheepCount = cheeps.Count();
+
+        // Assert
+        Assert.Equal(expectedBeforeAuthor, actualBeforeAuthor);
+        Assert.NotEqual(expectedBeforeAuthor, actualAfterAuthor);
+        Assert.Equal(expectedAfterCheepCount, actualAfterCheepCount);
     }
     #endregion
     #endregion
