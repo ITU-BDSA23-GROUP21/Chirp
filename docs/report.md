@@ -52,7 +52,7 @@ Prerequisites:
 2. If you do not have Docker Desktop installed then follow the steps on their [website](https://www.docker.com/products/docker-desktop/) to download and install Docker Dekstop.  
 3. Open the terminal and pull the Docker Image of Microsoft Sql Server with the command  
 `docker pull mcr.microsoft.com/mssql/server:2022-latest`.  
-- Due to hardware issues on some Mac computers, you must create a Postgres database instead if you are running OSX.
+    - Due to hardware issues on some Mac computers, you must create a Postgres database instead if you are running OSX.
 4. Start up a container based on the image pulled from before with the command  
 `docker run -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=YourPassword123" -p 1433:1433 --name sql1 --hostname sql1 -d mcr.microsoft.com/mssql/server:2022-latest`.  
 5. In the terminal navigate to the where you have cloned the project to and navigate to the folder `Chirp/src/Chirp.Razor`.  
