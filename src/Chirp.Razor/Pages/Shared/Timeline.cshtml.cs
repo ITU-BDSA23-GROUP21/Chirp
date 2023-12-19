@@ -101,6 +101,6 @@ public abstract class TimelineModel : PageModel {
 
     private async Task LoadPage() {
         Cheeps = await GetCheeps();
-        Followings = await _authorService.GetFollowings(User?.Identity?.Name, Email);
+        Followings = await _authorService.GetFollowings(User?.Identity?.Name);
     }
 }
