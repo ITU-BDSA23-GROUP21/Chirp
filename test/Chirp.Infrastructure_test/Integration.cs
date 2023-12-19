@@ -177,10 +177,10 @@ public class Integration : IAsyncLifetime {
         //Arrange 
         CheepRepository repository = await CheepRepoInit();
         string author = "Nathan Sirmon";
-        string email = "Nathan+Sirmon@dtu.dk";
+        // string email = "Nathan+Sirmon@dtu.dk";
 
         //Act
-        ValidationResult result = await repository.AddCheep(message, author, email);
+        ValidationResult result = await repository.AddCheep(message, author);
         IEnumerable<CheepDto> cheeps = await repository.GetCheeps(1, author);
         cheeps = cheeps.Where(c => c.Message == message);
 
@@ -195,10 +195,10 @@ public class Integration : IAsyncLifetime {
         CheepRepository repository = await CheepRepoInit();
         string message = "Valid Message";
         string author = "Nathan Sirmon";
-        string email = "Nathan+Sirmon@dtu.dk";
+        // string email = "Nathan+Sirmon@dtu.dk";
 
         //Act
-        ValidationResult result = await repository.AddCheep(message, author, email);
+        ValidationResult result = await repository.AddCheep(message, author);
         IEnumerable<CheepDto> cheeps = await repository.GetCheeps(1, author);
         cheeps = cheeps.Where(c => c.Message == message);
 
@@ -213,10 +213,10 @@ public class Integration : IAsyncLifetime {
         CheepRepository repository = await CheepRepoInit();
         string message = "Valid Message";
         string authorName = "Nathan Sirmon";
-        string email = "Nathan+Sirmon@dtu.dk";
+        // string email = "Nathan+Sirmon@dtu.dk";
 
         //Act
-        ValidationResult result = await repository.AddCheep(message, authorName, email);
+        ValidationResult result = await repository.AddCheep(message, authorName);
         IEnumerable<CheepDto> cheeps = await repository.GetCheeps(1, authorName);
         CheepDto cheep = cheeps.Where(c => c.Message == message).Single();
 
@@ -236,10 +236,10 @@ public class Integration : IAsyncLifetime {
         // Arrange
         CheepRepository repository = await CheepRepoInit();
         string message = "Valid Message";
-        string email = "ValidEmail@mail.com";
+        // string email = "ValidEmail@mail.com";
 
         // Act / Assert
-        await Assert.ThrowsAnyAsync<Exception>(async () => await repository.AddCheep(message, author, email));
+        await Assert.ThrowsAnyAsync<Exception>(async () => await repository.AddCheep(message, author));
     }
 
     #endregion
