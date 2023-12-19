@@ -479,6 +479,30 @@ public class Integration : IAsyncLifetime {
         //Assert
         Assert.Equal(expectedFollower, actualFollower);
     }
+    [Theory]
+    [InlineData("", 0)]
+    [InlineData("   ", 0)]
+    [InlineData("NonExistingName", 0)]
+    [InlineData("", 1)]
+    [InlineData("   ", 1)]
+    [InlineData("NonExistingName", 1)]
+    public async Task AuthorRepository_Follow_InvalidUsers(string name, int parameter)
+    {
+        // Arrange
+        AuthorRepository repository = await AuthorRepoInit();
+        string validName = "Rasmus";
+
+        //Act / Assert
+        if(parameter == 0)
+        {
+            await Assert.ThrowsAnyAsync<Exception>(async () => await repository.Follow(name, validName));
+        }
+        else
+        {
+            await Assert.ThrowsAnyAsync<Exception>(async () => await repository.Follow(validName, name));
+        }
+    }
+
     #endregion
     #region Unfollow Method
     [Fact]
@@ -500,6 +524,12 @@ public class Integration : IAsyncLifetime {
         Assert.Equal(expectedTempFollower, actualTempFollower);
         Assert.Empty(actualFollowings);
     }
+    #endregion
+    #region Get Followings Method
+
+    #endregion
+    #region Anonymize Method
+
     #endregion
     #endregion
 }
