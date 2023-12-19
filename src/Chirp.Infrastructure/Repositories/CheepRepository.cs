@@ -11,11 +11,13 @@ public class CheepRepository : ICheepRepository {
     public CheepRepository(ChirpContext dbContext) =>
         _dbContext = dbContext;
 
+    // Method used in testing when an author is not specified by the test.
     public Task<List<CheepDto>> GetCheeps(int page) {
         var authors = Enumerable.Empty<string>();
         return GetCheeps(page, authors);
     }
 
+    // Method used in testing when an author is not specified by the test.
     public Task<List<CheepDto>> GetCheeps(int page, string? author, string? userEmail = null) {
         List<string> authors = new();
         if (author != null) {
@@ -24,8 +26,11 @@ public class CheepRepository : ICheepRepository {
         return GetCheeps(page, authors, userEmail);
     }
 
-    // Returns the most recent 32 cheeps. Also take a list of authors to filter cheeps by, and an optional userEmail.
-    // If userEmail is supplied, it is also included whether that user has like the cheeps
+
+    /// <inheritdoc/>
+    /// <remarks>
+    /// This implementation has a limit of 32 cheeps per page.
+    /// </remarks>
     public Task<List<CheepDto>> GetCheeps(int page, IEnumerable<string> authors, string? userEmail = null) {
         if (page <= 0) page = 1;
         return _dbContext.Cheeps
@@ -70,7 +75,6 @@ public class CheepRepository : ICheepRepository {
 
     }
 
-    // Used for liking or disliking cheeps. The parameter 'Value' determnines whether its a like or dislike
     public async Task LikeCheep(string userEmail, string cheepId, bool value) {
         var author = await _dbContext.Authors.Where(author => author.Email == userEmail).FirstAsync();
         var cheep = await _dbContext.Cheeps.Where(cheep => cheep.Id == Guid.Parse(cheepId)).Include(cheep => cheep.Likes).FirstAsync();
@@ -87,7 +91,6 @@ public class CheepRepository : ICheepRepository {
         _dbContext.SaveChanges();
     }
 
-    // Used for removing a like or a dislike for a cheep
     public async Task RemoveLike(string userEmail, string cheepId) {
         var cheep = await _dbContext.Cheeps.Where(cheep => cheep.Id == Guid.Parse(cheepId)).Include(cheep => cheep.Likes).FirstAsync();
         var author = await _dbContext.Authors.Where(author => author.Email == userEmail).FirstAsync();
@@ -99,6 +102,10 @@ public class CheepRepository : ICheepRepository {
     }
 }
 
+/// <summary>
+/// This validator is used when adding cheeps
+/// Is used to give feedback to the user if a cheep could not be created and what rule it broke.
+/// </summary>
 public class CheepValidator : AbstractValidator<Cheep> {
     public CheepValidator() {
         RuleFor(x => x.Id).NotEmpty();
