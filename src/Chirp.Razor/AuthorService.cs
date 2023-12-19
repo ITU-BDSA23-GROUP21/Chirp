@@ -1,7 +1,9 @@
 using Chirp.Core;
 
 namespace Chirp.Razor;
-
+/// <summary>
+/// Defines method used when operation on cheeps in the Chirp application
+/// </summary>
 public interface IAuthorService {
     // Validation?
     public Task Follow(string userName, string followingName);
