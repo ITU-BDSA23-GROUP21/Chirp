@@ -5,6 +5,9 @@ using System.Collections;
 
 namespace Chirp.Razor;
 
+/// <summary>
+/// Defines method used when operating on cheeps in the Chirp application
+/// </summary>
 public interface ICheepService {
     public Task<List<CheepDto>> GetCheeps(int page = 1, string? userEmail = null);
     public Task<List<CheepDto>> GetCheepsFromAuthors(IEnumerable<string> authors, int page = 1, string? userEmail = null);
