@@ -1,5 +1,6 @@
 // Taken from https://github.com/itu-bdsa/lecture_notes/blob/main/sessions/session_06/data/DbInitializer.cs
 
+/* cSpell:disable */
 using System.Runtime.InteropServices;
 
 namespace Chirp.Infrastructure;

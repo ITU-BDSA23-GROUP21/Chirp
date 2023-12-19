@@ -16,15 +16,19 @@ numbersections: true
 
 Here comes a description of our domain model.
 
-![Illustration of the _Chirp!_ data model as UML class diagram.](docs/images/domain_model.png)
+![Illustration of the _Chirp!_ Data model as UML class diagram.](docs/images/domain_model.png)
 
 ## Architecture — In the small
 
 ## Architecture of deployed application
+The following diagram shows the three parts of our deployed application.
+- Client: A browser on the users machine. Sends HTTP calls to the server.
+- Server: RazorPages project available at https://bdsagroup21chirprazor.azurewebsites.net/. Receives client request, and responds with HTML pages for the client to render. Communicates with database to fetch or update data.
+- Database. MSSQL database hosted in Azure.
 
 ## User activities
 
-## Sequence of functionality/calls trough _Chirp!_
+## Sequence of functionality/calls through _Chirp!_
 
 # Process
 
