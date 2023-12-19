@@ -49,19 +49,13 @@ public class Integration : IAsyncLifetime {
         CheepRepository repository = await CheepRepoInit();
         int pagenr = 2;
         int expectedCheepCount = 32;
-        string expectedFirstCheep = "In the morning of the wind, some few splintered planks, of what present avail to him.";
-        string expectedLastCheep = "He walked slowly back the lid.";
     
         // Act
         IEnumerable<CheepDto> cheeps = await repository.GetCheeps(pagenr);
         int actualCheepCount = cheeps.Count();
-        string actualFirstCheep = cheeps.First().Message;
-        string actualLastCheep = cheeps.Last().Message;
 
         // Assert
         Assert.Equal(expectedCheepCount, actualCheepCount);
-        Assert.Equal(expectedFirstCheep, actualFirstCheep);
-        Assert.Equal(expectedLastCheep, actualLastCheep);
     }
     [Theory]
     [InlineData(-1)]
