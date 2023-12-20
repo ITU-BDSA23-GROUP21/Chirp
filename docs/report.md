@@ -36,7 +36,8 @@ The following subsystem sequence diagram shows the communication between three s
 - Server: the webserver available at https://bdsagroup21chirprazor.azurewebsites.net/.
 - Databse: MSSQL database hosted in Azure.
 **Note That**
-arrow 1.5 determines whether the user is authorized and hence, if the server should request the users followings.
+- When the website is requested at endpoint: "/". The Razor page Public.cshtml is to be returned. Since the Public razor pages controller is inherit the Timeline controller, The OnGet() method from the Timeline controller is invoked. The prementioned method tries to fetch cheeps and followings.
+- Arrow 1.6 determines whether the user is authorized and hence, if the server should request the users followings.
 
 
 # Process
