@@ -41,7 +41,9 @@ The following diagram shows the four parts of our deployed application.
 ![Illustration of the architecture of the deployed application](images/ArchitectureDeploy.drawio.png){width=100%}
 
 ## User activities
-![Illustration of user activities in Chirp](images/UserActivity.drawio.png){width=100%}
+![Illustration of an unauthorized users activities in Chirp](images/UserActivityUnauthorized.drawio.png){width=100%}
+
+![Illustration of an authorized users activities in Chirp](images/UserActivityAuthorized.drawio.png){width=100%}
 
 ## Sequence of functionality/calls through _Chirp!_
 The following subsystem sequence diagram shows the communication between three subsystems.
