@@ -72,6 +72,23 @@ Prerequisites:
 
 ## How to run test suite locally
 
+Our test suite consists of several unit tests, integration tests and a couple end to end UI tests. Most of our unit and integration tests are testing the methods in the Repository classes in the package `Chirp.Infrastructure`, as that is where most of the application's logic resides. We also have a couple of old tests that test the methods in the service classes in the package `Chirp.Razor`. However since the methods in the service classes just call the methods from the repository classes, we have decided it would be redundant to write more tests for the methods in the service classes.  
+Lastly, we also have end to end UI tests that uses playwright to test different scenarios from the end users point of view. To simulate an end user, we have created a dummy Gmail and a dummy GitHub account.  
+Gmail: dummyaccountfortesting000@gmail.com  
+Gmail Password: dummyemailfortesting  
+GitHub Password: dummygithubaccountfortesting  
+To run our tests follow the steps below.  
+
+1. To run the test suite locally, make sure to have installed docker.  
+2. Open the terminal and navigate to the project folder.  
+3. In the project folder run the command `dotnet test --filter FullyQualifiedName!~Chirp.Razor_test.End2EndUI` to run the integrations tests. Make sure docker is running before running the command.
+    - To use the exclamation mark (`!`) in the filter expression, you may have to escape it with a backslash (`\`) if you are using Linux or macOS shells.  
+4. After the integrations tests are done navigate to the folder `Chirp/src/Chirp.Razor/`.  
+5. Run the application with the command `UITEST=1 dotnet run`.  
+6. Open another terminal and navigate to the root project folder.  
+7. To run the UI test run the command `dotnet test --filter FullyQualifiedName~Chirp.Razor_test.End2EndUI`. If you want to see what the test does run the following command instead `PWDEBUG=1 dotnet test --filter FullyQualifiedName~Chirp.Razor_test.End2EndUI`.
+    - Since we have made a dummy Gmail and GitHub account, sometimes when logging in to GitHub it will prompt to enter a confirmation code that was sent via mail. This will fail the tests. A workaround is to run the test in debug mode with the second command and manually go through the first steps to log in to GitHub. 
+
 # Ethics
 
 ## License
