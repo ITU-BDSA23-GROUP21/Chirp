@@ -48,7 +48,7 @@ The following subsystem sequence diagram shows the communication between three s
 - When the website is requested with endpoint: "/". The Razor page Public.cshtml is to be returned. Since the Public razor pages controller inherit the Timeline controller, The OnGet() method from the Timeline controller is invoked. The prementioned method tries to fetch cheeps and followings.
 - Arrow 1.6 determines whether the user is authorized and hence, if the server should request the users followings.
 
-![Subsystem sequence diagram of the communication between client, server and database](images/SimpleSubsystemSequence.png)
+![Subsystem sequence diagram of the communication between client, server and database](images/SimpleSubsystemSequence.png){width=100%}
 
 
 # Process
