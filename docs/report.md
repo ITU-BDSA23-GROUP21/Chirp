@@ -16,7 +16,7 @@ numbersections: true
 
 Here comes a description of our domain model.
 
-<!-- ![Illustration of the _Chirp!_ Data model as UML class diagram.](docs/images/domain_model.png) -->
+![Illustration of the _Chirp!_ Data model as UML class diagram.](images/ChirpDomain.drawio.png){width=100%}
 
 ## Architecture — In the small
 
@@ -28,19 +28,19 @@ The diagram shows that
 - **Tests** consists of xunit, integration and end2end tests.
 - **Infrastructure** consists of EF Migrations, DbContext and model design.
 
-
-![Illustration of the architecture of _Chirp!_](images/OnionArchitecture.drawio.png)
+![Illustration of the architecture of _Chirp!_](images/OnionArchitecture.drawio.png){width=100%}
 
 ## Architecture of deployed application
 The following diagram shows the four parts of our deployed application.
+
 - Client: A browser on the users machine. Sends HTTP calls to the server.
-- Server: RazorPages project available at https://bdsagroup21chirprazor.azurewebsites.net/. Receives client request, and responds with HTML pages for the client to render. Communicates with database to fetch or update data. Communicates with Identity Management System to validate client authentication.
-- Database. MSSQL database hosted in Azure.
-- Azure AD B2C identity management hosted in Azure.
-![Illustration of the architecture of the deployed application](images/ArchitectureDeploy.drawio.png)
+- Server: RazorPages project hosted at https://bdsagroup21chirprazor.azurewebsites.net/. Receives client request, and responds with HTML pages for the client to render. Communicates with database to fetch or update data. Communicates with Identity Management System to validate client authentication.
+- Database. MSSQL database hosted in Azure. Hosted at bdsagroup21-chirpdb.database.windows.net
+- Azure AD B2C identity management hosted in Azure. Hosted at getchirping.onmicrosoft.com
+![Illustration of the architecture of the deployed application](images/ArchitectureDeploy.drawio.png){width=100%}
 
 ## User activities
-![Illustration of user activities in Chirp](images/UserActivity.drawio.png)
+![Illustration of user activities in Chirp](images/UserActivity.drawio.png){width=100%}
 
 ## Sequence of functionality/calls through _Chirp!_
 The following subsystem sequence diagram shows the communication between three subsystems.
@@ -59,7 +59,7 @@ We use two GitHub Actions workflows, one for testing, and one for release / depl
 
 The **deployment workflow** is triggered by pushing a tag to the main branch, that matches the regex `v*.*.*`. This workflow builds the application, publishes it to GitHub, and deploys it to Azure. Database schema synchronization is not included here, as it is performed during startup of the application, when it runs a new version.
 
-![Activity diagram of the Github Workflows](images/WorkflowActivity.drawio.png)
+![Activity diagram of the Github Workflows](images/WorkflowActivity.drawio.png){width=100%}
 
 ## Team work
 
@@ -75,7 +75,7 @@ The **deployment workflow** is triggered by pushing a tag to the main branch, th
 When a new task need to be done we create an issue on GitHub. In the issue title we shortly describe the task and explain in further depth in the description as well as state the requirements for when the task is complete. After creating the issue, it is then added to the project board under the label 'new'. When some developers have time they assign themselves to the issue, create a branch and start working on resolving the issue. A pull request is then made when the issue has been resolved and GitHub runs the GitHub actions we have set up. This includes building and testing the application, ensuring the code does not contain sensitive information with CodeQL and linking the related issue to the pull request. After these GitHub Actions have completed successfully, it needs to be reviewed and approved by some of the developers that have not worked on it. When approved the branch will be merged into the main branch, the related issue will be closed and the status of the issue will be set to done on the project board.  
 The flow of these events are visualized in the diagram below. 
 
-![Activity diagram over issues](images/Issueactivitydiagram.png)
+![Activity diagram over issues](images/Issueactivitydiagram.png){width=100%}
 
 ## How to make _Chirp!_ work locally
 Prerequisites:
