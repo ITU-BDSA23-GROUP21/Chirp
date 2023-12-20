@@ -154,6 +154,7 @@
        Maybe because model field and query have different names, or because "page" is reserved? *@
     <div>
         <a href="@($"/{routeName}?page={Model.Pageno - 1}")" class="@(Model.Pageno <= 1 ? "disabled" : "")">Previous</a>
+        <span>@(Model.Pageno == 0 ? 1 : Model.Pageno)</span>
         <a href="@($"/{routeName}?page={(Model.Pageno == 0 ? 2 : Model.Pageno + 1)}")" class="@(Model.Cheeps.Count() < 32 ? "disabled": "")">Next</a>
     </div>
 </div>
