@@ -6,8 +6,8 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.14" />
-    <PackageReference Include="Testcontainers.MsSql" Version="3.6.0" />
-    <PackageReference Include="Testcontainers.PostgreSql" Version="3.6.0" />
+    <PackageReference Include="TestContainers.MsSql" Version="3.6.0" />
+    <PackageReference Include="TestContainers.PostgreSql" Version="3.6.0" />
     <PackageReference Include="xunit" Version="2.6.3" />
   </ItemGroup>
 
