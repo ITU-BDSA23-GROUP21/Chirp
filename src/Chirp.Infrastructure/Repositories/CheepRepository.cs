@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore;
 namespace Chirp.Infrastructure;
 
 /// <summary>
-/// This class implements the methods from the interfaces.
-/// <para>It uses a reference to the <c>ChirpContext</c> to access the database 
-/// </para>
+/// This class implements the methods from the interfaces. And it dependents on <c>ChirpContext</c>
+/// <para> It uses the dependency to access the database 
+/// to get, add and alter cheeps</para>
 /// </summary>
 public class CheepRepository : ICheepRepository {
     private readonly ChirpContext _dbContext;
