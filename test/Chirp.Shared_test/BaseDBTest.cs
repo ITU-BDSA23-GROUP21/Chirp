@@ -1,37 +1,33 @@
 ﻿using Chirp.Infrastructure;
-using Microsoft.Data.Sqlite;
+using DotNet.Testcontainers.Containers;
 using Microsoft.EntityFrameworkCore;
-using System.Data.Common;
+using Testcontainers.MsSql;
+using Testcontainers.PostgreSql;
+using Xunit;
 
 namespace Chirp.Shared_test;
-public class BaseDBTest
-{
+public abstract class BaseDBTest : IAsyncLifetime {
+    // Suppressing warning, as InitializeAsync ensures that _context will have a non-null value.
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+    public ChirpContext _context;
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
-    private readonly DbConnection _connection;
-    private readonly DbContextOptions<ChirpContext> _contextOptions;
-    public BaseDBTest() {
-        // Adapted from example at https://learn.microsoft.com/en-us/ef/core/testing/testing-without-the-database#sqlite-in-memory
-        
-        // Create and open a connection. This creates the SQLite in-memory database, which will persist until the connection is closed
-        // at the end of the test (see Dispose below).
-        _connection = new SqliteConnection("Filename=:memory:");
-        _connection.Open();
+    public readonly DockerContainer _container
+        = Environment.GetEnvironmentVariable("SERVER") == "POSTGRES" ? new PostgreSqlBuilder().Build() : new MsSqlBuilder().Build();
 
-        // These options will be used by the context instances in this test suite, including the connection opened above.
-        _contextOptions = new DbContextOptionsBuilder<ChirpContext>()
-            .UseSqlite(_connection)
-            .Options;
-
-        // Create the schema and seed some data
-        using var context = new ChirpContext(_contextOptions);
-
-        if (context.Database.EnsureCreated())
-        {
-            DbInitializer.SeedDatabase(context);
-        }
+    public async Task InitializeAsync() {
+        await _container.StartAsync();
+        // Casting as a quick fix for type issues. Should be safe, as _container is readonly and only instantiated as a database container
+        _context = GetContext(_container as IDatabaseContainer);
+        await _context.Database.EnsureCreatedAsync();
+        DbInitializer.SeedDatabase(_context);
     }
 
-    protected ChirpContext CreateContext() => new(_contextOptions);
+    public Task DisposeAsync()
+        => _container.DisposeAsync().AsTask();
 
-    public void Dispose() => _connection.Dispose();
+    public static ChirpContext GetContext(IDatabaseContainer? container)
+        => Environment.GetEnvironmentVariable("SERVER") == "POSTGRES" ?
+            new(new DbContextOptionsBuilder().UseNpgsql(container?.GetConnectionString()).Options) :
+            new(new DbContextOptionsBuilder().UseSqlServer(container?.GetConnectionString()).Options);
 }

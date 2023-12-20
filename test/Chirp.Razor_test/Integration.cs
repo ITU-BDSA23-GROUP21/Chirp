@@ -8,10 +8,8 @@ namespace Chirp.Razor_test;
 
 [Collection("Environment Variable")]
 public class Integration : BaseDBTest {
-    CheepService cheepService;
-
-    public Integration() {
-        cheepService = new(new CheepRepository(CreateContext()));
+    public CheepService CheepServiceInit() {
+        return new(new CheepRepository(_context));
     }
 
     [Theory]
@@ -19,6 +17,7 @@ public class Integration : BaseDBTest {
     [InlineData(4)]
     public async void CheepService_GetCheeps_Return32Cheeps(int page) {
         //Arrange
+        var cheepService = CheepServiceInit();
         int expectedValue = 32;
 
         //Act
@@ -34,6 +33,7 @@ public class Integration : BaseDBTest {
     [InlineData(-1)]
     public async void CheepService_GetCheeps_ZeroAndBelowParameterValues(int page) {
         //Arrange
+        var cheepService = CheepServiceInit();
         int expectedCheepAmount = 32;
         CheepDto expectedFirstCheep = new("",
                                           "Jacqualine Gilcoine",
@@ -70,6 +70,7 @@ public class Integration : BaseDBTest {
     [InlineData("Roger Histand")]
     public async void CheepService_GetCheepsFromAuthor_ValidAuthorParameterValue(string author) {
         //Arrange
+        var cheepService = CheepServiceInit();
         string expectedValue = author;
         //Act
         IEnumerable<CheepDto> cheeps = await cheepService.GetCheepsFromAuthors(new List<string>() { author }, 1);
@@ -81,6 +82,7 @@ public class Integration : BaseDBTest {
     [Fact]
     public async void CheepService_GetCheepsFromAuthor_NonExistingAuthorParameterValue() {
         //Arrange 
+        var cheepService = CheepServiceInit();
         int expectedValue = 0;
 
         //Act
@@ -94,6 +96,7 @@ public class Integration : BaseDBTest {
     [Fact]
     public async void CheepService_GetCheepsFromAuthor_ValidAuthorReturning32Cheeps() {
         //Arrange 
+        var cheepService = CheepServiceInit();
         int expectedValue = 32;
 
         //Act
@@ -109,6 +112,7 @@ public class Integration : BaseDBTest {
     [InlineData(-1)]
     public async void CheepService_GetCheepsFromAuthor_ValidAuthorZeroAndBelowPageValue(int page) {
         //Arrange
+        var cheepService = CheepServiceInit();
         CheepDto expectedFirstCheep = new("",
                                           "Mellie Yost",
                                           "But what was behind the barricade.",
