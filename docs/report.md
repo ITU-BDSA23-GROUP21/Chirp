@@ -32,12 +32,15 @@ The diagram shows that
 ![Illustration of the architecture of _Chirp!_](images/OnionArchitecture.drawio.png)
 
 ## Architecture of deployed application
-The following diagram shows the three parts of our deployed application.
+The following diagram shows the four parts of our deployed application.
 - Client: A browser on the users machine. Sends HTTP calls to the server.
-- Server: RazorPages project available at https://bdsagroup21chirprazor.azurewebsites.net/. Receives client request, and responds with HTML pages for the client to render. Communicates with database to fetch or update data.
+- Server: RazorPages project available at https://bdsagroup21chirprazor.azurewebsites.net/. Receives client request, and responds with HTML pages for the client to render. Communicates with database to fetch or update data. Communicates with Identity Management System to validate client authentication.
 - Database. MSSQL database hosted in Azure.
+- Azure AD B2C identity management hosted in Azure.
+![Illustration of the architecture of the deployed application](images/ArchitectureDeploy.drawio.png)
 
 ## User activities
+![Illustration of user activities in Chirp](images/UserActivity.drawio.png)
 
 ## Sequence of functionality/calls through _Chirp!_
 The following subsystem sequence diagram shows the communication between three subsystems.
@@ -52,12 +55,11 @@ The following subsystem sequence diagram shows the communication between three s
 # Process
 
 ## Build, test, release, and deployment
-
-![Activity diagram of the Github Workflows](images/WorkflowActivity.drawio.png)
-
 We use two GitHub Actions workflows, one for testing, and one for release / deployment. The **test workflow** is triggered on any push to the main branch, and has to complete successfully before any pull request to main can be completed. Together with our branch policy that forbids pushing directly to main, this means that any code that reaches main has passed the tests.
 
 The **deployment workflow** is triggered by pushing a tag to the main branch, that matches the regex `v*.*.*`. This workflow builds the application, publishes it to GitHub, and deploys it to Azure. Database schema synchronization is not included here, as it is performed during startup of the application, when it runs a new version.
+
+![Activity diagram of the Github Workflows](images/WorkflowActivity.drawio.png)
 
 ## Team work
 
@@ -67,11 +69,6 @@ The **deployment workflow** is triggered by pushing a tag to the main branch, th
 - [217](https://github.com/ITU-BDSA23-GROUP21/Chirp/issues/217): We were not able to get our e2e UI tests running in our GitHub Actions workflow yet. This should be fixed, so they will be integrated into our automatic testing, and we can be certain that all code in the main branch has passed the tests.
 - [208](https://github.com/ITU-BDSA23-GROUP21/Chirp/issues/208): When anonymizing a user after they click "Forget about me", we do not delete the user entry in our Azure AD B2C. Ideally the user should also be deleted there, but it was not considered a high priority to implement at this point.
 - [196](https://github.com/ITU-BDSA23-GROUP21/Chirp/issues/196): Every time the user interacts with the page, the page is reloaded. I.e. when a user follows another user, or likes a cheep, the page is reloaded, and they lose their position on the page. This is not a great user experience, but as the system is still usable, it was considered a higher priority to fully implement the other features.
-
-<!-- - [44](https://github.com/ITU-BDSA23-GROUP21/Chirp/issues/44): Workflow stuff. Should be closed as will not be done?
-- [204](https://github.com/ITU-BDSA23-GROUP21/Chirp/issues/204): Page numbers. Could be added?
-- [114](https://github.com/ITU-BDSA23-GROUP21/Chirp/issues/114): Unit tests. This can't really be left here?
-- [211](https://github.com/ITU-BDSA23-GROUP21/Chirp/issues/211): In code documentation. Should be closed before hand-in. -->
 
 ### Task Workflow
 
