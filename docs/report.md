@@ -89,9 +89,8 @@ Prerequisites:
 
 1. Clone our Chirp project from the main branch on its GitHub page at https://github.com/ITU-BDSA23-GROUP21/Chirp.  
 2. If you do not have Docker Desktop installed then follow the steps on their [website](https://www.docker.com/products/docker-desktop/) to download and install Docker Desktop.  
-3. Open the terminal and pull the Docker Image of Microsoft SQL Server with the command
+3. Open the terminal and pull the Docker Image of Microsoft SQL Server with the command `docker pull mcr.microsoft.com/mssql/server:2022-latest`.
     - Due to hardware issues on some Mac computers, you must create a Postgres database instead if you are running OSX.
-`docker pull mcr.microsoft.com/mssql/server:2022-latest`.
 4. Start up a container based on the image pulled from before with the command  
 `docker run -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=YourPassword123" -p 1433:1433 --name sql1 --hostname sql1 -d mcr.microsoft.com/mssql/server:2022-latest`.
     - If you are using Mac and running OSX then start a docker with the Postgres image instead.
