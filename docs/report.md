@@ -29,6 +29,13 @@ The following diagram shows the three parts of our deployed application.
 ## User activities
 
 ## Sequence of functionality/calls through _Chirp!_
+The following subsystem sequence diagram shows the communication between three subsystems.
+- Client: A browser on the users machine. Sends HTTP calls to the server.
+- Server: the webserver available at https://bdsagroup21chirprazor.azurewebsites.net/.
+- Databse: MSSQL database hosted in Azure.
+**Note That**
+arrow 1.5 determines whether the user is authorized and hence, if the server should request the users followings.
+
 
 # Process
 
