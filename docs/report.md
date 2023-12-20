@@ -44,6 +44,8 @@ The **deployment workflow** is triggered by pushing a tag to the main branch, th
 
 ## Team work
 
+![Screenshot of project board](images/ProjectBoard.png)
+
 ### Unresolved tasks
 - [217](https://github.com/ITU-BDSA23-GROUP21/Chirp/issues/217): We were not able to get our e2e UI tests running in our GitHub Actions workflow yet. This should be fixed, so they will be integrated into our automatic testing, and we can be certain that all code in the main branch has passed the tests.
 - [208](https://github.com/ITU-BDSA23-GROUP21/Chirp/issues/208): When anonymizing a user after they click "Forget about me", we do not delete the user entry in our Azure AD B2C. Ideally the user should also be deleted there, but it was not considered a high priority to implement at this point.
