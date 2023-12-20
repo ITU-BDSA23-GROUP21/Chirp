@@ -49,13 +49,17 @@ The **deployment workflow** is triggered by pushing a tag to the main branch, th
 - [208](https://github.com/ITU-BDSA23-GROUP21/Chirp/issues/208): When anonymizing a user after they click "Forget about me", we do not delete the user entry in our Azure AD B2C. Ideally the user should also be deleted there, but it was not considered a high priority to implement at this point.
 - [196](https://github.com/ITU-BDSA23-GROUP21/Chirp/issues/196): Every time the user interacts with the page, the page is reloaded. I.e. when a user follows another user, or likes a cheep, the page is reloaded, and they lose their position on the page. This is not a great user experience, but as the system is still usable, it was considered a higher priority to fully implement the other features.
 
-![Activity diagram over issues](images/Issueactivitydiagram.png)
-
 <!-- - [44](https://github.com/ITU-BDSA23-GROUP21/Chirp/issues/44): Workflow stuff. Should be closed as will not be done?
 - [204](https://github.com/ITU-BDSA23-GROUP21/Chirp/issues/204): Page numbers. Could be added?
 - [114](https://github.com/ITU-BDSA23-GROUP21/Chirp/issues/114): Unit tests. This can't really be left here?
 - [211](https://github.com/ITU-BDSA23-GROUP21/Chirp/issues/211): In code documentation. Should be closed before hand-in. -->
 
+### Task Workflow
+
+When a new task need to be done we create an issue on GitHub. In the issue title we shortly describe the task and explain in further depth in the description as well as state the requirements for when the task is complete. After creating the issue, it is then added to the project board under the label 'new'. When some developers have time they assign themselves to the issue, create a branch and start working on resolving the issue. A pull request is then made when the issue has been resolved and GitHub runs the GitHub actions we have set up. This includes building and testing the application, ensuring the code does not contain sensitive information with CodeQL and linking the related issue to the pull request. After these GitHub Actions have completed successfully, it needs to be reviewed and approved by some of the developers that have not worked on it. When approved the branch will be merged into the main branch, the related issue will be closed and the status of the issue will be set to done on the project board.  
+The flow of these events are visualized in the diagram below. 
+
+![Activity diagram over issues](images/Issueactivitydiagram.png)
 
 ## How to make _Chirp!_ work locally
 Prerequisites:
