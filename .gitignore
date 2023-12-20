@@ -8,6 +8,7 @@ test.sh
 *.pdf
 
 # Files built by draw.io
+*.drawio*.dtmp
 *.drawio.dtmp
 *.drawio.bkp
 
