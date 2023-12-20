@@ -8,6 +8,7 @@ test.sh
 
 # Files built by draw.io
 *.drawio.dtmp
+*.drawio.bkp
 
 # User-specific files
 *.rsuser
