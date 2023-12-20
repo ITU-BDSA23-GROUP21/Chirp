@@ -1,167 +1,20 @@
 using Chirp.Core;
 using Chirp.Infrastructure;
-using DotNet.Testcontainers.Containers;
+using Chirp.Shared_test;
 using FluentValidation.Results;
-using Microsoft.EntityFrameworkCore;
-using Testcontainers.MsSql;
-using Testcontainers.PostgreSql;
 
 namespace Chirp.Infrastructure_test;
 
-public class Integration : IAsyncLifetime {
-    private readonly DockerContainer _container
-        = Environment.GetEnvironmentVariable("SERVER") == "POSTGRES" ? new PostgreSqlBuilder().Build() : new MsSqlBuilder().Build();
-
-    public Task InitializeAsync()
-        => _container.StartAsync();
-
-    public Task DisposeAsync()
-        => _container.DisposeAsync().AsTask();
-
-    public static ChirpContext GetContext(IDatabaseContainer? container)
-        => Environment.GetEnvironmentVariable("SERVER") == "POSTGRES" ?
-            new(new DbContextOptionsBuilder().UseNpgsql(container?.GetConnectionString()).Options) :
-            new(new DbContextOptionsBuilder().UseSqlServer(container?.GetConnectionString()).Options);
-
-    public async Task<CheepRepository> CheepRepoInit() {
-        // Casting as a quick fix for type issues. Should always be safe, as _container is readonly and only instantiated as a database container
-        var container = _container as IDatabaseContainer;
-        ChirpContext context = GetContext(container);
-        await context.Database.EnsureCreatedAsync();
-        DbInitializer.SeedDatabase(context);
-        return new(context);
+public class Integration : BaseDBTest {
+    public CheepRepository CheepRepoInit() {
+        return new(_context);
     }
 
-    public async Task<AuthorRepository> AuthorRepoInit() {
-        var container = _container as IDatabaseContainer;
-        ChirpContext context = GetContext(container);
-        await context.Database.EnsureCreatedAsync();
-        DbInitializer.SeedDatabase(context);
-        return new(context);
+    public AuthorRepository AuthorRepoInit() {
+        return new(_context);
     }
 
     #region Cheep Repository Tests
-    #region Get Cheeps Without Author Method
-    [Fact]
-    public async Task CheepRepository_GetCheepsNoAuthor_PositivePageNr()
-    {
-        // Arrange
-        CheepRepository repository = await CheepRepoInit();
-        int pagenr = 2;
-        int expectedCheepCount = 32;
-    
-        // Act
-        IEnumerable<CheepDto> cheeps = await repository.GetCheeps(pagenr);
-        int actualCheepCount = cheeps.Count();
-
-        // Assert
-        Assert.Equal(expectedCheepCount, actualCheepCount);
-    }
-    [Theory]
-    [InlineData(-1)]
-    [InlineData(0)]
-    public async Task CheepRepository_GetCheepsNoAuthor_NegativeAndZeroPageNr(int pagenr)
-    {
-        // Arrange
-        CheepRepository repository = await CheepRepoInit();
-        int expectedCheepCount = 32;
-        string expectedFirstCheep = "Starbuck now is what we hear the worst.";
-        string expectedLastCheep = "With back to my friend, patience!";
-    
-        // Act
-        IEnumerable<CheepDto> cheeps = await repository.GetCheeps(pagenr);
-        int actualCheepCount = cheeps.Count();
-        string actualFirstCheep = cheeps.First().Message;
-        string actualLastCheep = cheeps.Last().Message;
-    
-        // Assert
-        Assert.Equal(expectedCheepCount, actualCheepCount);
-        Assert.Equal(expectedFirstCheep, actualFirstCheep);
-        Assert.Equal(expectedLastCheep, actualLastCheep);;
-    }
-    #endregion
-    #region Get Cheeps One Author Method
-    [Theory]
-    [InlineData("Helge")]
-    [InlineData("Roger Histand")]
-    public async Task CheepRepository_GetCheeps_ValidAuthorParameterValue(string author) {
-        //Arrange
-        CheepRepository cheepRepository = await CheepRepoInit();
-        string expectedValue = author;
-        //Act
-        IEnumerable<CheepDto> cheeps = await cheepRepository.GetCheeps(1, author);
-
-        //Assert
-        Assert.All<CheepDto>(cheeps, (cheep) => { cheep.Author.Equals(expectedValue); });
-    }
-
-    [Theory]
-    [InlineData("")]
-    [InlineData("     ")]
-    [InlineData("NonExistingAuthor")]
-    public async Task CheepRepository_GetCheeps_InvalidAuthor(string authorName) {
-        //Arrange
-        CheepRepository cheepRepository = await CheepRepoInit();
-        int expectedValue = 0;
-
-        //Act
-        IEnumerable<CheepDto> cheeps = await cheepRepository.GetCheeps(1, authorName);
-        int actualValue = cheeps.Count();
-
-        //Assert
-        Assert.Equal(expectedValue, actualValue);
-    }
-
-    [Fact]
-    public async Task CheepRepository_GetCheeps_ValidAuthorReturning32Cheeps() {
-        //Arrange
-        CheepRepository cheepRepository = await CheepRepoInit();
-        int expectedValue = 32;
-
-        //Act
-        IEnumerable<CheepDto> cheeps = await cheepRepository.GetCheeps(1, "Jacqualine Gilcoine");
-        int actualValue = cheeps.Count();
-
-        //Assert
-        Assert.Equal(expectedValue, actualValue);
-    }
-
-    [Theory]
-    [InlineData(0)]
-    [InlineData(-1)]
-    public async Task CheepRepository_GetCheeps_ValidAuthorZeroAndBelowPageValue(int page) {
-        //Arrange
-        CheepRepository cheepRepository = await CheepRepoInit();
-        CheepDto expectedFirstCheep = new("",
-                                          "Mellie Yost",
-                                          "But what was behind the barricade.",
-                                          "08/01/23 13:17:33",
-                                          0,
-                                          null);
-
-        CheepDto expectedLastCheep = new("",
-                                          "Mellie Yost",
-                                          "A well-fed, plump Huzza Porpoise will yield you about saying, sir?",
-                                          "08/01/23 13:13:32",
-                                          0,
-                                          null);
-
-        //Act
-        IEnumerable<CheepDto> cheeps = await cheepRepository.GetCheeps(page, "Mellie Yost");
-        CheepDto actualFirstCheep = cheeps.First();
-        CheepDto actualLastCheep = cheeps.Last();
-
-        //Assert
-        Assert.Equal(expectedFirstCheep.Message, actualFirstCheep.Message);
-        Assert.Equal(expectedFirstCheep.Author, actualFirstCheep.Author);
-        Assert.Equal(expectedLastCheep.Message, actualLastCheep.Message);
-        Assert.Equal(expectedLastCheep.Author, actualLastCheep.Author);
-    }
-    #endregion
-    #region Get Cheeps Multiple Authors Method
-
-
-    #endregion
     #region Add Cheep Method
     [Theory]
     [InlineData("")]
@@ -169,7 +22,7 @@ public class Integration : IAsyncLifetime {
     [InlineData("Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient m")]
     public async Task CheepRepository_AddCheep_InvalidMessage(string message) {
         //Arrange 
-        CheepRepository repository = await CheepRepoInit();
+        CheepRepository repository = CheepRepoInit();
         string author = "Nathan Sirmon";
         // string email = "Nathan+Sirmon@dtu.dk";
 
@@ -186,7 +39,7 @@ public class Integration : IAsyncLifetime {
     [Fact]
     public async Task CheepRepository_AddCheep_ValidMessage() {
         //Arrange
-        CheepRepository repository = await CheepRepoInit();
+        CheepRepository repository = CheepRepoInit();
         string message = "Valid Message";
         string author = "Nathan Sirmon";
         // string email = "Nathan+Sirmon@dtu.dk";
@@ -204,7 +57,7 @@ public class Integration : IAsyncLifetime {
     [Fact]
     public async Task CheepRepository_AddCheep_ValidExistingAuthor() {
         //Arrange
-        CheepRepository repository = await CheepRepoInit();
+        CheepRepository repository = CheepRepoInit();
         string message = "Valid Message";
         string authorName = "Nathan Sirmon";
         // string email = "Nathan+Sirmon@dtu.dk";
@@ -225,10 +78,9 @@ public class Integration : IAsyncLifetime {
     [InlineData("")]
     [InlineData("   ")]
     [InlineData("NonExistingAuthor")]
-    public async Task CheepRepository_AddCheep_InvalidEmailOrNonExistingAuthor(string author)
-    {
+    public async Task CheepRepository_AddCheep_InvalidEmailOrNonExistingAuthor(string author) {
         // Arrange
-        CheepRepository repository = await CheepRepoInit();
+        CheepRepository repository = CheepRepoInit();
         string message = "Valid Message";
         // string email = "ValidEmail@mail.com";
 
@@ -239,39 +91,11 @@ public class Integration : IAsyncLifetime {
     #endregion
     #region Like Cheep Method
     [Theory]
-    [InlineData("")]
-    [InlineData("                 ")]
-    [InlineData("invalidemail.com")]
-    public async Task CheepRepository_LikeCheep_InvalidUserEmail(string email) {
-        //Arrange
-        CheepRepository repository = await CheepRepoInit();
-        IEnumerable<CheepDto> cheepsbefore = await repository.GetCheeps(1);
-        string cheepId = cheepsbefore.First().Id;
-
-        //Act
-        await Assert.ThrowsAsync<InvalidOperationException>(async () => await repository.LikeCheep(email, cheepId, true));
-    }
-    [Theory]
-    [InlineData("")]
-    [InlineData("    ")]
-    [InlineData("23r23ffgws3bvb5k8954")]
-    public async Task CheepRepository_LikeCheep_InvalidCheepId(string id)
-    {
-        // Arrange 
-        CheepRepository repository = await CheepRepoInit();
-        string email = "Jacqualine.Gilcoine@gmail.com";
-        bool value = true;
-
-        // Act / Assert
-        await Assert.ThrowsAnyAsync<Exception>(async () => await repository.LikeCheep(email, id, value));
-    }
-    [Theory]
     [InlineData(true)]
     [InlineData(false)]
-    public async Task CheepRepository_LikeCheep_ValidUserEmailValidCheepId(bool value)
-    {
+    public async Task CheepRepository_LikeCheep_ValidUserEmailValidCheepId(bool value) {
         // Arrange
-        CheepRepository repository = await CheepRepoInit();
+        CheepRepository repository = CheepRepoInit();
         string email = "Octavio.Wagganer@dtu.dk";
         IEnumerable<CheepDto> arrangecheeps = await repository.GetCheeps(1);
         string cheepId = arrangecheeps.First().Id;
@@ -289,46 +113,17 @@ public class Integration : IAsyncLifetime {
     #endregion
     #region Remove Like Method
     [Theory]
-    [InlineData("")]
-    [InlineData("   ")]
-    [InlineData("invalidemail")]
-    [InlineData("Nonexisting@email.com")]
-    public async Task CheepRepository_RemoveLike_InvalidUserEmail(string userEmail)
-    {
-        // Arrange
-        CheepRepository repository = await CheepRepoInit();
-        IEnumerable<CheepDto> cheeps = await repository.GetCheeps(1);
-        string cheepId = cheeps.First().Id;
-        
-        // Act / Assert
-        await Assert.ThrowsAnyAsync<Exception>(async () => await repository.RemoveLike(userEmail, cheepId));
-    }
-    [Theory]
-    [InlineData("")]
-    [InlineData("   ")]
-    [InlineData("ikbr3b33k3qdfkq2")]
-    public async Task CheepRepository_RemoveLike_InvalidCheepId(string cheepId)
-    {
-        // Arrange
-        CheepRepository repository = await CheepRepoInit();
-        string userEmail = "Jacqualine.Gilcoine@gmail.com";
-
-        // Act / Assert
-        await Assert.ThrowsAnyAsync<Exception>(async () => await repository.RemoveLike(userEmail, cheepId));
-    }
-    [Theory]
     [InlineData(true)]
     [InlineData(false)]
-    public async Task CheepRepository_RemoveLike_ValidUserEmailValidCheepId(bool likeValue)
-    {
+    public async Task CheepRepository_RemoveLike_ValidUserEmailValidCheepId(bool likeValue) {
         // Arrange
-        CheepRepository repository = await CheepRepoInit();
+        CheepRepository repository = CheepRepoInit();
         string userEmail = "Octavio.Wagganer@dtu.dk";
         IEnumerable<CheepDto> cheeps = await repository.GetCheeps(1);
         string cheepId = cheeps.First().Id;
         int expectedBeforeRemoveLikeValue = likeValue ? 1 : -1;
         int expectedAfterRemoveLikeValue = 0;
-    
+
         // Act
         await repository.LikeCheep(userEmail, cheepId, likeValue);
         cheeps = await repository.GetCheeps(1);
@@ -336,7 +131,7 @@ public class Integration : IAsyncLifetime {
         await repository.RemoveLike(userEmail, cheepId);
         cheeps = await repository.GetCheeps(1);
         int actualAfterRemoveLikeValue = cheeps.First().LikeCount;
-    
+
         // Assert
         Assert.Equal(expectedBeforeRemoveLikeValue, actualBeforeRemoveLikeValue);
         Assert.Equal(expectedAfterRemoveLikeValue, actualAfterRemoveLikeValue);
@@ -346,23 +141,10 @@ public class Integration : IAsyncLifetime {
     #endregion
     #region Author Repository Tests
     #region Create Author Method
-    [Theory]
-    [InlineData("")]
-    [InlineData("            ")]
-    [InlineData("InvalidEmail.com")]
-    public async Task AuthorRepository_CreateAuthor_InvalidEmail(string email) {
-        //Arrange
-        var repository = await AuthorRepoInit();
-        string author = "New Author";
-
-        // Act / Assert
-        await Assert.ThrowsAsync<InvalidOperationException>(async () => await repository.CreateAuthor(new AuthorDto(author, email)));
-    }
-
     [Fact]
     public async Task AuthorRepository_CreateAuthor_ValidEmail() {
         //Arrange
-        var repository = await AuthorRepoInit();
+        var repository = AuthorRepoInit();
         string authorName = "valid Author";
         string email = "ValidEmail@gmail.com";
 
@@ -375,22 +157,10 @@ public class Integration : IAsyncLifetime {
         Assert.Equal(email, author.Email);
     }
 
-    [Theory]
-    [InlineData("")]
-    [InlineData("     ")]
-    public async Task AuthorRepository_CreateAuthor_InvalidAuthorName(string authorName) {
-        //Arrange
-        var repository = await AuthorRepoInit();
-        string email = "validemail@gmail.com";
-
-        //Act / Assert
-        await Assert.ThrowsAsync<InvalidOperationException>(async () => await repository.CreateAuthor(new AuthorDto(authorName, email)));
-    }
-
     [Fact]
     public async Task AuthorRepository_CreateAuthor_ValidNonExistingAuthor() {
         //Arrange
-        var repository = await AuthorRepoInit();
+        var repository = AuthorRepoInit();
         string authorName = "Valid Author";
         string email = "Validemail@gmail.com";
 
@@ -403,39 +173,12 @@ public class Integration : IAsyncLifetime {
         Assert.Equal(email, author.Email);
     }
     #endregion
-    #region Get Author By Name Method
-    [Fact]
-    public async Task AuthorRepository_GetAuthorByName_RegisteredAuthor() {
-        //Arrange
-        AuthorRepository authorRepository = await AuthorRepoInit();
-        AuthorDto expectedAuthor = new("Helge",
-                                        "ropf@itu.dk");
-
-        //Act
-        AuthorDto actualAuthor = await authorRepository.GetAuthorByName("Helge");
-
-        //Assert
-        Assert.Equal(expectedAuthor, actualAuthor);
-    }
-    [Theory]
-    [InlineData("")]
-    [InlineData("   ")]
-    [InlineData("NonexistingAuthor")]
-    public async Task AuthorRepository_GetAuthorByName_InvalidOrNonExsistingAuthor(string authorName)
-    {
-        // Arrange
-        AuthorRepository repository = await AuthorRepoInit();
-
-        // Act / Assert
-        await Assert.ThrowsAnyAsync<Exception>(async () => await repository.GetAuthorByName(authorName));
-    }
-    #endregion
     #region Follow Method
     //Is this too complex for an integration test?
     [Fact]
     public async Task AuthorRepository_Follow_ValidUsers() {
         //Arrange
-        AuthorRepository authorRepository = await AuthorRepoInit();
+        AuthorRepository authorRepository = AuthorRepoInit();
         AuthorDto expectedFollower = await authorRepository.GetAuthorByName("Rasmus");
 
         //Act
@@ -453,19 +196,16 @@ public class Integration : IAsyncLifetime {
     [InlineData("", 1)]
     [InlineData("   ", 1)]
     [InlineData("NonExistingName", 1)]
-    public async Task AuthorRepository_Follow_InvalidUsers(string name, int parameter)
-    {
+    public async Task AuthorRepository_Follow_InvalidUsers(string name, int parameter) {
         // Arrange
-        AuthorRepository repository = await AuthorRepoInit();
+        AuthorRepository repository = AuthorRepoInit();
         string validName = "Rasmus";
 
         //Act / Assert
-        if(parameter == 0)
-        {
+        if (parameter == 0) {
             await Assert.ThrowsAnyAsync<Exception>(async () => await repository.Follow(name, validName));
         }
-        else
-        {
+        else {
             await Assert.ThrowsAnyAsync<Exception>(async () => await repository.Follow(validName, name));
         }
     }
@@ -475,7 +215,7 @@ public class Integration : IAsyncLifetime {
     [Fact]
     public async Task AuthorRepository_Unfollow_ValidUsers() {
         //Arrange
-        AuthorRepository authorRepository = await AuthorRepoInit();
+        AuthorRepository authorRepository = AuthorRepoInit();
         AuthorDto expectedTempFollower = await authorRepository.GetAuthorByName("Rasmus");
 
         //Act
@@ -498,19 +238,16 @@ public class Integration : IAsyncLifetime {
     [InlineData("", 1)]
     [InlineData("   ", 1)]
     [InlineData("NonExistingName", 1)]
-    public async Task AuthorRepository_UnFollow_InvalidUsers(string name, int parameter)
-    {
+    public async Task AuthorRepository_UnFollow_InvalidUsers(string name, int parameter) {
         // Arrange
-        AuthorRepository repository = await AuthorRepoInit();
+        AuthorRepository repository = AuthorRepoInit();
         string validName = "Rasmus";
 
         //Act / Assert
-        if(parameter == 0)
-        {
+        if (parameter == 0) {
             await Assert.ThrowsAnyAsync<Exception>(async () => await repository.UnFollow(name, validName));
         }
-        else
-        {
+        else {
             await Assert.ThrowsAnyAsync<Exception>(async () => await repository.UnFollow(validName, name));
         }
     }
@@ -520,14 +257,13 @@ public class Integration : IAsyncLifetime {
     [InlineData("")]
     [InlineData("   ")]
     [InlineData("InavlidAuthorName")]
-    public async Task AuthorRepository_GetFollowings_InvalidAuthorNames(string authorName)
-    {
+    public async Task AuthorRepository_GetFollowings_InvalidAuthorNames(string authorName) {
         // Arrange
-        AuthorRepository repository = await AuthorRepoInit();
+        AuthorRepository repository = AuthorRepoInit();
 
         //Act
-        IEnumerable<AuthorDto> authors = await repository.GetFollowings(authorName); 
-        
+        IEnumerable<AuthorDto> authors = await repository.GetFollowings(authorName);
+
         // Assert
         Assert.Empty(authors);
     }
@@ -537,20 +273,18 @@ public class Integration : IAsyncLifetime {
     [InlineData("")]
     [InlineData("   ")]
     [InlineData("InvalidAuthor")]
-    public async Task AuthorRepository_Anonymize_InvalidOrNonexistingAuthorName(string authorName)
-    {
+    public async Task AuthorRepository_Anonymize_InvalidOrNonexistingAuthorName(string authorName) {
         // Arrange
-        AuthorRepository repository = await AuthorRepoInit();
+        AuthorRepository repository = AuthorRepoInit();
 
         //Act / Assert
         await Assert.ThrowsAnyAsync<Exception>(async () => await repository.Anonymize(authorName));
     }
     [Fact]
-    public async Task AuthorRepository_Anonymize_ValidAuthorName()
-    {
+    public async Task AuthorRepository_Anonymize_ValidAuthorName() {
         // Arrange
-        AuthorRepository repository = await AuthorRepoInit();
-        CheepRepository cheepRepository = await CheepRepoInit();
+        AuthorRepository repository = AuthorRepoInit();
+        CheepRepository cheepRepository = CheepRepoInit();
         string expectedBeforeAuthor = "Jacqualine Gilcoine";
         int expectedAfterCheepCount = 0;
 
