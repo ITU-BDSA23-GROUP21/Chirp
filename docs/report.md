@@ -104,4 +104,4 @@ This application uses the MIT license. For the full license agreement, see https
 <!-- Should we write some considerations of how the packages we use impacts our choice of license?
      And have we confirmed that MIT license is OK with all the packages we added later on? -->
 ## LLMs, ChatGPT, CoPilot, and others
-No LLMs were used in the development of this application.
+No LLMs were used in the development of this application. We have confirmed that this license is in line with the packages used in the program.
