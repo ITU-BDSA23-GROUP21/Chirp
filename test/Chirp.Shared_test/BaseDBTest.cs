@@ -6,9 +6,12 @@ using Testcontainers.PostgreSql;
 using Xunit;
 
 namespace Chirp.Shared_test;
-public abstract class BaseDBTest : IAsyncLifetime
-{
-    protected ChirpContext _context;
+public abstract class BaseDBTest : IAsyncLifetime {
+    // Suppressing warning, as InitializeAsync ensures that _context will have a non-null value.
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+    public ChirpContext _context;
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+
     private readonly DockerContainer _container
         = Environment.GetEnvironmentVariable("SERVER") == "POSTGRES" ? new PostgreSqlBuilder().Build() : new MsSqlBuilder().Build();
 
