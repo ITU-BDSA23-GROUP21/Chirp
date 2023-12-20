@@ -16,7 +16,7 @@ numbersections: true
 
 Here comes a description of our domain model.
 
-<!-- ![Illustration of the _Chirp!_ Data model as UML class diagram.](docs/images/domain_model.png) -->
+![Illustration of the _Chirp!_ Data model as UML class diagram.](images/ChirpDomain.drawio.png){width=100%}
 
 ## Architecture — In the small
 
@@ -28,16 +28,19 @@ The diagram shows that
 - **Tests** consists of xunit, integration and end2end tests.
 - **Infrastructure** consists of EF Migrations, DbContext and model design.
 
-
-![Illustration of the architecture of _Chirp!_](images/OnionArchitecture.drawio.png)
+![Illustration of the architecture of _Chirp!_](images/OnionArchitecture.drawio.png){width=100%}
 
 ## Architecture of deployed application
-The following diagram shows the three parts of our deployed application.
+The following diagram shows the four parts of our deployed application.
+
 - Client: A browser on the users machine. Sends HTTP calls to the server.
-- Server: RazorPages project available at https://bdsagroup21chirprazor.azurewebsites.net/. Receives client request, and responds with HTML pages for the client to render. Communicates with database to fetch or update data.
-- Database. MSSQL database hosted in Azure.
+- Server: RazorPages project hosted at https://bdsagroup21chirprazor.azurewebsites.net/. Receives client request, and responds with HTML pages for the client to render. Communicates with database to fetch or update data. Communicates with Identity Management System to validate client authentication.
+- Database. MSSQL database hosted in Azure. Hosted at bdsagroup21-chirpdb.database.windows.net
+- Azure AD B2C identity management hosted in Azure. Hosted at getchirping.onmicrosoft.com
+![Illustration of the architecture of the deployed application](images/ArchitectureDeploy.drawio.png){width=100%}
 
 ## User activities
+![Illustration of user activities in Chirp](images/UserActivity.drawio.png){width=100%}
 
 ## Sequence of functionality/calls through _Chirp!_
 The following subsystem sequence diagram shows the communication between three subsystems.
@@ -52,12 +55,11 @@ The following subsystem sequence diagram shows the communication between three s
 # Process
 
 ## Build, test, release, and deployment
-
-![Activity diagram of the Github Workflows](images/WorkflowActivity.drawio.png)
-
 We use two GitHub Actions workflows, one for testing, and one for release / deployment. The **test workflow** is triggered on any push to the main branch, and has to complete successfully before any pull request to main can be completed. Together with our branch policy that forbids pushing directly to main, this means that any code that reaches main has passed the tests.
 
 The **deployment workflow** is triggered by pushing a tag to the main branch, that matches the regex `v*.*.*`. This workflow builds the application, publishes it to GitHub, and deploys it to Azure. Database schema synchronization is not included here, as it is performed during startup of the application, when it runs a new version.
+
+![Activity diagram of the Github Workflows](images/WorkflowActivity.drawio.png){width=100%}
 
 ## Team work
 
@@ -68,17 +70,12 @@ The **deployment workflow** is triggered by pushing a tag to the main branch, th
 - [208](https://github.com/ITU-BDSA23-GROUP21/Chirp/issues/208): When anonymizing a user after they click "Forget about me", we do not delete the user entry in our Azure AD B2C. Ideally the user should also be deleted there, but it was not considered a high priority to implement at this point.
 - [196](https://github.com/ITU-BDSA23-GROUP21/Chirp/issues/196): Every time the user interacts with the page, the page is reloaded. I.e. when a user follows another user, or likes a cheep, the page is reloaded, and they lose their position on the page. This is not a great user experience, but as the system is still usable, it was considered a higher priority to fully implement the other features.
 
-<!-- - [44](https://github.com/ITU-BDSA23-GROUP21/Chirp/issues/44): Workflow stuff. Should be closed as will not be done?
-- [204](https://github.com/ITU-BDSA23-GROUP21/Chirp/issues/204): Page numbers. Could be added?
-- [114](https://github.com/ITU-BDSA23-GROUP21/Chirp/issues/114): Unit tests. This can't really be left here?
-- [211](https://github.com/ITU-BDSA23-GROUP21/Chirp/issues/211): In code documentation. Should be closed before hand-in. -->
-
 ### Task Workflow
 
 When a new task need to be done we create an issue on GitHub. In the issue title we shortly describe the task and explain in further depth in the description as well as state the requirements for when the task is complete. After creating the issue, it is then added to the project board under the label 'new'. When some developers have time they assign themselves to the issue, create a branch and start working on resolving the issue. A pull request is then made when the issue has been resolved and GitHub runs the GitHub actions we have set up. This includes building and testing the application, ensuring the code does not contain sensitive information with CodeQL and linking the related issue to the pull request. After these GitHub Actions have completed successfully, it needs to be reviewed and approved by some of the developers that have not worked on it. When approved the branch will be merged into the main branch, the related issue will be closed and the status of the issue will be set to done on the project board.  
 The flow of these events are visualized in the diagram below. 
 
-![Activity diagram over issues](images/Issueactivitydiagram.png)
+![Activity diagram over issues](images/Issueactivitydiagram.png){width=100%}
 
 ## How to make _Chirp!_ work locally
 Prerequisites:
