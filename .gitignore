@@ -5,6 +5,7 @@
 
 notes.txt
 test.sh
+*.pdf
 
 # Files built by draw.io
 *.drawio.dtmp

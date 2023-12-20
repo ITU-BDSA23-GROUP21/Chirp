@@ -21,6 +21,7 @@ Here comes a description of our domain model.
 ## Architecture — In the small
 
 The diagram shows that
+
 - **Domain Model** consists of the existing entities. 
 - **Domain Services** consists of DTO's and repository interfaces.
 - **Application Services** consists of services available for the users and repositories.
@@ -33,10 +34,10 @@ The diagram shows that
 ## Architecture of deployed application
 The following diagram shows the four parts of our deployed application.
 
-- Client: A browser on the users machine. Sends HTTP calls to the server.
-- Server: RazorPages project hosted at https://bdsagroup21chirprazor.azurewebsites.net/. Receives client request, and responds with HTML pages for the client to render. Communicates with database to fetch or update data. Communicates with Identity Management System to validate client authentication.
-- Database. MSSQL database hosted in Azure. Hosted at bdsagroup21-chirpdb.database.windows.net
-- Azure AD B2C identity management hosted in Azure. Hosted at getchirping.onmicrosoft.com
+- **Client**: A browser on the users machine. Sends HTTP calls to the server.
+- **Server**: RazorPages project hosted at https://bdsagroup21chirprazor.azurewebsites.net/. Receives client request, and responds with HTML pages for the client to render. Communicates with database to fetch or update data. Communicates with Identity Management System to validate client authentication.
+- **Database**. MSSQL database hosted in Azure. Hosted at bdsagroup21-chirpdb.database.windows.net
+- **Azure** AD B2C identity management hosted in Azure. Hosted at getchirping.onmicrosoft.com
 ![Illustration of the architecture of the deployed application](images/ArchitectureDeploy.drawio.png){width=100%}
 
 ## User activities
@@ -44,6 +45,7 @@ The following diagram shows the four parts of our deployed application.
 
 ## Sequence of functionality/calls through _Chirp!_
 The following subsystem sequence diagram shows the communication between three subsystems.
+
 - Client: A browser on the users machine. Sends HTTP calls to the server.
 - Server: the webserver available at https://bdsagroup21chirprazor.azurewebsites.net/.
 - Databse: MSSQL database hosted in Azure.
@@ -63,7 +65,7 @@ The **deployment workflow** is triggered by pushing a tag to the main branch, th
 
 ## Team work
 
-![Screenshot of project board](images/ProjectBoard.png)
+![Screenshot of project board](images/ProjectBoard.png){width=120%}
 
 ### Unresolved tasks
 - [217](https://github.com/ITU-BDSA23-GROUP21/Chirp/issues/217): We were not able to get our e2e UI tests running in our GitHub Actions workflow yet. This should be fixed, so they will be integrated into our automatic testing, and we can be certain that all code in the main branch has passed the tests.
