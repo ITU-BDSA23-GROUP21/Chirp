@@ -2,7 +2,7 @@
 
 namespace Chirp.Razor.Pages;
 /// <summary>
-/// Class for getting cheeps for the usertimeline pages
+/// Class for getting cheeps for the UserTimeline pages
 /// </summary>
 public class UserTimelineModel : TimelineModel {
     public UserTimelineModel(ICheepService cheepService, IAuthorService authorService) : base(cheepService, authorService) { }
@@ -12,7 +12,7 @@ public class UserTimelineModel : TimelineModel {
         // Is this the right way to access route data?
         var author = RouteData?.Values?["author"]?.ToString() ?? "";
         
-        // Include authors that the user follows when the user are shown their own Usertimeline page
+        // Include authors that the user follows when the user are shown their own UserTimeline page
         if (User.Identity != null && User.Identity.Name == author) {
             IEnumerable<AuthorDto> followings = await _authorService.GetFollowings(User.Identity.Name);
             var authorNames = followings.Select(f => f.Name).Append(author);

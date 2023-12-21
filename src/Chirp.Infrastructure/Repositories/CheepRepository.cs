@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Chirp.Infrastructure;
 
 /// <summary>
-/// This class implements the methods from the interfaces. It depends on <c>ChirpContext</c>
+/// This class implements the methods from the interface. It depends on <c>ChirpContext</c>
 /// <para> It uses the dependency to access the database 
 /// to get, add and alter cheeps</para>
 /// </summary>
