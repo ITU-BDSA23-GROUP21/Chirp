@@ -63,9 +63,9 @@ The following subsystem sequence diagram shows the communication between three s
 # Process
 
 ## Build, test, release, and deployment
-We use two GitHub Actions workflows, one for testing, and one for release / deployment. The **test workflow** is triggered on any push to the main branch, and has to complete successfully before any pull request to main can be completed. Together with our branch policy that forbids pushing directly to main, this means that any code that reaches main has passed the tests.
+We use two GitHub Actions workflows, one for testing, and one for release / deployment. The **test workflow** is triggered on any push or pull request to the main branch, and has to complete successfully before any pull request to main can be merged. Together with our branch policy that forbids pushing directly to main, this means that any code that reaches main has passed the tests.
 
-The **deployment workflow** is triggered by pushing a tag to the main branch, that matches the regex `v*.*.*`. This workflow builds the application, publishes it to GitHub, and deploys it to Azure. Database schema synchronization is not included here, as it is performed during startup of the application, when it runs a new version.
+The **deployment workflow** is triggered by pushing a tag to the main branch, that matches the regex `v*.*.*`. This workflow builds the application, publishes it to GitHub, and deploys it to Azure. Database schema synchronization is not included here, as it is performed by the application during startup.
 
 ![Activity diagram of the Github Workflows](images/WorkflowActivity.drawio.png){width=100%}
 
@@ -81,7 +81,11 @@ The **deployment workflow** is triggered by pushing a tag to the main branch, th
 
 ### Task Workflow
 
-When a new task need to be done we create an issue on GitHub. In the issue title we shortly describe the task and explain in further depth in the description as well as state the requirements for when the task is complete. After creating the issue, it is then added to the project board under the label 'new'. When some developers have time they assign themselves to the issue, create a branch and start working on resolving the issue. A pull request is then made when the issue has been resolved and GitHub runs the GitHub actions we have set up. This includes building and testing the application, ensuring the code does not contain sensitive information with CodeQL and linking the related issue to the pull request. After these GitHub Actions have completed successfully, it needs to be reviewed and approved by some of the developers that have not worked on it. When approved the branch will be merged into the main branch, the related issue will be closed and the status of the issue will be set to done on the project board.  
+When a new task has been planned, we create an issue on GitHub. In the issue title we shortly describe the task, and in the description we write a user story, as well as acceptance criteria. After creating the issue, it is automatically added to the project board under the label 'new'.
+
+When some developers have time they assign themselves to the issue, create a branch and start working on resolving the issue. A pull request is made when the issue has been resolved, and GitHub runs the GitHub actions we have set up. This includes building and testing the application, ensuring the code does not contain sensitive information with CodeQL and linking the related issue to the pull request.
+
+After these GitHub Actions have completed successfully, it needs to be reviewed and approved by some of the developers that have not worked on it. When approved the branch will be merged into the main branch, the related issue will be closed and the status of the issue will be set to done on the project board.  
 The flow of these events are visualized in the diagram below. 
 
 ![Activity diagram over issues](images/Issueactivitydiagram.png){width=100%}
@@ -107,11 +111,14 @@ Prerequisites:
 
 ## How to run test suite locally
 
-Our test suite consists of several unit tests, integration tests and a couple end to end UI tests. Most of our unit and integration tests are testing the methods in the Repository classes in the package `Chirp.Infrastructure`, as that is where most of the application's logic resides. We also have a couple of old tests that test the methods in the service classes in the package `Chirp.Razor`. However since the methods in the service classes just call the methods from the repository classes, we have decided it would be redundant to write more tests the service classes.  
-Lastly, we also have end to end UI tests that uses playwright to test different scenarios from the end users point of view. To simulate an end user, we have created a dummy Gmail and a dummy GitHub account.  
-Gmail: dummyaccountfortesting000@gmail.com  
-Gmail Password: dummyemailfortesting  
-GitHub Password: dummygithubaccountfortesting  
+Our test suite consists of several unit tests, integration tests and a couple end to end UI tests. Most of our unit and integration tests are testing the methods in the Repository classes in the package `Chirp.Infrastructure`, as that is where most of the application's logic resides. We also have a couple of old tests that test the methods in the service classes in the package `Chirp.Razor`. However since the methods in the service classes just call the methods from the repository classes, we have decided it would be redundant to write more tests the service classes. 
+
+Lastly, we also have end to end UI tests that uses Playwright to test different scenarios from the end users point of view. To simulate an end user, we have created a dummy Gmail and a dummy GitHub account.
+
+- Gmail: dummyaccountfortesting000@gmail.com  
+- Gmail Password: dummyemailfortesting  
+- GitHub Password: dummygithubaccountfortesting
+
 To run our tests follow the steps below.  
 
 1. To run the test suite locally, make sure to have installed docker.  
