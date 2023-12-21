@@ -20,14 +20,14 @@ Here comes a description of our domain model.
 
 ## Architecture — In the small
 
-The diagram shows that
+The diagram uses the inversion of control princible and shows that
 
 - **Domain Model** consists of the existing entities. 
 - **Domain Services** consists of DTO's and repository interfaces.
 - **Application Services** consists of services available for the users and repositories.
 - **Presentation consists** of views and controllers.
 - **Tests** consists of xunit, integration and end2end tests.
-- **Infrastructure** consists of EF Migrations, DbContext and model design.
+- **Infrastructure** consists of EF Migrations, DbContext, model design, and the database initializer.
 
 ![Illustration of the architecture of _Chirp!_](images/OnionArchitecture.drawio.png){width=100%}
 
@@ -36,7 +36,7 @@ The following diagram shows the four parts of our deployed application.
 
 - **Client**: A browser on the users machine. Sends HTTP calls to the server.
 - **Server**: RazorPages project hosted at https://bdsagroup21chirprazor.azurewebsites.net/. Receives client request, and responds with HTML pages for the client to render. Communicates with database to fetch or update data. Communicates with Identity Management System to validate client authentication.
-- **Database**. MSSQL database hosted in Azure. Hosted at bdsagroup21-chirpdb.database.windows.net
+- **Database**: MSSQL database hosted in Azure. Hosted at bdsagroup21-chirpdb.database.windows.net
 - **Azure** AD B2C identity management hosted in Azure. Hosted at getchirping.onmicrosoft.com
 ![Illustration of the architecture of the deployed application](images/ArchitectureDeploy.drawio.png){width=100%}
 
@@ -48,10 +48,12 @@ The following diagram shows the four parts of our deployed application.
 ## Sequence of functionality/calls through _Chirp!_
 The following subsystem sequence diagram shows the communication between three subsystems.
 
-- Client: A browser on the users machine. Sends HTTP calls to the server.
-- Server: the webserver available at https://bdsagroup21chirprazor.azurewebsites.net/.
-- Databse: MSSQL database hosted in Azure.
+- **Client**: A browser on the users machine. Sends HTTP calls to the server.
+- **Server**: The webserver available at [https://bdsagroup21chirprazor.azurewebsites.net/](https://bdsagroup21chirprazor.azurewebsites.net/).
+- **Databse**: MSSQL database hosted in Azure.
+
 **Note That**
+
 - When the website is requested with endpoint: "/". The Razor page Public.cshtml is to be returned. Since the Public razor pages controller inherit the Timeline controller, The OnGet() method from the Timeline controller is invoked. The prementioned method tries to fetch cheeps and followings.
 - Arrow 1.6 determines whether the user is authorized and hence, if the server should request the users followings.
 
@@ -73,7 +75,7 @@ The **deployment workflow** is triggered by pushing a tag to the main branch, th
 
 ### Unresolved tasks
 - [217](https://github.com/ITU-BDSA23-GROUP21/Chirp/issues/217): We were not able to get our e2e UI tests running in our GitHub Actions workflow yet. This should be fixed, so they will be integrated into our automatic testing, and we can be certain that all code in the main branch has passed the tests.
-- [208](https://github.com/ITU-BDSA23-GROUP21/Chirp/issues/208): When anonymizing a user after they click "Forget about me", we do not delete the user entry in our Azure AD B2C. Ideally the user should also be deleted there, but it was not considered a high priority to implement at this point.
+- [208](https://github.com/ITU-BDSA23-GROUP21/Chirp/issues/208): When anonymizing a user after they click "Delete account", we do not delete the user entry in our Azure AD B2C. Ideally the user should also be deleted there, but it was not considered a high priority to implement at this point.
 - [196](https://github.com/ITU-BDSA23-GROUP21/Chirp/issues/196): Every time the user interacts with the page, the page is reloaded. I.e. when a user follows another user, or likes a cheep, the page is reloaded, and they lose their position on the page. This is not a great user experience, but as the system is still usable, it was considered a higher priority to fully implement the other features.
 - [266](https://github.com/ITU-BDSA23-GROUP21/Chirp/issues/266): The placement of our entity models does not align with clean architecture. They are placed in the infrastructure project, as they contain configurations specific to our ef-core infrastructure. That configuration could be separated from the entities, which could then be moved to the core project.
 
