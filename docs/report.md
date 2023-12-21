@@ -77,17 +77,18 @@ Prerequisites:
 - Git
 - Docker Desktop
 
-1. Clone our Chirp project from the main branch on its GitHub page at https://github.com/ITU-BDSA23-GROUP21/Chirp.  
+1. Clone our Chirp project from the main branch on its GitHub page at [https://github.com/ITU-BDSA23-GROUP21/Chirp](https://github.com/ITU-BDSA23-GROUP21/Chirp).  
 2. If you do not have Docker Desktop installed then follow the steps on their [website](https://www.docker.com/products/docker-desktop/) to download and install Docker Desktop.  
 3. Open the terminal and pull the Docker Image of Microsoft SQL Server with the command `docker pull mcr.microsoft.com/mssql/server:2022-latest`.
     - Due to compatibility issues between MSSQL and Apple Silicon chips, a Postgres image must be used instead if you are running on OSX.
 4. Start up a container based on the image pulled from before with the command  
 `docker run -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=YourPassword123" -p 1433:1433 --name sql1 --hostname sql1 -d mcr.microsoft.com/mssql/server:2022-latest`.
-    - If you are running on OSX, start a Docker container using the Postgres image and a corresponding connection string instead.
+    - If you are running on OSX, start a Docker container using the Postgres image instead.
 5. In the terminal navigate to the where you have cloned the project to and navigate to the folder `Chirp/src/Chirp.Razor`.  
 6. Initiate user secrets for the project with `dotnet user-secrets init`.  
 7. Store the connection string to the database container in a user secret called `ConnectionString` with this command:  
-`dotnet user-secrets set "ConnectionString" "Server=localhost;Database=TestDB;User Id=SA;Password=YourPassword123;TrustServerCertificate=True;"`.  
+`dotnet user-secrets set "ConnectionString" "Server=localhost;Database=TestDB;User Id=SA;Password=YourPassword123;TrustServerCertificate=True;"`.
+    - If you are using Postgres, store that connection string instead in user secrets.
 8. Now run the application with the command `dotnet run`
 
 ## How to run test suite locally
