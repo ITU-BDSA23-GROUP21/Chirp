@@ -119,9 +119,9 @@ To run our tests follow the steps below.
 3. In the project folder run the command `dotnet test --filter FullyQualifiedName!~Chirp.Razor_test.End2EndUI` to run the integrations tests. Make sure docker is running before running the command.
     - To use the exclamation mark (`!`) in the filter expression, you may have to escape it with a backslash (`\`) if you are using Linux or macOS shells.  
 4. After the integrations tests are done navigate to the folder `Chirp/src/Chirp.Razor/`.  
-5. Run the application with the command `UITEST=1 dotnet run`.  
+5. Run the application with the command `UITEST=1 dotnet run`. An IP-Address on localhost that the app listens too should be showing. Note that down for later.   
 6. Open another terminal and navigate to the root project folder.  
-7. To run the UI test run the command `dotnet test --filter FullyQualifiedName~Chirp.Razor_test.End2EndUI`. If you want to see what the test does run the following command instead `PWDEBUG=1 dotnet test --filter FullyQualifiedName~Chirp.Razor_test.End2EndUI`.
+7. To run the UI test run the command `IPADDRESS=http://localhost... dotnet test --filter FullyQualifiedName~Chirp.Razor_test.End2EndUI`. Replace the _http://localhost..._ with the IP-Address shown earlier. If you want to see what the test does run the following command instead `PWDEBUG=1 IPADDRESS=http://localhost... dotnet test --filter FullyQualifiedName~Chirp.Razor_test.End2EndUI`. Again replace _http://localhost..._ with the IP-Address shown earlier.
     - Since we have made a dummy Gmail and GitHub account, sometimes when logging in to GitHub it will prompt to enter a confirmation code that was sent via mail. This will fail the tests. A workaround is to run the test in debug mode with the second command and manually go through the first steps to log in to GitHub. 
 
 # Ethics
