@@ -18,14 +18,7 @@ numbersections: true
 
 ## Architecture — In the small
 
-We use an onion diagram to illustrate our architecture. In the onion diagram all dependencies flow inwards, so the code in an outer layer can depend on an inner layer, but not the other way around. In the diagram the code is divided into the following areas:
-
-- **Domain Model** consists of the existing entities. 
-- **Domain Services** consists of DTO's and repository interfaces.
-- **Application Services** consists of services available for the users and repositories.
-- **Presentation consists** of views and controllers.
-- **Tests** consists of xunit, integration and end2end tests.
-- **Infrastructure** consists of EF Migrations, DbContext, model design, and the database initializer.
+We use an onion diagram to illustrate our architecture. Each layer in the onion represents one area of responsibilities in the code. In the onion diagram all dependencies flow inwards, so the code in an outer layer can depend on an inner layer, but not the other way around. This is exemplified by inner layers providing interfaces, that an outer layer can implement.
 
 ![Illustration of the architecture of _Chirp!_](images/OnionArchitecture.drawio.png){width=100%}
 
@@ -38,19 +31,11 @@ We use an onion diagram to illustrate our architecture. In the onion diagram all
 ![Illustration of an authorized users activities in Chirp](images/UserActivityAuthorized.drawio.png){width=100%}
 
 ## Sequence of functionality/calls through _Chirp!_
-The following subsystem sequence diagram shows the communication between three subsystems.
-
-- **Client**: A browser on the users machine. Sends HTTP calls to the server.
-- **Server**: The webserver available at [https://bdsagroup21chirprazor.azurewebsites.net/](https://bdsagroup21chirprazor.azurewebsites.net/).
-- **Databse**: MSSQL database hosted in Azure.
-
+![Subsystem sequence diagram of the communication between client, server and database](images/SimpleSubsystemSequence.png){width=100%}
 **Note That**
 
-- When the website is requested with endpoint: "/". The Razor page Public.cshtml is to be returned. Since the Public razor pages controller inherit the Timeline controller, The OnGet() method from the Timeline controller is invoked. The prementioned method tries to fetch cheeps and followings.
+- When the website is requested with endpoint: "/". The Razor page Public.cshtml is to be returned. Since the Public razor pages controller inherit the Timeline controller, The OnGet() method from the Timeline controller is invoked. The aforementioned method tries to fetch cheeps and followings.
 - Arrow 1.6 determines whether the user is authorized and hence, if the server should request the users followings.
-
-![Subsystem sequence diagram of the communication between client, server and database](images/SimpleSubsystemSequence.png){width=100%}
-
 
 # Process
 
@@ -119,7 +104,7 @@ To run our tests follow the steps below.
 3. In the project folder run the command `dotnet test --filter FullyQualifiedName!~Chirp.Razor_test.End2EndUI` to run the integrations tests. Make sure docker is running before running the command.
     - To use the exclamation mark (`!`) in the filter expression, you may have to escape it with a backslash (`\`) if you are using Linux or macOS shells.  
 4. After the integrations tests are done navigate to the folder `Chirp/src/Chirp.Razor/`.  
-5. Run the application with the command `UITEST=1 dotnet run`. An IP-Address on localhost that the app listens too should be showing. Note that down for later.   
+5. Run the application with the command `UITEST=1 dotnet run`. An IP-Address on localhost that the app listens to should be showing. Note that down for later.   
 6. Open another terminal and navigate to the root project folder.  
 7. To run the UI test run the command `IPADDRESS=http://localhost... dotnet test --filter FullyQualifiedName~Chirp.Razor_test.End2EndUI`. Replace the _http://localhost..._ with the IP-Address shown earlier. If you want to see what the test does run the following command instead `PWDEBUG=1 IPADDRESS=http://localhost... dotnet test --filter FullyQualifiedName~Chirp.Razor_test.End2EndUI`. Again replace _http://localhost..._ with the IP-Address shown earlier.
     - Since we have made a dummy Gmail and GitHub account, sometimes when logging in to GitHub it will prompt to enter a confirmation code that was sent via mail. This will fail the tests. A workaround is to run the test in debug mode with the second command and manually go through the first steps to log in to GitHub. 
