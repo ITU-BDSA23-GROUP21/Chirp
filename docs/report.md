@@ -26,6 +26,9 @@ We use an onion diagram to illustrate our architecture. Each layer in the onion 
 ![Illustration of the architecture of the deployed application](images/ArchitectureDeploy.drawio.png){width=100%}
 
 ## User activities
+We use a UML activity diagram to represent possible user activities. In our version, every activity in Chirp is included in the same diagram. This is shown by displaying multiple final nodes, where each final node represents one destination, depending on the activity the user wants to perform.
+
+Both diagrams should be read together, since the user journey assumes a user starts as unauthorized.
 ![Illustration of an unauthorized users activities in Chirp](images/UserActivityUnauthorized.drawio.png){width=100%}
 
 ![Illustration of an authorized users activities in Chirp](images/UserActivityAuthorized.drawio.png){width=100%}
