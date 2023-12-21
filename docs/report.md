@@ -14,13 +14,11 @@ numbersections: true
 
 ## Domain model
 
-Here comes a description of our domain model.
-
 ![Illustration of the _Chirp!_ Data model as UML class diagram.](images/ChirpDomain.drawio.png){width=100%}
 
 ## Architecture — In the small
 
-The diagram uses the inversion of control princible and shows that
+We use an onion diagram to illustrate our architecture. In the onion diagram all dependencies flow inwards, so the code in an outer layer can depend on an inner layer, but not the other way around. In the diagram the code is divided into the following areas:
 
 - **Domain Model** consists of the existing entities. 
 - **Domain Services** consists of DTO's and repository interfaces.
@@ -32,12 +30,6 @@ The diagram uses the inversion of control princible and shows that
 ![Illustration of the architecture of _Chirp!_](images/OnionArchitecture.drawio.png){width=100%}
 
 ## Architecture of deployed application
-The following diagram shows the four parts of our deployed application.
-
-- **Client**: A browser on the users machine. Sends HTTP calls to the server.
-- **Server**: RazorPages project hosted at https://bdsagroup21chirprazor.azurewebsites.net/. Receives client request, and responds with HTML pages for the client to render. Communicates with database to fetch or update data. Communicates with Identity Management System to validate client authentication.
-- **Database**: MSSQL database hosted in Azure. Hosted at bdsagroup21-chirpdb.database.windows.net
-- **Azure** AD B2C identity management hosted in Azure. Hosted at getchirping.onmicrosoft.com
 ![Illustration of the architecture of the deployed application](images/ArchitectureDeploy.drawio.png){width=100%}
 
 ## User activities
