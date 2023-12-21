@@ -20,14 +20,14 @@ Here comes a description of our domain model.
 
 ## Architecture — In the small
 
-The diagram shows that
+The diagram uses the inversion of control princible and shows that
 
 - **Domain Model** consists of the existing entities. 
 - **Domain Services** consists of DTO's and repository interfaces.
 - **Application Services** consists of services available for the users and repositories.
 - **Presentation consists** of views and controllers.
 - **Tests** consists of xunit, integration and end2end tests.
-- **Infrastructure** consists of EF Migrations, DbContext and model design.
+- **Infrastructure** consists of EF Migrations, DbContext, model design, and the database initializer.
 
 ![Illustration of the architecture of _Chirp!_](images/OnionArchitecture.drawio.png){width=100%}
 
@@ -49,9 +49,11 @@ The following diagram shows the four parts of our deployed application.
 The following subsystem sequence diagram shows the communication between three subsystems.
 
 - Client: A browser on the users machine. Sends HTTP calls to the server.
-- Server: the webserver available at https://bdsagroup21chirprazor.azurewebsites.net/.
+- Server: the webserver available at [https://bdsagroup21chirprazor.azurewebsites.net/](https://bdsagroup21chirprazor.azurewebsites.net/).
 - Databse: MSSQL database hosted in Azure.
+
 **Note That**
+
 - When the website is requested with endpoint: "/". The Razor page Public.cshtml is to be returned. Since the Public razor pages controller inherit the Timeline controller, The OnGet() method from the Timeline controller is invoked. The prementioned method tries to fetch cheeps and followings.
 - Arrow 1.6 determines whether the user is authorized and hence, if the server should request the users followings.
 
